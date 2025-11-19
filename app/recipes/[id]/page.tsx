@@ -52,7 +52,7 @@ const DetailRecipe = () => {
       try {
         const id = params.id as string
         if (id) {
-          const { recipe } = await RecipeProvider.getRecipe(params.id as string);
+          const { recipe } = await RecipeProvider.getRecipe(id);
           // Set recipe
           if (recipe) setRecipe(recipe);
         }

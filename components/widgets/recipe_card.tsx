@@ -1,89 +1,14 @@
-"use client";
-
-import { useEffect, useState, useCallback } from "react";
 import { Recipe } from "@/app/api/entities/recipe";
 import Image from "next/image";
-import { IoFastFoodOutline } from "react-icons/io5";
-import { RecipeProvider } from "@/app/api/provider/recipe_provider";
-import { uploadUrlImage } from "@/app/utils/upload_file";
 import { useRouter } from "next/navigation";
 import { Earth, Info } from "lucide-react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "../ui/hover-card";
-import { Skeleton } from "../ui/skeleton";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
-  const [loadImageError, setLoadImageError] = useState(false);
-  const [loadingImage, setLoadingImage] = useState<boolean>(true);
-  const [image, setImage] = useState<string>("");
   const router = useRouter();
 
-  // Handler for saving recipes
-  const saveRecipesHandler = useCallback(async (recipeToSave: Recipe): Promise<Recipe | null> => {
-    try {
-      const { success, recipe } = await RecipeProvider.saveRecipe(recipeToSave);
-      if (success) {
-        // Optionally: toast or notification
-        return recipe;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error saving recipes:", error);
-      return null;
-    }
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchImage = async () => {
-      setLoadingImage(true);
-      try {
-        if (recipe.image.startsWith("https://")) {
-          if (isMounted) {
-            setImage(recipe.image);
-            setLoadingImage(false);
-          }
-        } else {
-          const value = await RecipeProvider.generateImage(recipe.image);
-          if (value === null) {
-            if (isMounted) {
-              setLoadImageError(true);
-              setLoadingImage(false);
-            }
-          } else {
-            if (isMounted) {
-              setImage(value);
-            }
-            // Save the generated image URL to the recipe
-            const uploadedUrl = await uploadUrlImage(value);
-            recipe.image = uploadedUrl ?? recipe.image;
-            recipe.created_by = "1";
-            if (recipe.id == null) {
-              const result = await saveRecipesHandler(recipe);
-              if (result?.id !== undefined) {
-                recipe.id = result.id;
-              }
-            }
-            if (isMounted) setLoadingImage(false);
-          }
-        }
-      } catch (e) {
-        if (isMounted) {
-          setLoadImageError(true);
-          setLoadingImage(false);
-        }
-      }
-    };
-
-    fetchImage();
-    return () => {
-      isMounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recipe.image, saveRecipesHandler]);
-
   const handleCardClick = (e: React.MouseEvent) => {
-    // Prevent navigation if clicking on the info hover card
-    // (optional: improve accessibility)
+    e.stopPropagation();
     router.push(`/recipes/${recipe.id}`);
   };
 
@@ -123,24 +48,15 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             </HoverCardContent>
           </HoverCard>
         </div>
-        {loadingImage ? (
-          <Skeleton className="w-full h-48" />
-        ) : loadImageError || !image ? (
-          <div className="text-6xl text-slate-700 w-full h-full flex justify-center items-center bg-slate-100">
-            <IoFastFoodOutline className="animate-pulse" />
-          </div>
-        ) : (
-          <Image
+        <Image
             className="object-cover w-full h-full transition-transform duration-300"
-            src={image}
+            src={recipe.image}
             alt={recipe.recipe_name}
             width={500}
             height={500}
-            onError={() => setLoadImageError(true)}
             priority={true}
             draggable={false}
           />
-        )}
         {/* Black gradient overlay */}
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10 pointer-events-none" />
       </div>

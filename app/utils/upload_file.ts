@@ -2,6 +2,24 @@ import { apiConfig } from "@/app/api/config";
 import imageCompression from "browser-image-compression";
 
 
+export function extractErrorMessageSafe(input: string): string | null {
+  try {
+    // Remplacer les quotes simples par des doubles pour rendre le JSON valide
+    const jsonStr = input.replace(/'/g, '"');
+
+    // Trouver la partie JSON dans la chaîne
+    const jsonStart = jsonStr.indexOf('{');
+    const jsonPart = jsonStr.slice(jsonStart);
+
+    const parsed = JSON.parse(jsonPart);
+
+    return parsed?.error?.message ?? null;
+  } catch {
+    return null;
+  }
+}
+
+
 const options = {
     maxSizeMB: 2.9,
     maxWidthOrHeight: 1920,
@@ -45,13 +63,14 @@ export const compressImageToBase64 = async (
 export const uploadUrlImage = async (url: string): Promise<string | null> => {
     try {
         console.log(url)
-        const response = await fetch(`${apiConfig.base_url}/upload_image_url/`, {
+        const response = await fetch(`${apiConfig.base_url}/recipes/upload_image`, {
             method: 'POST',
             headers: apiConfig.request_headers,
             body: JSON.stringify({ url: url }),
         });
         if (response.ok) {
-            return (await response.json())['url'] as string;
+            const imageSaveData = await response.json();
+            return imageSaveData['url'] as string;
         } else {
             console.log("Upload => error to get image data");
             return null;

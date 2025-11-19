@@ -26,7 +26,7 @@ export const RecipeSection = () => {
       <CarouselContent>
         {listRecipes.map((recipe, index) => (
           <CarouselItem key={index}>
-            <ImageRecipeCard key={index} recipe={recipe} />
+            <ImageRecipeCard recipe={recipe} />
           </CarouselItem>
         ))}
       </CarouselContent>

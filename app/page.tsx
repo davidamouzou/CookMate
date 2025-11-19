@@ -105,8 +105,8 @@ export default function Home() {
         <hr className="my-8" />
         <div className="my-5">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 py-2">
-            {recipesData.map((recipe, index) => (
-              <RecipeCard key={recipe.id || index} recipe={recipe} />
+            {recipesData.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
 
             {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button"; // Assuming these are Shadcn/UI components
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
@@ -23,16 +23,17 @@ import { RecipeProvider } from "@/app/api/provider/recipe_provider";
 import RecipeCard from "./recipe_card"; // Assuming RecipeCard component exists
 import { toast, Toaster } from "sonner"; // Import Toaster from sonner
 import { useEffect } from "react";
+import { uploadUrlImage } from "@/app/utils/upload_file";
 
 // RecipeListPanel component to display a list of recipes in a sheet
 export function RecipeListPanel({
     open = false,
-    recipes = [],
+    recipe = null,
     onOpenChange,
     prompt
 }: {
     open?: boolean,
-    recipes?: Recipe[],
+    recipe?: Recipe | null,
     onOpenChange: (isOpen: boolean) => void,
     prompt?: string
 }) {
@@ -49,10 +50,8 @@ export function RecipeListPanel({
                     )}
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
-                    {recipes.length > 0 ? (
-                        recipes.map((recipe, index) => (
-                            <RecipeCard key={recipe.id || index} recipe={recipe} />
-                        ))
+                    {recipe ? (
+                        <RecipeCard recipe={recipe} />
                     ) : (
                         <p className="text-sm text-muted-foreground text-center py-4">Aucune recette à afficher pour le moment.</p>
                     )}
@@ -71,7 +70,7 @@ const RecipeCreator: React.FC = () => {
     const [level, setLevel] = useState("");
     const [allergens, setAllergens] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false); // Renamed for clarity
-    const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [isLoading, setIsLoading] = useState(false); // Renamed for clarity
     const [onFocus, setOnFocus] = useState(false);
     const [currentPrompt, setCurrentPrompt] = useState(""); // Renamed for clarity
@@ -88,48 +87,23 @@ const RecipeCreator: React.FC = () => {
 
     // Handler for choosing an image to generate recipes
     const chooseImageHandler = async () => {
-        let toastId: string | number | undefined = undefined;
-        try {
-            const image = await chooseImage(); // Utility function to select an image
-            if (image) {
-                setIsLoading(true);
-                toastId = toast.loading("Génération de la recette à partir de l'image...", { // Use toast.loading for async operations
-                    description: "Veuillez patienter pendant que nous analysons l'image.",
-                });
-                setSearch(""); // Clear search input
-                const response = await RecipeProvider.generateWithImage(image, language);
-                if (response && response.length > 0) {
-                    setRecipes(prevRecipes => [...response, ...prevRecipes]); // Add new recipes to the beginning
-                    setCurrentPrompt("Recettes générées à partir d'une image.");
-                    setIsSheetOpen(true);
-                    toast.success("Recettes générées avec succès!", { // Success toast
-                        id: toastId,
-                        description: `${response.length} recette(s) ont été créée(s) à partir de l'image.`,
-                    });
-                } else {
-                    toast.error("Aucune recette générée", { // Error toast if no recipes
-                        id: toastId,
-                        description: "Impossible de générer des recettes à partir de l'image fournie.",
-                    });
-                }
-            } else {
-                if (toastId !== undefined) {
-                    toast.dismiss(toastId); // Dismiss loading toast if no image was selected
-                }
-            }
-        } catch (error) {
-            console.error("Error generating recipe with image:", error);
-            toast.error("Erreur lors de la génération", { // Error toast
-                id: toastId,
-                description: "Un problème est survenu lors de la génération de recettes à partir de l'image.",
-                action: {
-                    label: "Réessayer",
-                    onClick: () => chooseImageHandler(), // Option to retry
-                },
-            });
-        }
-        setIsLoading(false);
+        const image = await chooseImage();
     };
+
+    // Handler for saving recipes
+    const saveRecipesHandler = useCallback(async (recipeToSave: Recipe): Promise<Recipe | null> => {
+        try {
+            const { success, recipe } = await RecipeProvider.saveRecipe(recipeToSave);
+            if (success) {
+                // Optionally: toast or notification
+                return recipe;
+            }
+            return null;
+        } catch (error) {
+            console.error("Error saving recipes:", error);
+            return null;
+        }
+    }, []);
 
     // Handler for generating recipes based on text description and filters
     const generateRecipesHandler = async () => {
@@ -155,29 +129,31 @@ const RecipeCreator: React.FC = () => {
             description: `Basé sur: ${descriptionParts}`,
         });
 
-        try {
-            setSearch(""); // Clear search input after starting generation
-            const response = await RecipeProvider.generateWithDescription(descriptionParts, language);
-            if (response && response.length > 0) {
-                setRecipes(prevRecipes => [...response, ...prevRecipes]);
-                setIsSheetOpen(true);
-                toast.success("Recettes générées avec succès!", {
-                    id: toastId,
-                    description: `${response.length} recette(s) ont été créée(s).`,
-                });
-            } else {
-                toast.error("Aucune recette trouvée", {
-                    id: toastId,
-                    description: "Impossible de générer des recettes avec les critères actuels. Essayez de modifier votre recherche.",
-                });
-            }
-        } catch (error) {
-            console.error("Error generating recipe with description:", error);
-            toast.error("Erreur de génération", {
+        // Clear search input after starting generation
+        setSearch(""); 
+
+        const res = await RecipeProvider.generateRecipe(descriptionParts, language);
+
+        if (res.success) {
+            const imageGenerate = await RecipeProvider.generateImage(res.recipe?.description ?? "");
+            const imageUpload = await uploadUrlImage(imageGenerate ?? "");
+            res.recipe!.image = imageUpload || "";
+            const savedRecipe = await saveRecipesHandler(res.recipe!);
+            setRecipe(savedRecipe);
+            setIsSheetOpen(true);
+
+            toast.success("Recettes générées avec succès!", {
                 id: toastId,
-                description: "Un problème est survenu lors de la génération des recettes.",
+                description: `Recette créée.`,
+            });
+
+        } else {
+            toast.error(res.message || "Erreur de génération", {
+                id: toastId,
+                description: "Veuillez réessayer plus tard.",
             });
         }
+
         setIsLoading(false);
     };
 
@@ -191,7 +167,7 @@ const RecipeCreator: React.FC = () => {
             <Toaster richColors position="top-right" />
             <RecipeListPanel
                 open={isSheetOpen}
-                recipes={recipes}
+                recipe={recipe}
                 onOpenChange={handleCloseSheet}
                 prompt={currentPrompt}
             />
