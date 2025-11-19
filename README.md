@@ -15,11 +15,6 @@ Create a `.env` file at the root of the project with the following keys:
 
 ```properties
 API_KEY=Firebase api key
-APP_ID=Firebase app id
-AUTH_DOMAIN=Firebase auth domain
-MEASUREMENT_ID=Firebase measurement id
-MESSAGING_SENDER_ID=Firebase messaging sender id
-PROJECT_ID=Firebase project id
 ```
 
 ## How to Run the Project

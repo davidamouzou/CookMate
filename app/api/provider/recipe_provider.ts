@@ -100,11 +100,17 @@ export class RecipeProvider {
 
     static async generateWithDescription(prompt: string, language: string = "en"): Promise<Recipe[]> {
         try {
+            console.log("Generating recipes with prompt:", prompt, "and language:", language);
             const response = await fetch(`${apiConfig.base_url}/gen_witch_text/`, {
                 method: 'POST',
                 headers: apiConfig.request_headers,
                 body: JSON.stringify({ text: prompt, language: language }),
             })
+             
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers);
+            console.log("Response body:", await response.clone().text());
+            console.log("Request body:", await response.json());
 
             if (response.ok) {
                 const recipes = (await response.json())['data'] as Recipe[];
