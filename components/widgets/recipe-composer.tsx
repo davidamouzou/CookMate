@@ -130,11 +130,21 @@ const RecipeCreator: React.FC = () => {
         });
 
         // Clear search input after starting generation
-        setSearch(""); 
+        setSearch("");
 
         const res = await RecipeProvider.generateRecipe(descriptionParts, language);
 
         if (res.success) {
+            const recipeGenerate = res.recipe;
+            if (recipeGenerate?.description === "" && recipeGenerate?.ingredients === undefined && recipeGenerate?.instructions === undefined && recipeGenerate?.duration_to_cook === 0) {
+                toast.info("Votre description ne permet pas de générer une recette correcte.", {
+                    id: toastId,
+                    description: "Veuillez réessayer avec une autre description.",
+                });
+                setIsLoading(false);
+                return;
+            }
+            
             const imageGenerate = await RecipeProvider.generateImage(res.recipe?.description ?? "");
             const imageUpload = await uploadUrlImage(imageGenerate ?? "");
             res.recipe!.image = imageUpload || "";
@@ -148,7 +158,7 @@ const RecipeCreator: React.FC = () => {
             });
 
         } else {
-            toast.error(res.message || "Erreur de génération", {
+            toast.warning(res.message || "Erreur de génération", {
                 id: toastId,
                 description: "Veuillez réessayer plus tard.",
             });
