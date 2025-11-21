@@ -18,8 +18,8 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { Recipe } from "@/app/api/entities/recipe"; // Assuming these are your API entities/providers
-import { RecipeProvider } from "@/app/api/provider/recipe_provider";
+import { Recipe } from "@/api/entities/recipe"; // Assuming these are your API entities/providers
+import { RecipeProvider } from "@/api/provider/recipe_provider";
 import RecipeCard from "./recipe_card"; // Assuming RecipeCard component exists
 import { toast, Toaster } from "sonner"; // Import Toaster from sonner
 import { useEffect } from "react";
@@ -144,7 +144,7 @@ const RecipeCreator: React.FC = () => {
                 setIsLoading(false);
                 return;
             }
-            
+
             const imageGenerate = await RecipeProvider.generateImage(res.recipe?.description ?? "");
             const imageUpload = await uploadUrlImage(imageGenerate ?? "");
             res.recipe!.image = imageUpload || "";

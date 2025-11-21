@@ -3,8 +3,8 @@
 import { Beef, ChevronLeft, Circle, CircleCheck, CookingPot, Flame, Printer, Share, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Recipe } from "@/app/api/entities/recipe";
-import { RecipeProvider } from "@/app/api/provider/recipe_provider";
+import { Recipe } from "@/api/entities/recipe";
+import { RecipeProvider } from "@/api/provider/recipe_provider";
 import Image from "next/image";
 import { PiBowlFoodLight, PiFireSimpleThin } from "react-icons/pi";
 import { Button } from "@/components/ui/button";

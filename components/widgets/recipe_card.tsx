@@ -1,4 +1,4 @@
-import { Recipe } from "@/app/api/entities/recipe";
+import { Recipe } from "@/api/entities/recipe";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Earth, Info } from "lucide-react";
@@ -49,14 +49,14 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </HoverCard>
         </div>
         <Image
-            className="object-cover w-full h-full transition-transform duration-300"
-            src={recipe.image}
-            alt={recipe.recipe_name}
-            width={500}
-            height={500}
-            priority={true}
-            draggable={false}
-          />
+          className="object-cover w-full h-full transition-transform duration-300"
+          src={recipe.image}
+          alt={recipe.recipe_name}
+          width={500}
+          height={500}
+          priority={true}
+          draggable={false}
+        />
         {/* Black gradient overlay */}
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10 pointer-events-none" />
       </div>

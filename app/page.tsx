@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Recipe } from "./api/entities/recipe";
-import { RecipeProvider } from "./api/provider/recipe_provider";
+import { Recipe } from "../api/entities/recipe";
+import { RecipeProvider } from "../api/provider/recipe_provider";
 import Header from "@/components/widgets/header";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
