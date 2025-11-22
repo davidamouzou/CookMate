@@ -93,7 +93,7 @@ export class RecipeProvider {
                 headers: apiConfig.request_headers,
                 body: JSON.stringify({ description: image }),
             })
-
+            
             if (response.ok) {
                 return (await response.json())['url'] as string;;
             } else {
