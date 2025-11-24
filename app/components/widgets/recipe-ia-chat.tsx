@@ -143,7 +143,7 @@ const RecipeIAChat: React.FC = () => {
 
                 // Remove loading message
                 setMessages(prev => prev.filter(m => m.id !== loadingId));
-                
+
             } else {
                 setMessages(prev => [...prev, {
                     id: Date.now().toString(),
