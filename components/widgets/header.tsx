@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/app/assets/icons/logo.png";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
@@ -12,7 +11,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const Header = () => {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
   const t = useTranslations('Header');
 
   const navLinks = [
@@ -37,15 +36,15 @@ const Header = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 flex justify-between items-center py-4 px-6 md:px-12 bg-background/80 backdrop-blur-md border-b border-border/40 supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 z-50 flex justify-between items-center py-4 px-2 md:px-4 bg-background/60 backdrop-blur-md border-b border-border/40 supports-[backdrop-filter]:bg-background/60"
     >
       {/* Logo Section */}
-      <Link href="/" className="flex items-center gap-2">
-        <div className="relative w-8 h-8 md:w-10 md:h-10">
-          <Image src={logo} alt="Flavoriz Logo" fill className="object-contain" />
+      <Link href="/" className="flex items-center">
+        <div className="relative overflow-hidden rounded-lg w-8 h-8">
+          <Image src={theme === 'dark' ? '/logo/light.png' : '/logo/dark.png'} alt="Flavoriz Logo" fill className="object-cover" />
         </div>
-        <span className="text-xl md:text-2xl font-bold tracking-tight">
-          FLA<span className="text-primary">VORIZ</span>
+        <span className="text-2xl md:block hidden font-bold tracking-tight">
+           C<span className="text-primary">OOK</span>ER
         </span>
       </Link>
 

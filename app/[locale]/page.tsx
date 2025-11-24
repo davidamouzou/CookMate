@@ -1,9 +1,9 @@
-import Header from "@/components/widgets/header";
 import { SliderCard } from "@/components/widgets/slider_card";
 import { RecipeProvider } from "@/app/context/RecipeContext";
 import { Hero } from "@/components/widgets/hero";
 import { RecipeList } from "@/components/widgets/recipe-list";
 import RecipeCreator from "@/components/widgets/recipe-composer";
+import Header from "@/components/widgets/header";
 
 export default function Home() {
   return (

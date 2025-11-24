@@ -1,7 +1,7 @@
-import Header from "@/components/widgets/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import Header from "@/components/widgets/header";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContactPage() {

@@ -1,7 +1,7 @@
-import Header from "@/components/widgets/header";
 import { RecipeList } from "@/components/widgets/recipe-list";
 import { RecipeProvider } from "@/app/context/RecipeContext";
 import RecipeCreator from "@/components/widgets/recipe-composer";
+import Header from "@/components/widgets/header";
 
 export default function RecipesPage() {
     return (
