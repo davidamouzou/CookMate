@@ -52,7 +52,7 @@ export const compressImageToBase64 = async (
                 console.error(`Error to compress image ${megabytes} Mo.`)
             }
         }
-
+        
         return await imageCompression.getDataUrlFromFile(compressedFile);
     } catch (error) {
         console.error(`Failed to compress image below ${megabytes} Mo: ` + error);
