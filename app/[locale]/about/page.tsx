@@ -1,5 +1,5 @@
 import Header from "@/components/layout/header";
-import { useTranslations } from "next-intl";
+//import { useTranslations } from "next-intl";
 
 export default function AboutPage() {
     //const t = useTranslations('About'); // You might need to add this to your messages

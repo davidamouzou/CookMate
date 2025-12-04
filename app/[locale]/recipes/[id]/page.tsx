@@ -2,7 +2,7 @@
 
 import { Beef, Circle, CircleCheck, Flame, User, Clock, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Recipe } from "@/api/entities/recipe";
 import { RecipeProvider } from "@/api/provider/recipe_provider";
 import Image from "next/image";
