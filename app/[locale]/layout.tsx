@@ -1,6 +1,6 @@
-import "@/app/style/globals.css";
-import "@/app/style/scroll-style.css";
-import { ThemeProvider } from "@/app/components/widgets/theme-provider";
+import "@/style/globals.css";
+import "@/style/scroll-style.css";
+import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import React from "react";
 import { Metadata } from "next";

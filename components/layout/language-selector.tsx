@@ -8,7 +8,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/app/components/ui/select";
+} from "@/components/ui/select";
 import { useTransition } from "react";
 
 export default function LanguageSelector() {

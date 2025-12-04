@@ -1,5 +1,5 @@
-import { Button } from "@/app/components/ui/button";
-import Header from "@/app/components/widgets/header";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/layout/header";
 import Image from "next/image";
 
 export default function BlogPage() {

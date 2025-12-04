@@ -40,7 +40,7 @@ const Header = () => {
       className="sticky top-0 z-50 flex justify-between items-center py-4 px-2 md:px-4 bg-background/80 backdrop-blur-md border-b border-border/40"
     >
       {/* Logo Section */}
-      <Link href="/" className="flex items-center">
+      <Link href="/public" className="flex items-center">
         <div className="relative overflow-hidden rounded-lg w-8 h-8">
           <Image src="/logo/dark.png" alt="Flavoriz Logo" fill className="object-cover dark:hidden" />
           <Image src="/logo/light.png" alt="Flavoriz Logo" fill className="object-cover hidden dark:block" />

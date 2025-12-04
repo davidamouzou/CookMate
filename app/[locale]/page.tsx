@@ -1,9 +1,9 @@
-import { SliderCard } from "@/app/components/widgets/slider_card";
+import { SliderCard } from "@/components/layout/slider_card";
 import { RecipeProvider } from "@/app/context/RecipeContext";
-import { Hero } from "@/app/components/widgets/hero";
-import { RecipeList } from "@/app/components/widgets/recipe-list";
-import RecipeIAChat from "@/app/components/widgets/recipe-ia-chat";
-import Header from "@/app/components/widgets/header";
+import { Hero } from "@/components/layout/hero";
+import { RecipeList } from "@/components/layout/recipe-list";
+import RecipeIAChat from "@/components/layout/recipe-ia-chat";
+import Header from "@/components/layout/header";
 
 export default function Home() {
   return (

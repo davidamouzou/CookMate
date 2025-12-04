@@ -1,7 +1,7 @@
-import { RecipeList } from "@/app/components/widgets/recipe-list";
+import { RecipeList } from "@/components/layout/recipe-list";
 import { RecipeProvider } from "@/app/context/RecipeContext";
-import RecipeIAChat from "@/app/components/widgets/recipe-ia-chat";
-import Header from "@/app/components/widgets/header";
+import RecipeIAChat from "@/components/layout/recipe-ia-chat";
+import Header from "@/components/layout/header";
 
 export default function RecipesPage() {
     return (

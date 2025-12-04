@@ -1,8 +1,8 @@
 "use client";
 
-import RecipeCard from "@/app/components/widgets/recipe_card";
-import { SkeletonCard } from "@/app/components/widgets/skeleton-card";
-import { Button } from "@/app/components/ui/button";
+import RecipeCard from "@/components/layout/recipe_card";
+import { SkeletonCard } from "@/components/layout/skeleton-card";
+import { Button } from "@/components/ui/button";
 import { useRecipes } from "@/app/context/RecipeContext";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";

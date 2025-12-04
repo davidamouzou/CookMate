@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useCallback, useState, useRef, useEffect } from "react";
-import { Button } from "@/app/components/ui/button";
-import { Popover, PopoverTrigger, PopoverContent } from "@/app/components/ui/popover";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/app/components/ui/select";
-import { Slider } from "@/app/components/ui/slider";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SlidersHorizontal, WandSparkles, X, Send, Image as ImageIcon, Loader2 } from "lucide-react";
 import chooseImage from "@/api/functions/choose_image";
 import { Recipe } from "@/api/entities/recipe";

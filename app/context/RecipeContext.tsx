@@ -47,12 +47,12 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
         setInitialized(true);
     }, []);
 
-    // Fetch initial recipes if cache is empty, but only after initialization
+    // Fetch initial recipes if the cache is empty, but only after initialization
     useEffect(() => {
         if (!initialized) return;
 
         if (recipes.length === 0) {
-            fetchRecipes();
+            fetchRecipes().then()
         }
     }, [initialized]);
 

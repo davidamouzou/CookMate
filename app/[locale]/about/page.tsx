@@ -1,4 +1,4 @@
-import Header from "@/app/components/widgets/header";
+import Header from "@/components/layout/header";
 import { useTranslations } from "next-intl";
 
 export default function AboutPage() {

@@ -7,11 +7,11 @@ import { Recipe } from "@/api/entities/recipe";
 import { RecipeProvider } from "@/api/provider/recipe_provider";
 import Image from "next/image";
 import { PiBowlFoodLight, PiFireSimpleThin } from "react-icons/pi";
-import { Button } from "@/app/components/ui/button";
-import { DetailRecipeSkeleton } from "@/app/components/widgets/detail-recipe-skeleton";
-import RecipeIAChat from "@/app/components/widgets/recipe-ia-chat";
+import { Button } from "@/components/ui/button";
+import { DetailRecipeSkeleton } from "@/components/layout/detail-recipe-skeleton";
+import RecipeIAChat from "@/components/layout/recipe-ia-chat";
 import { motion } from "framer-motion";
-import Header from "@/app/components/widgets/header";
+import Header from "@/components/layout/header";
 
 const NutritionCard = ({
   title,
