@@ -11,9 +11,9 @@ from google import genai
 from google.genai import types
 from PIL import Image  # Pillow library for image manipulation
 
-from backend.models.recipe import Recipe
-from backend.models.recipe_prompt import RecipePrompt
-from backend.config import config
+from models.recipe import Recipe
+from models.recipe_prompt import RecipePrompt
+from config import config
 
 
 router = APIRouter(prefix="/generate", tags=["generate"])
