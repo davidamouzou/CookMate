@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+
+import config
 from fastapi import APIRouter, Request, Response
 from fastapi.responses import JSONResponse
 from requests import post
@@ -8,15 +10,16 @@ import json
 from google import genai
 from google.genai import types
 from PIL import Image  # Pillow library for image manipulation
-from config import config
-from models.recipe import Recipe
-from models.recipe_prompt import RecipePrompt
+
+from backend.models.recipe import Recipe
+from backend.models.recipe_prompt import RecipePrompt
+from backend.config import config
 
 
 router = APIRouter(prefix="/generate", tags=["generate"])
 
 @router.post("/recipe")
-async def generate_recipe(recipe_prompt: RecipePrompt, res: Response):
+async def generate_recipe(recipe_prompt: RecipePrompt):
     data = recipe_prompt.model_dump()
     try:
         # Configuration of the Gemini model
@@ -24,7 +27,7 @@ async def generate_recipe(recipe_prompt: RecipePrompt, res: Response):
 
         list_file = []
         if data.get('files'):
-            # Convert the base64 string to image
+            # Convert the base64 string to an image
             for imageBase in data['files']:
                 img_data = base64.b64decode(imageBase['base64'])
                 image = Image.open(io.BytesIO(img_data))
@@ -32,7 +35,7 @@ async def generate_recipe(recipe_prompt: RecipePrompt, res: Response):
 
         prompt = f"""
         Analyze the following user input: "{data['text']}" and return an appropriate response in {data['language']}:
-        1. If the input is not related to ingredients or a dish, return the following response in JSON format and don't add creted_at.
+        1. If the input is not related to ingredients or a dish, return the following response in JSON format and don't add created_at.
         2. If the input is relevant and describes specific ingredients or a dish, return a corresponding recipe in the form of
         Note: The response must be formulated in the language {data['language']} and should be only JSON, not any other message.
         """

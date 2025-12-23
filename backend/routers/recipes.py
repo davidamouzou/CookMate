@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from config import supabase_client
-from models.recipe import Recipe
 
+from backend.config import supabase_client
+from backend.models.recipe import Recipe
 
 recipe_table = supabase_client.table("recipes")
 router = APIRouter(prefix="/recipes", tags=["recipes"])

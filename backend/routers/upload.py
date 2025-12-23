@@ -4,8 +4,8 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import requests
-from config import supabase_client
 
+from backend.config import supabase_client
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
