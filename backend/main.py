@@ -10,24 +10,25 @@ from routers import generate, recipes, upload
 app = FastAPI()
 
 
+# Include routers
+app.include_router(generate.router)
+app.include_router(recipes.router)
+app.include_router(upload.router)
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "*",
         "http://localhost:3000",
         "https://www.coooke.fr",
         "https://cook-book-ruby.vercel.app",
+        "http://127.0.0.1:3000"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# Include routers
-app.include_router(generate.router)
-app.include_router(recipes.router)
-app.include_router(upload.router)
 
 
 @app.middleware("http")

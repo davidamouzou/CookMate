@@ -37,13 +37,13 @@ const Header = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 flex justify-between items-center py-4 px-2 md:px-4 bg-background/80 backdrop-blur-md border-b border-border/40"
+      className="sticky top-0 z-50 flex justify-between items-center bg-background/80 backdrop-blur-md border-b border-border/40 h-16 px-4 md:px-8 lg:px-12"
     >
       {/* Logo Section */}
-      <Link href="/public" className="flex items-center">
+      <Link href="/" className="flex items-center">
         <div className="relative overflow-hidden rounded-lg w-8 h-8">
-          <Image src="/logo/dark.png" alt="Flavoriz Logo" fill className="object-cover dark:hidden" />
-          <Image src="/logo/light.png" alt="Flavoriz Logo" fill className="object-cover hidden dark:block" />
+          <Image src="/logo/dark.png" alt="Cook Mate Logo" fill className="object-cover dark:hidden" />
+          <Image src="/logo/light.png" alt="Cook Mate Logo" fill className="object-cover hidden dark:block" />
         </div>
         <span className="text-2xl md:block hidden font-bold tracking-tight">
           C<span className="text-primary">OOK</span>ER
