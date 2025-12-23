@@ -28,11 +28,12 @@ export function generateStaticParams() {
 
 export default function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  const { locale } = params;
   console.log('RootLayout locale:', locale);
   let messages;
   try {
