@@ -9,42 +9,47 @@ from routers import generate, recipes, upload
 
 app = FastAPI()
 
-
-# Include routers
-app.include_router(generate.router)
-app.include_router(recipes.router)
-app.include_router(upload.router)
-
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "*",
         "http://localhost:3000",
-        "https://www.coooke.fr",
+        "http://127.0.0.1:3000",
         "https://cook-book-ruby.vercel.app",
-        "http://127.0.0.1:3000"
+        "https://www.coooke.fr",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Include routers
+app.include_router(generate.router)
+app.include_router(recipes.router)
+app.include_router(upload.router)
+
 
 @app.middleware("http")
 async def verify_api_key(request: Request, call_next):
-    api_key = request.headers.get('api-key')
+    # Laisser passer OPTIONS (CORS preflight)
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     if request.url.path == '/' or request.url.path.startswith('/docs'):
         return await call_next(request)
-    
+
+    api_key = request.headers.get('api-key')
     if api_key != config.get('API_KEY'):
-        return Response(content=json.dumps(
-            {
-            "code": "unauthorized",
-            "message": "You are not authorized to access this service",
-            "details": "Invalid API key"
-        }
-        ), status_code=401)
+        return Response(
+            content=json.dumps({
+                "code": "unauthorized",
+                "message": "You are not authorized to access this service",
+                "details": "Invalid API key"
+            }),
+            status_code=401,
+            media_type="application/json"
+        )
+
     return await call_next(request)
 
 

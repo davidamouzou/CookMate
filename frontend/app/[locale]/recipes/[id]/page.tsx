@@ -84,27 +84,15 @@ const DetailRecipe = () => {
       {
         !recipe ? (<DetailRecipeSkeleton />) : (
           <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
-            {/* Background Image with Overlay */}
-            <div className="fixed inset-0 z-0">
-              <Image
-                className="h-full w-full object-cover opacity-20 dark:opacity-10 blur-3xl scale-110"
-                src={recipe.image}
-                alt="Background"
-                width={100}
-                height={100}
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/50 to-background" />
-            </div>
-
             <div className="relative z-10">
               <div className="container mx-auto px-4 py-6 md:py-10 max-w-7xl">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12">
                   {/* Left Column: Image & Quick Stats */}
                   <div className="lg:col-span-5 space-y-8">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl shadow-2xl border-4 border-white/20 dark:border-zinc-800/50"
+                      className="relative aspect-[5/5] w-full overflow-hidden rounded-3xl shadow-2xl border-4 border-white/20 dark:border-zinc-800/50"
                     >
                       <Image
                         className="h-full w-full object-cover"

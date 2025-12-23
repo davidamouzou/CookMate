@@ -37,7 +37,7 @@ const Header = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 flex justify-between items-center bg-background/80 backdrop-blur-md border-b border-border/40 h-16 px-4 md:px-8 lg:px-12"
+      className="sticky top-0 z-50 flex justify-between items-center bg-background/80 backdrop-blur-md border-b border-border/40 h-16 px-5 md:px-8 lg:px-12"
     >
       {/* Logo Section */}
       <Link href="/" className="flex items-center">
