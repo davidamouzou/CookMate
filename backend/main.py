@@ -3,8 +3,8 @@ from datetime import datetime
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend import config
-from backend.routers import generate, recipes, upload
+from config import config
+from routers import generate, recipes, upload
 
 
 app = FastAPI()
