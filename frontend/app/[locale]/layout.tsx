@@ -26,7 +26,7 @@ export function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'fr' }];
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
   params: { locale },
 }: {
@@ -36,7 +36,9 @@ export default async function RootLayout({
   console.log('RootLayout locale:', locale);
   let messages;
   try {
-    messages = await getMessages({ locale });
+   getMessages({ locale }).then((msgs) => {
+      messages = msgs;
+    });
     console.log('RootLayout messages loaded');
   } catch (error) {
     console.error('RootLayout messages error:', error);
