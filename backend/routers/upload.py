@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import requests
 
-from backend.config import supabase_client
+from config import supabase_client
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
