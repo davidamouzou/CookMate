@@ -2,7 +2,6 @@ import "@/style/globals.css";
 import "@/style/scroll-style.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
-import React from "react";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
@@ -15,8 +14,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Coooker",
-  description: "Coooker is your go-to app for discovering, creating, and sharing delicious recipes. Explore a wide variety of dishes, manage your favorites, and get inspired to cook something new every day.",
+  title: "Cook Mate - Your Ultimate Recipe Companion",
+  description: "Cook Mate is your go-to app for discovering, creating, and sharing delicious recipes. Explore a wide variety of dishes, manage your favorites, and get inspired to cook something new every day.",
 }
 
 import { NextIntlClientProvider } from 'next-intl';
@@ -26,20 +25,13 @@ export function generateStaticParams() {
   return [{ locale: 'en' }, { locale: 'fr' }];
 }
 
-export default function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
-  const { locale } = params;
+export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+  const resolvedParams = await params;
+  const { locale } = resolvedParams;
   console.log('RootLayout locale:', locale);
-  let messages;
+  let messages: Record<string, unknown> = {};
   try {
-   getMessages({ locale }).then((msgs) => {
-      messages = msgs;
-    });
+    messages = await getMessages({ locale });
     console.log('RootLayout messages loaded');
   } catch (error) {
     console.error('RootLayout messages error:', error);
