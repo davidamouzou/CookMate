@@ -28,12 +28,11 @@ export function generateStaticParams() {
 
 export default async function RootLayout({
   children,
-  params
-}: Readonly<{
+  params: { locale },
+}: {
   children: React.ReactNode;
   params: { locale: string };
-}>) {
-  const { locale } = params;
+}) {
   console.log('RootLayout locale:', locale);
   let messages;
   try {
