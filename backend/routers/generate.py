@@ -90,7 +90,7 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
     try:
         client = genai.Client(api_key=config.get("model_api_key"))
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3-flash-preview",
             contents=[prompt, *images],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -98,6 +98,7 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
             ),
         )
         client.close()
+        print(response.text)
     except Exception as exc:
         logger.exception("Model call failed")
         return _error_response(f"Model call failed: {exc}")

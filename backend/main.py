@@ -31,7 +31,7 @@ app.include_router(upload.router)
 
 @app.middleware("http")
 async def verify_api_key(request: Request, call_next):
-    # Laisser passer OPTIONS (CORS preflight)
+    # Allow preflight requests and public endpoints
     if request.method == "OPTIONS":
         return await call_next(request)
 

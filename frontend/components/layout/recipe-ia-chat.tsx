@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { SlidersHorizontal, WandSparkles, X, Send, Image as ImageIcon, Loader2 } from "lucide-react";
 import chooseImage from "@/api/functions/choose_image";
@@ -385,14 +385,30 @@ const RecipeIAChat: React.FC = () => {
                                 </Button>
 
                                 <div className="relative flex-1">
-                                    <Input
+                                    <Textarea
                                         value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
+                                        onChange={(e) => {
+                                            const value = e.target.value.slice(0, 300);
+                                            setInputValue(value);
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleSendMessage();
+                                            }
+                                        }}
                                         placeholder="Une idée de recette ?"
-                                        className="pr-10 py-6 rounded-full bg-muted/30 border-transparent focus:border-primary/20 focus:bg-background transition-all"
+                                        className="pr-10 py-3 px-4 rounded-3xl bg-muted/30 border-transparent focus:border-primary/20 focus:bg-background transition-all resize-none min-h-[48px] max-h-[120px] overflow-y-auto"
                                         disabled={isGenerating}
+                                        maxLength={300}
+                                        rows={1}
+                                        style={{
+                                            lineHeight: '1.5rem',
+                                        }}
                                     />
+                                    <div className="absolute bottom-2 right-3 text-xs text-muted-foreground">
+                                        {inputValue.length}/300
+                                    </div>
                                 </div>
 
                                 <Button

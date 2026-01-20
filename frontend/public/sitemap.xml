@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+    <!-- English Home -->
+    <url>
+        <loc>https://yourdomain.com/en</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en"/>
+    </url>
+
+    <!-- French Home -->
+    <url>
+        <loc>https://yourdomain.com/fr</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr"/>
+    </url>
+
+    <!-- English About -->
+    <url>
+        <loc>https://yourdomain.com/en/about</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/about"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/about"/>
+    </url>
+
+    <!-- French About -->
+    <url>
+        <loc>https://yourdomain.com/fr/about</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/about"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/about"/>
+    </url>
+
+    <!-- English Contact -->
+    <url>
+        <loc>https://yourdomain.com/en/contact</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/contact"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/contact"/>
+    </url>
+
+    <!-- French Contact -->
+    <url>
+        <loc>https://yourdomain.com/fr/contact</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/contact"/>
+    </url>
+
+    <!-- English Blog -->
+    <url>
+        <loc>https://yourdomain.com/en/blog</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/blog"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/blog"/>
+    </url>
+
+    <!-- French Blog -->
+    <url>
+        <loc>https://yourdomain.com/fr/blog</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/blog"/>
+    </url>
+
+    <!-- English Recipes -->
+    <url>
+        <loc>https://yourdomain.com/en/recipes</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/recipes"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/recipes"/>
+    </url>
+
+    <!-- French Recipes -->
+    <url>
+        <loc>https://yourdomain.com/fr/recipes</loc>
+        <lastmod>2026-01-15</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/recipes"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/recipes"/>
+    </url>
+
+</urlset>
