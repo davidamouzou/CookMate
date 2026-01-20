@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = process.env.BASE_URL || 'https://yourdomain.com';
+    const baseUrl = process.env.BASE_URL || 'https://coooke.fr';
     const locales = ['en', 'fr'];
     const currentDate = new Date();
 

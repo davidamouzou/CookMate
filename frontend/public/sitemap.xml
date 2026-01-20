@@ -4,102 +4,102 @@
 
     <!-- English Home -->
     <url>
-        <loc>https://yourdomain.com/en</loc>
+        <loc>https://coooke.fr/en</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en"/>
     </url>
 
     <!-- French Home -->
     <url>
-        <loc>https://yourdomain.com/fr</loc>
+        <loc>https://coooke.fr/fr</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr"/>
     </url>
 
     <!-- English About -->
     <url>
-        <loc>https://yourdomain.com/en/about</loc>
+        <loc>https://coooke.fr/en/about</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/about"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/about"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/about"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/about"/>
     </url>
 
     <!-- French About -->
     <url>
-        <loc>https://yourdomain.com/fr/about</loc>
+        <loc>https://coooke.fr/fr/about</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/about"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/about"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/about"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/about"/>
     </url>
 
     <!-- English Contact -->
     <url>
-        <loc>https://yourdomain.com/en/contact</loc>
+        <loc>https://coooke.fr/en/contact</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/contact"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/contact"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/contact"/>
     </url>
 
     <!-- French Contact -->
     <url>
-        <loc>https://yourdomain.com/fr/contact</loc>
+        <loc>https://coooke.fr/fr/contact</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/contact"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/contact"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/contact"/>
     </url>
 
     <!-- English Blog -->
     <url>
-        <loc>https://yourdomain.com/en/blog</loc>
+        <loc>https://coooke.fr/en/blog</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/blog"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/blog"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/blog"/>
     </url>
 
     <!-- French Blog -->
     <url>
-        <loc>https://yourdomain.com/fr/blog</loc>
+        <loc>https://coooke.fr/fr/blog</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/blog"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/blog"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/blog"/>
     </url>
 
     <!-- English Recipes -->
     <url>
-        <loc>https://yourdomain.com/en/recipes</loc>
+        <loc>https://coooke.fr/en/recipes</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/recipes"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/recipes"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/recipes"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/recipes"/>
     </url>
 
     <!-- French Recipes -->
     <url>
-        <loc>https://yourdomain.com/fr/recipes</loc>
+        <loc>https://coooke.fr/fr/recipes</loc>
         <lastmod>2026-01-15</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
-        <xhtml:link rel="alternate" hreflang="en" href="https://yourdomain.com/en/recipes"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://yourdomain.com/fr/recipes"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://coooke.fr/en/recipes"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://coooke.fr/fr/recipes"/>
     </url>
 
 </urlset>
