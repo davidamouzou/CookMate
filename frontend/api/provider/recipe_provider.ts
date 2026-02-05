@@ -34,6 +34,7 @@ export class RecipeProvider {
             const response = await fetch(`${apiConfig.base_url}/recipes/${id}`, {
                 method: 'GET',
                 headers: apiConfig.request_headers,
+                cache: 'no-store',
             })
             if (response.ok) {
                 const data = await response.json();
@@ -52,6 +53,7 @@ export class RecipeProvider {
             const response = await fetch(`${apiConfig.base_url}/recipes/?offset=${offset}&limit=${limit}`, {
                 method: 'GET',
                 headers: apiConfig.request_headers,
+                cache: 'no-store',
             })
             if (response.ok) {
                 const data = await response.json();

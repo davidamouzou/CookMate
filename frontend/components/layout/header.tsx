@@ -87,9 +87,7 @@ const Header = () => {
           <span className="sr-only">{t('toggleTheme')}</span>
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <User className="w-5 h-5" />
-        </Button>
+        
 
         {/* Mobile Menu */}
         <div className="md:hidden">
