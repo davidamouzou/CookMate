@@ -168,26 +168,70 @@ const RecipeIAChat: React.FC = () => {
         try {
             const image = await chooseImage();
             if (image) {
+                const userMessageId = Date.now().toString();
                 setMessages(prev => [...prev, {
-                    id: Date.now().toString(),
+                    id: userMessageId,
                     role: 'user',
                     content: "J'ai une image de mes ingrédients !",
-                    image: image
+                    image,
                 }]);
 
-                // TODO: Send image to backend when API is ready
-                // For now, we just acknowledge it
-                setTimeout(() => {
-                    setMessages(prev => [...prev, {
+                const loadingId = 'loading-image-' + Date.now();
+                setMessages(prev => [...prev, {
+                    id: loadingId,
+                    role: 'assistant',
+                    content: "Je déchiffre vos ingrédients...",
+                    isLoading: true
+                }]);
+                setIsGenerating(true);
+
+                const res = await RecipeProvider.generateRecipeFromImage(image, language);
+
+                if (res.success && res.recipe) {
+                    try {
+                        // Optionally generate and upload a refined image based on the description
+                        const generatedImage = await RecipeProvider.generateImage(res.recipe.description ?? "");
+                        const uploaded = await uploadUrlImage(generatedImage ?? "");
+                        res.recipe.image = uploaded || res.recipe.image || "";
+
+                        const saved = await saveRecipesHandler(res.recipe);
+                        if (saved) {
+                            setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
+                                id: Date.now().toString(),
+                                role: 'assistant',
+                                content: `Voici ce que j'ai détecté sur l'image : ${saved.recipe_name}`,
+                                recipe: saved,
+                            }]);
+                        } else {
+                            setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
+                                id: Date.now().toString(),
+                                role: 'assistant',
+                                content: `Voici une recette à partir de votre image : ${res.recipe.recipe_name}`,
+                                recipe: res.recipe,
+                            }]);
+                        }
+                    } catch (imgErr) {
+                        console.error("Image refinement failed", imgErr);
+                        setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
+                            id: Date.now().toString(),
+                            role: 'assistant',
+                            content: `Voici une recette à partir de votre image : ${res.recipe.recipe_name}`,
+                            recipe: res.recipe,
+                        }]);
+                    }
+                } else {
+                    setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                         id: Date.now().toString(),
                         role: 'assistant',
-                        content: "Superbe image ! Pour l'instant, je ne peux pas encore analyser les images, mais je garde ça au chaud pour une prochaine mise à jour !"
+                        content: res.message || "Impossible de générer une recette à partir de cette image."
                     }]);
-                }, 1000);
+                }
             }
         } catch (e) {
             console.error(e);
             toast.error("Erreur lors du chargement de l'image");
+        } finally {
+            setIsGenerating(false);
         }
     };
 

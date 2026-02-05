@@ -60,6 +60,16 @@ def _parse_model_response(raw_text: str) -> Dict[str, Any]:
     except json.JSONDecodeError as exc:
         raise ValueError(f"Model response not valid JSON: {exc}")
 
+def _validation_failure(detail: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=422,
+        content={
+            "code": "unrelated_input",
+            "message": "The provided description or image does not correspond to a recipe or ingredients.",
+            "details": detail,
+        },
+    )
+
 
 @router.post("/recipe")
 async def generate_recipe(recipe_prompt: RecipePrompt):
@@ -77,11 +87,17 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
     # 1) Validate basic input
     text = payload.get("text", "").strip()
     language = payload.get("language", "en")
-    if not text:
-        return _error_response("No text provided", status_code=400)
 
     # 2) Extract images
     images = _extract_images(payload.get("files", []))
+
+    # Require at least text or an image
+    if not text and not images:
+        return _error_response("No text or images provided", status_code=400)
+
+    # If no text but images exist, seed a generic instruction
+    if not text:
+        text = "Generate a detailed recipe based on the provided image of ingredients."
 
     # 3) Build prompt
     prompt = _build_prompt(text, language)
@@ -109,6 +125,15 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
     except ValueError as exc:
         logger.exception("Failed to parse model response: %s", exc)
         return _error_response(str(exc), status_code=502)
+
+    # Validate that the model returned a plausible recipe
+    if not isinstance(result, dict):
+        return _validation_failure("Model response was not a JSON object.")
+
+    ingredients = result.get("ingredients") or []
+    instructions = result.get("instructions") or []
+    if not isinstance(ingredients, list) or not ingredients or not isinstance(instructions, list) or not instructions:
+        return _validation_failure("No ingredients or instructions were detected in the request.")
 
     # Add created_at when appropriate
     if isinstance(result, dict) and "created_at" not in result:

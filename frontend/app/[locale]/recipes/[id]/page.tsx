@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Recipe } from "@/api/entities/recipe";
 import { RecipeProvider } from "@/api/provider/recipe_provider";
-import Image from "next/image";
 import { PiBowlFoodLight, PiFireSimpleThin } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { DetailRecipeSkeleton } from "@/components/layout/detail-recipe-skeleton";
@@ -94,12 +93,11 @@ const DetailRecipe = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="relative aspect-[5/5] w-full overflow-hidden rounded-3xl shadow-2xl border-4 border-white/20 dark:border-zinc-800/50"
                     >
-                      <Image
+                      <img
                         className="h-full w-full object-cover"
                         src={recipe.image}
                         alt={recipe.recipe_name}
-                        fill
-                        priority
+                        
                         sizes="(max-width: 768px) 100vw, 50vw"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

@@ -103,12 +103,57 @@ export class RecipeProvider {
                 recipe: recipe as Recipe,
             } // convert to Recipe objet ts
         } else {
-            const errorText = await response.json();
+            const errorPayload = await safeReadError(response);
             return {
                 success: false,
                 recipe: null,
-                message: extractErrorMessageSafe(errorText) || "Erreur lors de la génération de la recette",
+                message: errorPayload || "Erreur lors de la génération de la recette",
             };
+        }
+    }
+
+    static async generateRecipeFromImage(imageDataUrl: string, language: string = "en"): Promise<RecipeGenerateResponse> {
+        // Extract pure base64 content from data URL (e.g., data:image/png;base64,XXXXX)
+        const base64 = imageDataUrl.includes(",") ? imageDataUrl.split(",")[1] : imageDataUrl;
+
+        const response = await fetch(`${apiConfig.base_url}/generate/recipe`, {
+            method: 'POST',
+            headers: apiConfig.request_headers,
+            body: JSON.stringify({
+                text: "Generate a recipe from the provided image ingredients.",
+                language,
+                files: [{ base64 }],
+            }),
+        });
+
+        if (response.ok) {
+            const recipe = await response.json();
+            return { success: true, recipe: recipe as Recipe };
+        }
+
+        const errorText = await safeReadError(response);
+        return {
+            success: false,
+            recipe: null,
+            message: errorText || "Erreur lors de la génération de la recette à partir de l'image",
+        };
+    }
+}
+
+async function safeReadError(response: Response): Promise<string | null> {
+    try {
+        const asJson = await response.clone().json();
+        if (asJson && typeof asJson === "object") {
+            if ("message" in asJson && typeof asJson.message === "string") return asJson.message;
+            if ("error" in asJson && typeof asJson.error === "string") return asJson.error;
+        }
+        return typeof asJson === "string" ? asJson : JSON.stringify(asJson);
+    } catch {
+        try {
+            const asText = await response.text();
+            return extractErrorMessageSafe(asText) || asText;
+        } catch {
+            return null;
         }
     }
 }

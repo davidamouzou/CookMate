@@ -36,7 +36,7 @@ export default function ContactPage() {
                                 <div>
                                     <h3 className="font-semibold">Visit My Website</h3>
                                     <p className="text-muted-foreground">
-                                        <a href="https://davamz.com" target="_blank" rel="noopener noreferrer">https://davamz.com</a>
+                                        <a href="https://davidko.vercel.app" target="_blank" rel="noopener noreferrer">See my work</a>
                                     </p>
                                 </div>
                             </div>

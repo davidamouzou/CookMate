@@ -1,5 +1,4 @@
 import { Recipe } from "@/api/entities/recipe";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Clock, ChefHat, Star, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -28,7 +27,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
     >
       {/* Image Section */}
       <div className="relative h-56 w-full overflow-hidden">
-        <Image
+        <img
           className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
           src={recipe.image}
           alt={recipe.recipe_name}
