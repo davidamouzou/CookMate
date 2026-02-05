@@ -8,6 +8,7 @@ export default async function getConfig(locale) {
             messages,
         };
     } catch (err) {
+        console.error(`Failed to load messages for locale "${loc}"`, err);
         // If messages for the locale cannot be found, rethrow with helpful message
         throw new Error(
             `Could not load messages for locale "${loc}". Make sure ./messages/${loc}.json exists.`

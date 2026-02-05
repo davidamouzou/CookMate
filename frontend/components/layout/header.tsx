@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
-import { Sun, Moon, Search, User, Menu } from "lucide-react";
+import { Sun, Moon, Search, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "../ui/sheet";
 import LanguageSelector from "./language-selector";
 import { useTranslations } from "next-intl";

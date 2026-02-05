@@ -1,29 +1,11 @@
-import { compressImageToBase64, extractErrorMessageSafe } from "@/api/functions/upload_file"
+import { extractErrorMessageSafe } from "@/api/functions/upload_file"
 import { apiConfig } from "@/api/config";
 import { Recipe } from "@/api/entities/recipe";
-
-type BaseType = {
-    base64: string;
-    mimeType: string;
-}
 
 export type RecipeGenerateResponse = {
     success: boolean;
     recipe: Recipe | null;
     message?: string;
-}
-
-const convertDataURLToBase64 = (dataURL: string): BaseType | null => {
-    if (dataURL.startsWith("data:image/")) {
-        const base64 = dataURL.split(",")[1];
-        return {
-            "base64": base64,
-            "mimeType": "image/$ext",
-        };
-    } else {
-        console.error("the dataURL is not a valid image");
-        return null;
-    }
 }
 
 
@@ -128,13 +110,5 @@ export class RecipeProvider {
                 message: extractErrorMessageSafe(errorText) || "Erreur lors de la génération de la recette",
             };
         }
-    }
-
-    // Generate a recipe based on an image
-    static async generateWithImage(image: string, language: string = "en") {
-        const imageCompress = await compressImageToBase64(image, 3)
-        if (!imageCompress) { return [] }
-        const imageConvert = convertDataURLToBase64(imageCompress)
-        if (!imageConvert) { return [] }
     }
 }

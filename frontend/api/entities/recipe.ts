@@ -14,5 +14,18 @@ export type Recipe = {
     cuisine: string;
     description: string;
     meal_type: string;
-    nutrition_facts: Record<string, any>;
+    nutrition_facts: NutritionFacts;
 }
+
+export type NutritionFacts = {
+    calories?: string;
+    protein?: string;
+    carbohydrates?: string;
+    fat?: string;
+    vitamins?: string;
+    minerals?: string;
+    dietary_fiber?: string;
+    sugar?: string;
+    salt?: string;
+    antioxidants?: string;
+};

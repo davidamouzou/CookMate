@@ -152,6 +152,7 @@ const RecipeIAChat: React.FC = () => {
                 }]);
             }
         } catch (error) {
+            console.error("Recipe generation failed", error);
             setMessages(prev => prev.filter(m => m.id !== loadingId));
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),

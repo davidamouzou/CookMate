@@ -42,7 +42,7 @@ export const compressImageToBase64 = async (
     base64String: string, megabytes: number
 ): Promise<string | null> => {
     try {
-        const fileBlob: any = base64ToBlob(base64String);
+        const fileBlob = base64ToBlob(base64String);
         let compressedFile = await imageCompression(fileBlob, options);
 
         while (compressedFile.size > megabytes * 1024 * 1024) {
