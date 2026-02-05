@@ -1,6 +1,6 @@
 "use client";
 
-import RecipeCard from "@/components/layout/recipe_card";
+import RecipeCard from "@/components/layout/recipe-card";
 import { SkeletonCard } from "@/components/layout/skeleton-card";
 import { Button } from "@/components/ui/button";
 import { useRecipes } from "@/app/context/RecipeContext";

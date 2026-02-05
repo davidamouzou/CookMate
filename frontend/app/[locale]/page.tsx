@@ -1,4 +1,4 @@
-import { SliderCard } from "@/components/layout/slider_card";
+import { SliderCard } from "@/components/layout/slider-card";
 import { RecipeProvider } from "@/app/context/RecipeContext";
 import { Hero } from "@/components/layout/hero";
 import { RecipeList } from "@/components/layout/recipe-list";

@@ -11,7 +11,7 @@ import { SlidersHorizontal, WandSparkles, X, Send, Image as ImageIcon, Loader2 }
 import chooseImage from "@/api/functions/choose_image";
 import { Recipe } from "@/api/entities/recipe";
 import { RecipeProvider } from "@/api/provider/recipe_provider";
-import RecipeCard from "./recipe_card";
+import RecipeCard from "./recipe-card";
 import { toast, Toaster } from "sonner";
 import { uploadUrlImage } from "@/api/functions/upload_file";
 import { motion, AnimatePresence } from "framer-motion";
@@ -206,7 +206,7 @@ const RecipeIAChat: React.FC = () => {
                             setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                                 id: Date.now().toString(),
                                 role: 'assistant',
-                                content: `Voici une recette à partir de votre image : ${res.recipe.recipe_name}`,
+                                content: `Voici une recette à partir de votre image : ${res.recipe!.recipe_name}`,
                                 recipe: res.recipe,
                             }]);
                         }
@@ -215,7 +215,7 @@ const RecipeIAChat: React.FC = () => {
                         setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                             id: Date.now().toString(),
                             role: 'assistant',
-                            content: `Voici une recette à partir de votre image : ${res.recipe.recipe_name}`,
+                            content: `Voici une recette à partir de votre image : ${res.recipe!.recipe_name}`,
                             recipe: res.recipe,
                         }]);
                     }
