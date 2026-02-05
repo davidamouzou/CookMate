@@ -26,7 +26,7 @@ const options = {
     useWebWorker: true,
 };
 
-const base64ToBlob = (base64: string): Blob => {
+const base64ToFile = (base64: string): File => {
     const byteString = atob(base64.split(",")[1]);
     const mimeString = base64.split(",")[0].split(":")[1].split(";")[0];
     const arrayBuffer = new ArrayBuffer(byteString.length);
@@ -34,7 +34,7 @@ const base64ToBlob = (base64: string): Blob => {
     for (let i = 0; i < byteString.length; i++) {
         intArray[i] = byteString.charCodeAt(i);
     }
-    return new Blob([arrayBuffer], { type: mimeString });
+    return new File([arrayBuffer], "image", { type: mimeString });
 };
 
 // Compress an image to a Base64 string
@@ -42,7 +42,7 @@ export const compressImageToBase64 = async (
     base64String: string, megabytes: number
 ): Promise<string | null> => {
     try {
-        const fileBlob = base64ToBlob(base64String);
+        const fileBlob = base64ToFile(base64String);
         let compressedFile = await imageCompression(fileBlob, options);
 
         while (compressedFile.size > megabytes * 1024 * 1024) {
@@ -52,7 +52,7 @@ export const compressImageToBase64 = async (
                 console.error(`Error to compress image ${megabytes} Mo.`)
             }
         }
-        
+
         return await imageCompression.getDataUrlFromFile(compressedFile);
     } catch (error) {
         console.error(`Failed to compress image below ${megabytes} Mo: ` + error);
