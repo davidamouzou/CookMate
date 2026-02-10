@@ -8,13 +8,12 @@ from requests import post
 import base64
 import io
 import json
-from google import genai
 from google.genai import types
 from PIL import Image
 
 from models.recipe import Recipe
 from models.recipe_prompt import RecipePrompt
-from config import config
+from config import gen_ai_client, image_gen_config
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/generate", tags=["generate"])
@@ -104,8 +103,7 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
 
     # 4) Call the model
     try:
-        client = genai.Client(api_key=config.get("model_api_key"))
-        response = client.models.generate_content(
+        response = gen_ai_client.models.generate_content(
             model="gemini-3-flash-preview",
             contents=[prompt, *images],
             config=types.GenerateContentConfig(
@@ -113,13 +111,14 @@ async def generate_recipe(recipe_prompt: RecipePrompt):
                 response_schema=Recipe,
             ),
         )
-        client.close()
-        print(response.text)
     except Exception as exc:
         logger.exception("Model call failed")
         return _error_response(f"Model call failed: {exc}")
 
     # 5) Parse and post-process
+    if response.text is None:
+        return _error_response("Model response was empty", status_code=502)
+    
     try:
         result = _parse_model_response(response.text)
     except ValueError as exc:
@@ -149,12 +148,6 @@ async def generate_image(req: Request):
     if not description:
         return _error_response("No description provided", status_code=400)
 
-    headers = {
-        "Authorization": f"Bearer {config.get('image_gen_model_key')}",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    }
-
     payload = {
         "style": "photorealism",
         "prompt": description,
@@ -166,7 +159,7 @@ async def generate_image(req: Request):
     }
 
     try:
-        response = post(config.get('image_gen_model_url'), json=payload, headers=headers)
+        response = post(image_gen_config["url"], json=payload, headers=image_gen_config["headers"], timeout=30)
     except Exception as exc:
         logger.exception("Image generation request failed")
         return _error_response(f"Image generation request failed: {exc}")

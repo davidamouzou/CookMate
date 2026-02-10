@@ -1,9 +1,3 @@
-import os
-
-os.environ.setdefault("SUPABASE_URL", "https://example.supabase.co")
-os.environ.setdefault("SUPABASE_KEY", "test-key")
-os.environ.setdefault("API_KEY", "test-key")
-
 from fastapi.testclient import TestClient
 from main import app
 

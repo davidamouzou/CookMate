@@ -1,13 +1,26 @@
 import os
 from supabase import Client, create_client
+from google import genai
 
-config = {
-    "model_api_key": os.getenv("MODEL_API_KEY"),
-    "image_gen_model_key": os.getenv("IMAGE_GEN_MODEL_KEY"),
-    "image_gen_model_url": os.getenv("IMAGE_GEN_MODEL_URL"),
-    "supabase_key": os.getenv("SUPABASE_KEY"),
-    "supabase_url": os.getenv("SUPABASE_URL"),
+app_config = {
     "API_KEY": os.getenv("API_KEY"),
 }
 
-supabase_client: Client = create_client(config.get('supabase_url'), config.get('supabase_key'))
+# Initialize Supabase client
+supabase_client: Client = create_client(
+    os.getenv("SUPABASE_URL", ""), 
+    os.getenv("SUPABASE_KEY", "")
+)
+
+# Initialize GenAI client
+gen_ai_client = genai.Client(api_key=os.getenv("MODEL_API_KEY", ""))
+
+# Image generation configuration
+image_gen_config = {
+    "headers": {
+        "Authorization": f"Bearer {os.getenv('IMAGE_GEN_MODEL_KEY', '')}",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    },
+    "url": os.getenv("IMAGE_GEN_MODEL_URL"), 
+}

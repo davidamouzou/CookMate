@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import config
+from config import app_config
 from routers import generate, recipes, upload
 
 
@@ -39,7 +39,7 @@ async def verify_api_key(request: Request, call_next):
         return await call_next(request)
 
     api_key = request.headers.get('api-key')
-    if api_key != config.get('API_KEY'):
+    if api_key != app_config.get('API_KEY'):
         return Response(
             content=json.dumps({
                 "code": "unauthorized",
