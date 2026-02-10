@@ -82,7 +82,7 @@ jobs:
       - name: Dependency vulnerabilities
         run: pip-audit -r requirements.txt
       - name: Static analysis
-        run: bandit -r . -x tests -q
+        run: bandit -c bandit.yaml -r . -q
 
   frontend-unit:
     name: Frontend - Unit
