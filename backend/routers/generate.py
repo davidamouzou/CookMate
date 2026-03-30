@@ -45,7 +45,7 @@ def _build_prompt(text: str, language: str) -> str:
 
 
 def _parse_model_response(raw_text: str) -> Dict[str, Any]:
-    # Remove markdown fences if present
+    # Remove Markdown fences if present
     cleaned = raw_text.replace("```json", "").replace("```", "").strip()
     try:
         parsed = json.loads(cleaned)

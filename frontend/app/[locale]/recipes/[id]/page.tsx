@@ -3,8 +3,8 @@
 import { Beef, Circle, CircleCheck, Flame, User, Clock, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Recipe } from "@/api/entities/recipe";
-import { RecipeProvider } from "@/api/provider/recipe_provider";
+import { Recipe } from "@/features/entities/recipe";
+import { RecipeProvider } from "@/features/provider/recipe_provider";
 import { PiBowlFoodLight, PiFireSimpleThin } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { DetailRecipeSkeleton } from "@/components/layout/detail-recipe-skeleton";

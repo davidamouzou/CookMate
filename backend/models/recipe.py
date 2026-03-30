@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
+
 from pydantic import BaseModel
-from pydantic import BaseModel, Field
 
 
 class NutritionFacts(BaseModel):

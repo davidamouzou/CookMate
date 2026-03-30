@@ -1,6 +1,6 @@
-import { Recipe } from "@/api/entities/recipe";
+import { Recipe } from "@/features/entities/recipe";
 import { useRouter } from "next/navigation";
-import { Clock, ChefHat, Star, ArrowUpRight } from "lucide-react";
+import { Clock, ChefHat, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
@@ -70,13 +70,6 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             <ChefHat className="w-4 h-4" />
             <span className="capitalize">{recipe.difficulty || 'Easy'}</span>
           </div>
-        </div>
-
-        {/* Rating (Mock) */}
-        <div className="flex items-center gap-1 text-amber-500 text-xs font-medium pt-2 border-t border-border/50">
-          <Star className="w-3.5 h-3.5 fill-current" />
-          <span>4.8</span>
-          <span className="text-muted-foreground ml-1">(120+ reviews)</span>
         </div>
       </div>
     </motion.div>

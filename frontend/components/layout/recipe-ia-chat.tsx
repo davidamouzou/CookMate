@@ -8,12 +8,12 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { SlidersHorizontal, WandSparkles, X, Send, Image as ImageIcon, Loader2 } from "lucide-react";
-import chooseImage from "@/api/functions/choose_image";
-import { Recipe } from "@/api/entities/recipe";
-import { RecipeProvider } from "@/api/provider/recipe_provider";
+import chooseImage from "@/features/functions/choose_image";
+import { Recipe } from "@/features/entities/recipe";
+import { RecipeProvider } from "@/features/provider/recipe_provider";
 import RecipeCard from "./recipe-card";
 import { toast, Toaster } from "sonner";
-import { uploadUrlImage } from "@/api/functions/upload_file";
+import { uploadUrlImage } from "@/features/functions/upload_file";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -295,13 +295,13 @@ const RecipeIAChat: React.FC = () => {
 
                                 <div
                                     className="rounded-full shadow-lg border-4 bg-white dark:bg-zinc-900 overflow-hidden w-[70px] h-[70px]"
-
                                 >
                                     <Image
                                         src="/images/Beagle_Fast_Food.gif"
                                         alt="Chef Assistant"
                                         width={80}
                                         height={80}
+                                        unoptimized
                                     />
                                 </div>
                             </motion.div>

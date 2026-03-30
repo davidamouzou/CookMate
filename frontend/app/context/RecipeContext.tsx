@@ -1,8 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { Recipe } from "@/api/entities/recipe";
-import { RecipeProvider as ApiProvider } from "@/api/provider/recipe_provider";
+import { Recipe } from "@/features/entities/recipe";
+import { RecipeProvider as ApiProvider } from "@/features/provider/recipe_provider";
 
 interface RecipeContextType {
     recipes: Recipe[];
