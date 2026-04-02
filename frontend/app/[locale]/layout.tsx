@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import Script from "next/script";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -40,7 +41,15 @@ export default async function RootLayout({ children, params }: { children: React
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head ><title>Generate</title></head>
+      <head>
+        <title>Generate</title>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222739966901829"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${outfit.className}`}
       >
