@@ -44,7 +44,7 @@ export default async function RootLayout({ children, params }: { children: React
       <head>
         <title>Generate</title>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222739966901829"
-          crossorigin="anonymous" />
+          crossOrigin="anonymous" />
       </head>
       <body
         className={`${outfit.className}`}
