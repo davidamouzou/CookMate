@@ -43,12 +43,8 @@ export default async function RootLayout({ children, params }: { children: React
     <html lang={locale} suppressHydrationWarning>
       <head>
         <title>Generate</title>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222739966901829"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222739966901829"
+          crossorigin="anonymous" />
       </head>
       <body
         className={`${outfit.className}`}
