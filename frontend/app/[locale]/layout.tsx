@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import Script from "next/script";
 
 const outfit = Outfit({
   subsets: ["latin"],
