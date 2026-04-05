@@ -1,4 +1,4 @@
-import { apiConfig } from "@/features/config";
+import { apiConfig, isApiConfigured } from "@/features/config";
 import imageCompression from "browser-image-compression";
 
 
@@ -62,6 +62,11 @@ export const compressImageToBase64 = async (
 
 export const uploadUrlImage = async (url: string): Promise<string | null> => {
     try {
+        if (!isApiConfigured) {
+            console.error("API backend is not configured. Set BASE_URL in .env.local.");
+            return null;
+        }
+
         console.log(url)
         const response = await fetch(`${apiConfig.base_url}/upload/image`, {
             method: 'POST',
@@ -69,8 +74,13 @@ export const uploadUrlImage = async (url: string): Promise<string | null> => {
             body: JSON.stringify({ url: url }),
         });
         if (response.ok) {
-            const imageSaveData = await response.json();
-            return imageSaveData['url'] as string;
+            const payload = await response.text();
+            if (!payload) {
+                return null;
+            }
+
+            const imageSaveData = JSON.parse(payload) as { url?: string };
+            return imageSaveData.url ?? null;
         } else {
             console.log("Upload => error to get image data");
             return null;
