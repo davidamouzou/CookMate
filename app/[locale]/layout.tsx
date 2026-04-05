@@ -4,6 +4,11 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages, getTranslations } from 'next-intl/server';
+import { notFound } from "next/navigation";
+import { buildAlternates, getBaseUrl } from "@/lib/metadata";
+import { locales, type Locale } from "@/i18n/routing";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -13,35 +18,48 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
-export const metadata: Metadata = {
-  title: "Cook Mate - Your Ultimate Recipe Companion",
-  description: "Cook Mate is your go-to app for discovering, creating, and sharing delicious recipes. Explore a wide variety of dishes, manage your favorites, and get inspired to cook something new every day.",
-}
-
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+type RootLayoutProps = {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+};
 
 export function generateStaticParams() {
-  return [{ locale: 'en' }, { locale: 'fr' }];
+  return locales.map((locale) => ({ locale }));
 }
 
-export default async function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
-  const resolvedParams = await params;
-  const { locale } = resolvedParams;
-  console.log('RootLayout locale:', locale);
-  let messages: Record<string, unknown> = {};
-  try {
-    messages = await getMessages({ locale });
-    console.log('RootLayout messages loaded');
-  } catch (error) {
-    console.error('RootLayout messages error:', error);
-    messages = {}; // Fallback
+function isSupportedLocale(locale: string): locale is Locale {
+  return locales.includes(locale as Locale);
+}
+
+export async function generateMetadata({ params }: RootLayoutProps): Promise<Metadata> {
+  const { locale: requestedLocale } = await params;
+  const locale = isSupportedLocale(requestedLocale) ? requestedLocale : "en";
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    metadataBase: getBaseUrl(),
+    applicationName: t("brand"),
+    title: {
+      default: t("siteTitle"),
+      template: `%s | ${t("brand")}`,
+    },
+    description: t("siteDescription"),
+    alternates: buildAlternates(locale),
+  };
+}
+
+export default async function RootLayout({ children, params }: RootLayoutProps) {
+  const { locale } = await params;
+
+  if (!isSupportedLocale(locale)) {
+    notFound();
   }
+
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <title>Generate</title>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222739966901829"
           crossOrigin="anonymous" />
       </head>

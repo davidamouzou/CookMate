@@ -3,8 +3,10 @@ import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export const SliderCard = () => {
+  const t = useTranslations("SliderCard");
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const slides = useMemo(() => [
     "/images/slide_1.jpg",
@@ -28,7 +30,7 @@ export const SliderCard = () => {
           <Star className="text-primary h-5 w-5 fill-current" />
         </div>
         <div className="bg-white/60 dark:bg-black/60 backdrop-blur-md px-5 py-2.5 rounded-full shadow-sm">
-          <span className="text-sm font-bold tracking-wide text-foreground">Top-Rated Foods</span>
+          <span className="text-sm font-bold tracking-wide text-foreground">{t("badge")}</span>
         </div>
       </div>
 
@@ -36,7 +38,7 @@ export const SliderCard = () => {
       <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 z-20">
         <div className="bg-white/60 dark:bg-black/60 backdrop-blur-md p-4 md:p-6 rounded-3xl shadow-lg">
           <h3 className="text-xl md:text-2xl font-bold text-foreground leading-tight">
-            Savor Healthy Eats - Keep it Casual and Easy-Going!
+            {t("title")}
           </h3>
         </div>
       </div>
@@ -53,7 +55,7 @@ export const SliderCard = () => {
         >
           <Image
             src={slides[currentSlideIndex]}
-            alt={`Slide ${currentSlideIndex + 1}`}
+            alt={t("slideAlt", { number: currentSlideIndex + 1 })}
             fill
             priority
             className="object-cover"

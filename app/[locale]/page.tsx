@@ -4,6 +4,25 @@ import { Hero } from "@/components/layout/hero";
 import { RecipeList } from "@/components/layout/recipe-list";
 import RecipeIAChat from "@/components/layout/recipe-ia-chat";
 import Header from "@/components/layout/header";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/metadata";
+import { type Locale } from "@/i18n/routing";
+
+type HomePageProps = {
+  params: Promise<{ locale: Locale }>;
+};
+
+export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    title: t("homeTitle"),
+    description: t("homeDescription"),
+    alternates: buildAlternates(locale),
+  };
+}
 
 export default function Home() {
   return (

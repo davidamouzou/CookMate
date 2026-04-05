@@ -1,8 +1,26 @@
 import Header from "@/components/layout/header";
-//import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import { buildAlternates } from "@/lib/metadata";
+import { type Locale } from "@/i18n/routing";
 
-export default function AboutPage() {
-    //const t = useTranslations('About'); // You might need to add this to your messages
+type AboutPageProps = {
+    params: Promise<{ locale: Locale }>;
+};
+
+export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: "Metadata" });
+
+    return {
+        title: t("aboutTitle"),
+        description: t("aboutDescription"),
+        alternates: buildAlternates(locale, "/about"),
+    };
+}
+
+export default async function AboutPage() {
+    const t = await getTranslations("AboutPage");
 
     return (
         <main className="min-h-screen bg-background">
@@ -10,24 +28,23 @@ export default function AboutPage() {
                 <Header />
                 <div className="py-12 md:py-24 max-w-4xl mx-auto space-y-8">
                     <h1 className="text-4xl md:text-6xl font-bold text-center">
-                        About <span className="text-primary">Flavor</span>
+                        {t("title")} <span className="text-primary">{t("titleHighlight")}</span>
                     </h1>
                     <p className="text-xl text-muted-foreground text-center leading-relaxed">
-                        Flavor is your ultimate culinary companion, designed to inspire your daily cooking journey.
-                        We believe that cooking should be accessible, fun, and delicious for everyone.
+                        {t("description")}
                     </p>
 
                     <div className="grid md:grid-cols-2 gap-8 mt-16">
                         <div className="bg-secondary/20 p-8 rounded-3xl">
-                            <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
+                            <h3 className="text-2xl font-bold mb-4">{t("missionTitle")}</h3>
                             <p className="text-muted-foreground">
-                                To empower home cooks with creative recipes, smart tools, and a community that shares the love for food.
+                                {t("missionDescription")}
                             </p>
                         </div>
                         <div className="bg-secondary/20 p-8 rounded-3xl">
-                            <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
+                            <h3 className="text-2xl font-bold mb-4">{t("visionTitle")}</h3>
                             <p className="text-muted-foreground">
-                                A world where every meal is an opportunity to explore new flavors and create lasting memories with loved ones.
+                                {t("visionDescription")}
                             </p>
                         </div>
                     </div>

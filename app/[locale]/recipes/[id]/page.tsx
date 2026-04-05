@@ -11,6 +11,7 @@ import { DetailRecipeSkeleton } from "@/components/layout/detail-recipe-skeleton
 import RecipeIAChat from "@/components/layout/recipe-ia-chat";
 import { motion } from "framer-motion";
 import Header from "@/components/layout/header";
+import { useTranslations } from "next-intl";
 
 const NutritionCard = ({
   title,
@@ -34,6 +35,7 @@ const NutritionCard = ({
 
 const Instruction = ({ instruction, index }: { instruction: string; index: number }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const t = useTranslations("RecipeDetail");
 
   return (
     <div
@@ -47,7 +49,7 @@ const Instruction = ({ instruction, index }: { instruction: string; index: numbe
         {isChecked ? <CircleCheck className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
       </div>
       <div className="flex-1">
-        <span className="text-xs font-bold text-muted-foreground mb-1 block">STEP {index + 1}</span>
+        <span className="text-xs font-bold text-muted-foreground mb-1 block">{t("step", { number: index + 1 })}</span>
         <p className={`text-base leading-relaxed transition-opacity ${isChecked ? "line-through opacity-50" : ""}`}>
           {instruction}
         </p>
@@ -60,6 +62,7 @@ const DetailRecipe = () => {
   const params = useParams()
   const [recipe, setRecipe] = useState<Recipe>()
   const [showFullDescription, setShowFullDescription] = useState(false)
+  const t = useTranslations("RecipeDetail");
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -108,7 +111,7 @@ const DetailRecipe = () => {
                             <Clock className="w-4 h-4" /> {recipe.duration_to_cook} min
                           </span>
                           <span className="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
-                            <User className="w-4 h-4" /> {recipe.servings} servings
+                            <User className="w-4 h-4" /> {recipe.servings} {t("servings")}
                           </span>
                         </div>
                       </div>
@@ -117,22 +120,22 @@ const DetailRecipe = () => {
                     {/* Nutrition Grid - Mobile/Desktop */}
                     <div className="grid grid-cols-2 gap-4">
                       <NutritionCard
-                        title="Calories"
+                        title={t("nutrition.calories")}
                         value={`${recipe.nutrition_facts["calories"]}`}
                         icon={<PiBowlFoodLight />}
                       />
                       <NutritionCard
-                        title="Protein"
+                        title={t("nutrition.protein")}
                         value={`${recipe.nutrition_facts["protein"]}`}
                         icon={<Beef />}
                       />
                       <NutritionCard
-                        title="Fat"
+                        title={t("nutrition.fat")}
                         value={`${recipe.nutrition_facts["fat"]}`}
                         icon={<PiFireSimpleThin />}
                       />
                       <NutritionCard
-                        title="Carbs"
+                        title={t("nutrition.carbs")}
                         value={`${recipe.nutrition_facts["carbohydrates"]}`}
                         icon={<Flame />}
                       />
@@ -165,7 +168,7 @@ const DetailRecipe = () => {
                             className="ml-2 text-primary font-semibold hover:underline decoration-2 underline-offset-4"
                             onClick={() => setShowFullDescription(!showFullDescription)}
                           >
-                            {showFullDescription ? "Read less" : "Read more"}
+                            {showFullDescription ? t("readLess") : t("readMore")}
                           </button>
                         </p>
                       </motion.div>
@@ -175,7 +178,7 @@ const DetailRecipe = () => {
                     <div>
                       <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
                         <span className="w-8 h-1 bg-primary rounded-full inline-block"></span>
-                        Ingredients
+                        {t("ingredients")}
                       </h2>
                       <div className="flex flex-wrap gap-2">
                         {recipe.ingredients.map((ingredient, index) => (
@@ -193,7 +196,7 @@ const DetailRecipe = () => {
                     <div>
                       <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                         <span className="w-8 h-1 bg-primary rounded-full inline-block"></span>
-                        Instructions
+                        {t("instructions")}
                       </h2>
                       <div className="space-y-3">
                         {recipe.instructions.map((instruction, index) => (
@@ -220,7 +223,7 @@ const DetailRecipe = () => {
                       try {
                         await navigator.share({
                           title: recipe.recipe_name,
-                          text: `Check out this recipe for ${recipe.recipe_name}!`,
+                          text: t("shareText", { name: recipe.recipe_name }),
                           url: window.location.href,
                         });
                       } catch (error) {
@@ -229,7 +232,7 @@ const DetailRecipe = () => {
                     } else {
                       // Fallback for browsers that don't support share
                       navigator.clipboard.writeText(window.location.href);
-                      alert("Link copied to clipboard!");
+                      alert(t("shareCopied"));
                     }
                   }}
                   size="icon"

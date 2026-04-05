@@ -2,9 +2,11 @@
 
 import { Search } from "lucide-react";
 import { useRecipes } from "@/app/context/RecipeContext";
+import { useTranslations } from "next-intl";
 
 export function SearchBar() {
     const { searchQuery, setSearchQuery } = useRecipes();
+    const t = useTranslations("Header");
 
     return (
         <div className="rounded-full mt-5 justify-end flex items-center relative">
@@ -13,7 +15,7 @@ export function SearchBar() {
                 type="search"
                 name="search"
                 id="search"
-                placeholder="Find Great Food"
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />

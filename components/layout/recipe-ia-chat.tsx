@@ -16,6 +16,7 @@ import { toast, Toaster } from "sonner";
 import { uploadUrlImage } from "@/features/functions/upload_file";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
 
 interface Message {
     id: string;
@@ -27,13 +28,15 @@ interface Message {
 }
 
 const RecipeIAChat: React.FC = () => {
+    const t = useTranslations("RecipeIAChat");
+    const locale = useLocale();
     // Chat State
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<Message[]>([
+    const [messages, setMessages] = useState<Message[]>(() => [
         {
             id: 'welcome',
             role: 'assistant',
-            content: "Bonjour ! Je suis votre chef IA personnel. Dites-moi ce que vous avez dans votre frigo ou ce dont vous avez envie, et je créerai une recette pour vous !"
+            content: t("welcome")
         }
     ]);
     const [inputValue, setInputValue] = useState("");
@@ -44,22 +47,16 @@ const RecipeIAChat: React.FC = () => {
     const [mealType, setMealType] = useState("");
     const [cookTime, setCookTime] = useState([30]);
     const [level, setLevel] = useState("");
-    const [language, setLanguage] = useState("fr");
+    const [language, setLanguage] = useState(locale);
 
     // Auto-scroll to bottom
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, isOpen]);
 
-    // Detect language
     useEffect(() => {
-        if (typeof window !== "undefined" && window.navigator && window.navigator.language) {
-            const lang = window.navigator.language.slice(0, 2);
-            if (["fr", "en", "es", "de"].includes(lang)) {
-                setLanguage(lang);
-            }
-        }
-    }, []);
+        setLanguage(locale);
+    }, [locale]);
 
     const saveRecipesHandler = useCallback(async (recipeToSave: Recipe): Promise<Recipe | null> => {
         try {
@@ -83,15 +80,15 @@ const RecipeIAChat: React.FC = () => {
         // Construct the full prompt including filters
         const descriptionParts = [
             userMessageText,
-            mealType ? `type de repas: ${mealType}` : '',
+            mealType ? `${t("filters.mealType")}: ${t(`mealTypeOptions.${mealType}`)}` : '',
             `durée <= ${cookTime[0]} minutes`,
-            level ? `niveau: ${level}` : '',
+            level ? `${t("filters.difficulty")}: ${t(`difficultyOptions.${level}`)}` : '',
         ].filter(Boolean).join(", ");
 
         const newUserMessage: Message = {
             id: Date.now().toString(),
             role: 'user',
-            content: userMessageText || "Génère une recette avec mes filtres."
+            content: userMessageText || t("defaultPrompt")
         };
 
         setMessages(prev => [...prev, newUserMessage]);
@@ -102,7 +99,7 @@ const RecipeIAChat: React.FC = () => {
         setMessages(prev => [...prev, {
             id: loadingId,
             role: 'assistant',
-            content: "Je réfléchis à une délicieuse recette...",
+            content: t("thinking"),
             isLoading: true
         }]);
 
@@ -117,7 +114,7 @@ const RecipeIAChat: React.FC = () => {
                     setMessages(prev => [...prev, {
                         id: Date.now().toString(),
                         role: 'assistant',
-                        content: "Désolé, je n'ai pas pu générer une recette valide avec ces critères. Essayez d'être plus précis."
+                        content: t("invalidRecipe")
                     }]);
                     return;
                 }
@@ -132,7 +129,7 @@ const RecipeIAChat: React.FC = () => {
                         setMessages(prev => [...prev, {
                             id: Date.now().toString(),
                             role: 'assistant',
-                            content: `Voici une recette pour vous : ${res.recipe?.recipe_name}`,
+                            content: t("recipeReady", { name: res.recipe?.recipe_name ?? "" }),
                             recipe: recipeSave,
                         }]);
                     }
@@ -148,7 +145,7 @@ const RecipeIAChat: React.FC = () => {
                 setMessages(prev => [...prev, {
                     id: Date.now().toString(),
                     role: 'assistant',
-                    content: res.message || "Une erreur est survenue lors de la génération."
+                    content: res.message || t("generationError")
                 }]);
             }
         } catch (error) {
@@ -157,7 +154,7 @@ const RecipeIAChat: React.FC = () => {
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
                 role: 'assistant',
-                content: "Désolé, une erreur technique est survenue."
+                content: t("technicalError")
             }]);
         } finally {
             setIsGenerating(false);
@@ -172,7 +169,7 @@ const RecipeIAChat: React.FC = () => {
                 setMessages(prev => [...prev, {
                     id: userMessageId,
                     role: 'user',
-                    content: "J'ai une image de mes ingrédients !",
+                    content: t("imageUploaded"),
                     image,
                 }]);
 
@@ -180,7 +177,7 @@ const RecipeIAChat: React.FC = () => {
                 setMessages(prev => [...prev, {
                     id: loadingId,
                     role: 'assistant',
-                    content: "Je déchiffre vos ingrédients...",
+                    content: t("imageAnalyzing"),
                     isLoading: true
                 }]);
                 setIsGenerating(true);
@@ -199,14 +196,14 @@ const RecipeIAChat: React.FC = () => {
                             setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                                 id: Date.now().toString(),
                                 role: 'assistant',
-                                content: `Voici ce que j'ai détecté sur l'image : ${saved.recipe_name}`,
+                                content: t("imageDetected", { name: saved.recipe_name }),
                                 recipe: saved,
                             }]);
                         } else {
                             setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                                 id: Date.now().toString(),
                                 role: 'assistant',
-                                content: `Voici une recette à partir de votre image : ${res.recipe!.recipe_name}`,
+                                content: t("imageRecipe", { name: res.recipe!.recipe_name }),
                                 recipe: res.recipe,
                             }]);
                         }
@@ -215,7 +212,7 @@ const RecipeIAChat: React.FC = () => {
                         setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                             id: Date.now().toString(),
                             role: 'assistant',
-                            content: `Voici une recette à partir de votre image : ${res.recipe!.recipe_name}`,
+                            content: t("imageRecipe", { name: res.recipe!.recipe_name }),
                             recipe: res.recipe,
                         }]);
                     }
@@ -223,13 +220,13 @@ const RecipeIAChat: React.FC = () => {
                     setMessages(prev => [...prev.filter(m => m.id !== loadingId), {
                         id: Date.now().toString(),
                         role: 'assistant',
-                        content: res.message || "Impossible de générer une recette à partir de cette image."
+                        content: res.message || t("imageRecipeError")
                     }]);
                 }
             }
         } catch (e) {
             console.error(e);
-            toast.error("Erreur lors du chargement de l'image");
+            toast.error(t("imageUploadError"));
         } finally {
             setIsGenerating(false);
         }
@@ -252,7 +249,7 @@ const RecipeIAChat: React.FC = () => {
                                 className="bg-white dark:bg-zinc-800 px-4 py-2 rounded-2xl shadow-xl border border-primary/10 pointer-events-auto relative mr-2"
                             >
                                 <div className="text-sm font-medium text-foreground">
-                                    Besoin d'inspiration ? 👨‍🍳
+                                    {t("cta")} 👨‍🍳
                                 </div>
                                 <div className="absolute -bottom-1 right-6 w-3 h-3 bg-white dark:bg-zinc-800 border-b border-r border-primary/10 transform rotate-45 translate-y-1/2"></div>
                             </motion.div>
@@ -298,7 +295,7 @@ const RecipeIAChat: React.FC = () => {
                                 >
                                     <Image
                                         src="/images/Beagle_Fast_Food.gif"
-                                        alt="Chef Assistant"
+                                        alt={t("assistantTitle")}
                                         width={80}
                                         height={80}
                                         unoptimized
@@ -327,8 +324,8 @@ const RecipeIAChat: React.FC = () => {
                                     <WandSparkles className="h-5 w-5 text-primary" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-sm">Chef Assistant</h3>
-                                    <p className="text-xs text-muted-foreground">Toujours prêt à cuisiner</p>
+                                    <h3 className="font-semibold text-sm">{t("assistantTitle")}</h3>
+                                    <p className="text-xs text-muted-foreground">{t("assistantSubtitle")}</p>
                                 </div>
                             </div>
                             <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="h-8 w-8 rounded-full hover:bg-destructive/10 hover:text-destructive">
@@ -345,13 +342,13 @@ const RecipeIAChat: React.FC = () => {
                                 >
                                     <div className={`max-w-[85%] space-y-2 ${msg.role === 'user' ? 'items-end flex flex-col' : 'items-start flex flex-col'}`}>
                                         {msg.image && (
-                                            <div className="rounded-xl overflow-hidden border border-border/50 shadow-sm mb-1 max-w-[200px]">
-                                                <Image
-                                                    src={msg.image}
-                                                    alt="User uploaded"
-                                                    width={200}
-                                                    height={200}
-                                                    className="w-full h-auto object-cover"
+                                        <div className="rounded-xl overflow-hidden border border-border/50 shadow-sm mb-1 max-w-[200px]">
+                                            <Image
+                                                src={msg.image}
+                                                alt={t("imageUploaded")}
+                                                width={200}
+                                                height={200}
+                                                className="w-full h-auto object-cover"
                                                 />
                                             </div>
                                         )}
@@ -387,37 +384,37 @@ const RecipeIAChat: React.FC = () => {
                             <div className="flex items-end gap-2">
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" size="icon" className="h-10 w-10 shrink-0 rounded-full" title="Filtres">
+                                        <Button variant="outline" size="icon" className="h-10 w-10 shrink-0 rounded-full" title={t("filtersButton")}>
                                             <SlidersHorizontal className="h-4 w-4" />
                                         </Button>
                                     </PopoverTrigger>
                                     <PopoverContent className="w-80 p-4" align="start" side="top">
                                         <div className="space-y-4">
-                                            <h4 className="font-medium leading-none mb-2">Préférences</h4>
+                                            <h4 className="font-medium leading-none mb-2">{t("preferences")}</h4>
                                             <div className="space-y-2">
-                                                <Label>Type de repas</Label>
+                                                <Label>{t("mealType")}</Label>
                                                 <Select value={mealType} onValueChange={setMealType}>
-                                                    <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
+                                                    <SelectTrigger><SelectValue placeholder={t("all")} /></SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="breakfast">Petit déjeuner</SelectItem>
-                                                        <SelectItem value="lunch">Déjeuner</SelectItem>
-                                                        <SelectItem value="dinner">Dîner</SelectItem>
-                                                        <SelectItem value="dessert">Dessert</SelectItem>
+                                                        <SelectItem value="breakfast">{t("mealTypeOptions.breakfast")}</SelectItem>
+                                                        <SelectItem value="lunch">{t("mealTypeOptions.lunch")}</SelectItem>
+                                                        <SelectItem value="dinner">{t("mealTypeOptions.dinner")}</SelectItem>
+                                                        <SelectItem value="dessert">{t("mealTypeOptions.dessert")}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
                                             <div className="space-y-2">
-                                                <Label>Temps max: {cookTime[0]} min</Label>
+                                                <Label>{t("maxTime", { minutes: cookTime[0] })}</Label>
                                                 <Slider value={cookTime} onValueChange={setCookTime} max={180} step={5} />
                                             </div>
                                             <div className="space-y-2">
-                                                <Label>Difficulté</Label>
+                                                <Label>{t("difficulty")}</Label>
                                                 <Select value={level} onValueChange={setLevel}>
-                                                    <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
+                                                    <SelectTrigger><SelectValue placeholder={t("all")} /></SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="easy">Facile</SelectItem>
-                                                        <SelectItem value="medium">Moyen</SelectItem>
-                                                        <SelectItem value="hard">Difficile</SelectItem>
+                                                        <SelectItem value="easy">{t("difficultyOptions.easy")}</SelectItem>
+                                                        <SelectItem value="medium">{t("difficultyOptions.medium")}</SelectItem>
+                                                        <SelectItem value="hard">{t("difficultyOptions.hard")}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -442,7 +439,7 @@ const RecipeIAChat: React.FC = () => {
                                                 handleSendMessage();
                                             }
                                         }}
-                                        placeholder="Une idée de recette ?"
+                                        placeholder={t("inputPlaceholder")}
                                         className="pr-10 py-3 px-4 rounded-3xl bg-muted/30 border-transparent focus:border-primary/20 focus:bg-background transition-all resize-none min-h-[48px] max-h-[120px] overflow-y-auto"
                                         disabled={isGenerating}
                                         maxLength={300}

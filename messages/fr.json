@@ -1,21 +1,185 @@
 {
-    "Header": {
-        "toggleTheme": "Changer de thème"
-    },
-    "Hero": {
-        "fresh": "Nourriture",
-        "food": "Fraîche",
-        "with": "Avec",
-        "great": "Grand",
-        "taste": "Goût",
-        "description": "Dans l'ensemble, \"Créer de délicieux plats\" est une ressource essentielle pour quiconque souhaite lancer une entreprise alimentaire ou faire passer ses compétences culinaires au niveau supérieur."
-    },
-    "RecipeList": {
-        "popularRecipes": "Recettes Populaires",
-        "loading": "Chargement...",
-        "loadMore": "Charger plus de recettes"
-    },
-    "LanguageSelector": {
-        "label": "Langue"
+  "Metadata": {
+    "brand": "Cook Mate",
+    "siteTitle": "Cook Mate",
+    "siteDescription": "Cook Mate vous aide à découvrir des recettes, générer des idées avec l'IA et cuisiner avec confiance au quotidien.",
+    "homeTitle": "Explorer des idées culinaires",
+    "homeDescription": "Parcourez les recettes tendances, explorez des catégories et laissez-vous guider par l'assistant culinaire IA de Cook Mate.",
+    "aboutTitle": "À propos de Cook Mate",
+    "aboutDescription": "Découvrez Cook Mate, notre mission et notre vision pour simplifier la cuisine du quotidien.",
+    "contactTitle": "Contacter Cook Mate",
+    "contactDescription": "Contactez-nous pour une question, une suggestion ou une idée de collaboration autour de Cook Mate.",
+    "blogTitle": "Blog Cook Mate",
+    "blogDescription": "Retrouvez des conseils cuisine, des histoires et de l'inspiration pratique signés Cook Mate.",
+    "recipesTitle": "Collection de recettes",
+    "recipesDescription": "Explorez la collection grandissante de recettes Cook Mate venues du monde entier."
+  },
+  "Header": {
+    "toggleTheme": "Changer de thème",
+    "brandLabel": "Cook Mate",
+    "searchPlaceholder": "Rechercher une recette...",
+    "openMenu": "Ouvrir le menu",
+    "menuTitle": "Navigation",
+    "nav": {
+      "home": "Accueil",
+      "about": "À propos",
+      "recipes": "Recettes",
+      "blog": "Blog",
+      "contact": "Contact"
     }
+  },
+  "Hero": {
+    "titleStart": "Explorez des",
+    "titleHighlight": "idées",
+    "titleEnd": "culinaires",
+    "description": "Trouvez des recettes vraiment accessibles, gagnez du temps avec des suggestions intelligentes et transformez vos ingrédients du quotidien en plats inspirants.",
+    "question": "Qu'est-ce qu'on",
+    "questionHighlight": "cuisine",
+    "categories": {
+      "all": "Tous les styles",
+      "appetizers": "Entrées",
+      "mainCourses": "Plats principaux",
+      "saladsSides": "Salades et accompagnements",
+      "vegetarian": "Végétarien",
+      "desserts": "Desserts",
+      "healthy": "Cuisine saine",
+      "quickEasy": "Rapide et facile"
+    }
+  },
+  "RecipeList": {
+    "popularRecipes": "Recettes populaires",
+    "loading": "Chargement...",
+    "loadMore": "Charger plus de recettes"
+  },
+  "SliderCard": {
+    "badge": "Plats les mieux notés",
+    "title": "Savourez une cuisine plus saine et gardez le plaisir de cuisiner au quotidien.",
+    "slideAlt": "Plat mis en avant {number}"
+  },
+  "LanguageSelector": {
+    "label": "Langue"
+  },
+  "AboutPage": {
+    "title": "À propos de",
+    "titleHighlight": "Cook Mate",
+    "description": "Cook Mate est votre compagnon de cuisine au quotidien, pensé pour vous aider à trouver des idées, cuisiner avec confiance et profiter encore plus de chaque repas.",
+    "missionTitle": "Notre mission",
+    "missionDescription": "Rendre la cuisine maison plus simple et plus inspirante grâce à des recettes utiles, des outils pratiques et une expérience chaleureuse.",
+    "visionTitle": "Notre vision",
+    "visionDescription": "Construire un monde où chaque cuisinier peut explorer de nouvelles saveurs, réduire la friction en cuisine et partager des repas mémorables."
+  },
+  "ContactPage": {
+    "title": "Entrons en",
+    "titleHighlight": "contact",
+    "description": "Une question, une suggestion ou un projet en tête ? Nous serions ravis d'échanger avec vous.",
+    "emailTitle": "Écrivez-nous",
+    "websiteTitle": "Visitez mon site",
+    "websiteLinkLabel": "Voir mon travail",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "message": "Message",
+    "firstNamePlaceholder": "Jean",
+    "lastNamePlaceholder": "Dupont",
+    "emailPlaceholder": "jean@example.com",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+    "submit": "Envoyer le message"
+  },
+  "BlogPage": {
+    "title": "Blog",
+    "titleHighlight": "culinaire",
+    "description": "Actualités, conseils et histoires en direct de la cuisine Cook Mate.",
+    "readMore": "Lire la suite",
+    "posts": {
+      "healthyCooking": {
+        "title": "10 conseils pour une cuisine plus saine",
+        "excerpt": "Découvrez de petits changements simples à intégrer à votre routine culinaire pour un mode de vie plus sain.",
+        "category": "Santé"
+      },
+      "sourdough": {
+        "title": "L'art du levain",
+        "excerpt": "Un guide débutant pour préparer votre propre pain au levain maison.",
+        "category": "Boulangerie"
+      },
+      "weeknightDinners": {
+        "title": "Dîners rapides en semaine",
+        "excerpt": "Gagnez du temps sans sacrifier les saveurs avec ces idées de repas en 30 minutes.",
+        "category": "Recettes"
+      }
+    }
+  },
+  "RecipesPage": {
+    "title": "Découvrez nos",
+    "titleHighlight": "recettes",
+    "description": "Explorez notre collection de recettes savoureuses venues du monde entier."
+  },
+  "NotFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou n'est plus disponible.",
+    "cta": "Retour à l'accueil"
+  },
+  "RecipeCard": {
+    "viewRecipe": "Voir la recette {name}",
+    "difficulty": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    }
+  },
+  "RecipeDetail": {
+    "servings": "portions",
+    "nutrition": {
+      "calories": "Calories",
+      "protein": "Protéines",
+      "fat": "Lipides",
+      "carbs": "Glucides"
+    },
+    "readMore": "Lire plus",
+    "readLess": "Lire moins",
+    "ingredients": "Ingrédients",
+    "instructions": "Instructions",
+    "step": "Étape {number}",
+    "shareText": "Découvrez cette recette de {name} !",
+    "shareCopied": "Lien copié dans le presse-papiers."
+  },
+  "RecipeIAChat": {
+    "welcome": "Bonjour ! Je suis votre chef IA personnel. Dites-moi ce que vous avez à la maison ou ce dont vous avez envie, et je vous proposerai une recette.",
+    "defaultPrompt": "Génère une recette avec mes filtres.",
+    "thinking": "Je réfléchis à une délicieuse recette...",
+    "invalidRecipe": "Désolé, je n'ai pas pu générer une recette valide avec ces critères. Essayez d'être un peu plus précis.",
+    "recipeReady": "Voici une recette pour vous : {name}",
+    "generationError": "Une erreur est survenue pendant la génération de la recette.",
+    "technicalError": "Désolé, une erreur technique est survenue.",
+    "imageUploaded": "J'ai une photo de mes ingrédients !",
+    "imageAnalyzing": "J'analyse vos ingrédients...",
+    "imageDetected": "Voici ce que j'ai détecté sur l'image : {name}",
+    "imageRecipe": "Voici une recette basée sur votre image : {name}",
+    "imageRecipeError": "Impossible de générer une recette à partir de cette image.",
+    "imageUploadError": "Une erreur est survenue lors du chargement de l'image.",
+    "cta": "Besoin d'inspiration ?",
+    "assistantTitle": "Assistant chef",
+    "assistantSubtitle": "Toujours prêt à cuisiner",
+    "filtersButton": "Filtres",
+    "preferences": "Préférences",
+    "mealType": "Type de repas",
+    "maxTime": "Temps max : {minutes} min",
+    "difficulty": "Difficulté",
+    "all": "Tous",
+    "inputPlaceholder": "Une idée de recette ?",
+    "filters": {
+      "mealType": "Type de repas",
+      "difficulty": "Difficulté"
+    },
+    "mealTypeOptions": {
+      "breakfast": "Petit déjeuner",
+      "lunch": "Déjeuner",
+      "dinner": "Dîner",
+      "dessert": "Dessert"
+    },
+    "difficultyOptions": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    }
+  }
 }

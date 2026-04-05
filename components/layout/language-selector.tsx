@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/routing";
 import {
     Select,
@@ -13,6 +13,7 @@ import { useTransition } from "react";
 
 export default function LanguageSelector() {
     const locale = useLocale();
+    const t = useTranslations("LanguageSelector");
     const router = useRouter();
     const pathname = usePathname();
     const [isPending, startTransition] = useTransition();
@@ -30,7 +31,7 @@ export default function LanguageSelector() {
             disabled={isPending}
         >
             <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Language" />
+                <SelectValue placeholder={t("label")} />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="en">English</SelectItem>

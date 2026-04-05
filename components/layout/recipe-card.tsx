@@ -1,10 +1,18 @@
 import { Recipe } from "@/features/entities/recipe";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Clock, ChefHat, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
+  const t = useTranslations("RecipeCard");
+
+  const difficultyKey = recipe.difficulty?.toLowerCase();
+  const difficultyLabel =
+    difficultyKey && ["easy", "medium", "hard"].includes(difficultyKey)
+      ? t(`difficulty.${difficultyKey}`)
+      : recipe.difficulty || t("difficulty.easy");
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -23,7 +31,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
       className="group relative w-full bg-card rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 border border-border/50"
       tabIndex={0}
       role="button"
-      aria-label={`View recipe ${recipe.recipe_name}`}
+      aria-label={t("viewRecipe", { name: recipe.recipe_name })}
     >
       {/* Image Section */}
       <div className="relative h-56 w-full overflow-hidden">
@@ -68,7 +76,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </div>
           <div className="flex items-center gap-1.5">
             <ChefHat className="w-4 h-4" />
-            <span className="capitalize">{recipe.difficulty || 'Easy'}</span>
+            <span className="capitalize">{difficultyLabel}</span>
           </div>
         </div>
       </div>
