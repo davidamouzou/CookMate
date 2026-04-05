@@ -1,4 +1,4 @@
-import "@/style/globals.css";
+import "@/style/";
 import "@/style/scroll-style.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
