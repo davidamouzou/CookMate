@@ -1,9 +1,0 @@
-/* Dans un fichier CSS global */
-.scrollbar-hidden {
-  scrollbar-width: none; /* Pour Firefox */
-  -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
-}
-
-.scrollbar-hidden::-webkit-scrollbar {
-  display: none; /* Pour Chrome, Safari et Opera */
-}

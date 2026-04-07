@@ -13,7 +13,6 @@ import { Recipe } from "@/features/entities/recipe";
 import { RecipeProvider } from "@/features/provider/recipe_provider";
 import RecipeCard from "./recipe-card";
 import { toast, Toaster } from "sonner";
-import { uploadUrlImage } from "@/features/functions/upload_file";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
@@ -121,9 +120,8 @@ const RecipeIAChat: React.FC = () => {
 
                 // Generate and upload image
                 try {
-                    const imageGenerate = await RecipeProvider.generateImage(res.recipe.description ?? "");
-                    const imageUpload = await uploadUrlImage(imageGenerate ?? "");
-                    res.recipe.image = imageUpload || "";
+                    const imageUrl = await RecipeProvider.generateImage(res.recipe.description ?? "");
+                    res.recipe.image = imageUrl || "";
                     const recipeSave = await saveRecipesHandler(res.recipe);
                     if (recipeSave) {
                         setMessages(prev => [...prev, {
@@ -187,9 +185,8 @@ const RecipeIAChat: React.FC = () => {
                 if (res.success && res.recipe) {
                     try {
                         // Optionally generate and upload a refined image based on the description
-                        const generatedImage = await RecipeProvider.generateImage(res.recipe.description ?? "");
-                        const uploaded = await uploadUrlImage(generatedImage ?? "");
-                        res.recipe.image = uploaded || res.recipe.image || "";
+                        const imageUrl = await RecipeProvider.generateImage(res.recipe.description ?? "");
+                        res.recipe.image = imageUrl || res.recipe.image || "";
 
                         const saved = await saveRecipesHandler(res.recipe);
                         if (saved) {

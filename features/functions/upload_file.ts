@@ -1,4 +1,5 @@
-import { apiConfig, isApiConfigured } from "@/features/config";
+import { firebaseStorage, isFirebaseConfigured } from "@/features/config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import imageCompression from "browser-image-compression";
 
 
@@ -60,33 +61,67 @@ export const compressImageToBase64 = async (
     }
 }
 
-export const uploadUrlImage = async (url: string): Promise<string | null> => {
+// Convert base64 string to Blob
+const base64ToBlob = (base64: string, contentType: string = "image/jpeg"): Blob => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: contentType });
+};
+
+// Upload image to Firebase Storage and return the public URL
+export const uploadImageToStorage = async (
+    base64Data: string,
+    contentType: string = "image/jpeg"
+): Promise<string | null> => {
     try {
-        if (!isApiConfigured) {
-            console.error("API backend is not configured. Set BASE_URL in .env.local.");
+        if (!isFirebaseConfigured) {
+            console.error("Firebase is not configured.");
             return null;
         }
 
-        console.log(url)
-        const response = await fetch(`${apiConfig.base_url}/upload/image`, {
-            method: 'POST',
-            headers: apiConfig.request_headers,
-            body: JSON.stringify({ url: url }),
-        });
-        if (response.ok) {
-            const payload = await response.text();
-            if (!payload) {
-                return null;
-            }
+        const blob = base64ToBlob(base64Data, contentType);
+        const fileName = `recipes/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
+        const storageRef = ref(firebaseStorage, fileName);
 
-            const imageSaveData = JSON.parse(payload) as { url?: string };
-            return imageSaveData.url ?? null;
-        } else {
-            console.log("Upload => error to get image data");
-            return null;
-        }
-    } catch (e) {
-        console.log(`Error to upload image: ${e}`);
+        await uploadBytes(storageRef, blob);
+        const downloadUrl = await getDownloadURL(storageRef);
+
+        return downloadUrl;
+    } catch (error) {
+        console.error("Error uploading image to Firebase Storage:", error);
         return null;
     }
-}
+};
+
+// Upload image from URL to Firebase Storage
+export const uploadUrlImage = async (url: string): Promise<string | null> => {
+    try {
+        if (!isFirebaseConfigured) {
+            console.error("Firebase is not configured.");
+            return null;
+        }
+
+        // Fetch the image from the URL
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error("Failed to fetch image from URL:", url);
+            return null;
+        }
+
+        const blob = await response.blob();
+        const fileName = `recipes/${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
+        const storageRef = ref(firebaseStorage, fileName);
+
+        await uploadBytes(storageRef, blob);
+        const downloadUrl = await getDownloadURL(storageRef);
+
+        return downloadUrl;
+    } catch (error) {
+        console.error("Error uploading image from URL:", error);
+        return null;
+    }
+};
