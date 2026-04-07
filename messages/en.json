@@ -49,7 +49,8 @@
   "RecipeList": {
     "popularRecipes": "Popular recipes",
     "loading": "Loading...",
-    "loadMore": "Load more recipes"
+    "loadMore": "Load more recipes",
+    "noResults": "No recipes match your filters. Try adjusting your criteria."
   },
   "SliderCard": {
     "badge": "Top-rated foods",
@@ -177,6 +178,26 @@
       "dessert": "Dessert"
     },
     "difficultyOptions": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "Filters": {
+    "mealType": "Meal type",
+    "difficulty": "Difficulty",
+    "maxDuration": "Max duration",
+    "cuisine": "Cuisine",
+    "allCuisines": "All cuisines",
+    "clearAll": "Clear filters",
+    "mealTypes": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "snack": "Snack",
+      "dessert": "Dessert"
+    },
+    "difficulties": {
       "easy": "Easy",
       "medium": "Medium",
       "hard": "Hard"

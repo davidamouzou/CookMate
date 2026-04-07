@@ -1,8 +1,22 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode, useMemo, useCallback } from "react";
 import { Recipe } from "@/features/entities/recipe";
 import { RecipeProvider as ApiProvider } from "@/features/provider/recipe_provider";
+
+export type FilterState = {
+    mealType: string;
+    difficulty: string;
+    cuisine: string;
+    maxDuration: number | null;
+};
+
+const defaultFilters: FilterState = {
+    mealType: "",
+    difficulty: "",
+    cuisine: "",
+    maxDuration: null,
+};
 
 interface RecipeContextType {
     recipes: Recipe[];
@@ -10,7 +24,13 @@ interface RecipeContextType {
     loadMore: () => Promise<void>;
     searchQuery: string;
     setSearchQuery: (query: string) => void;
+    filters: FilterState;
+    setFilters: (filters: FilterState) => void;
+    updateFilter: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void;
+    clearFilters: () => void;
     filteredRecipes: Recipe[];
+    availableCuisines: string[];
+    hasActiveFilters: boolean;
 }
 
 const RecipeContext = createContext<RecipeContextType | undefined>(undefined);
@@ -21,6 +41,7 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
     const [lastRecipeIndex, setLastRecipeIndex] = useState(0);
     const [recipesToLoad, setRecipesToLoad] = useState(25);
     const [searchQuery, setSearchQuery] = useState("");
+    const [filters, setFilters] = useState<FilterState>(defaultFilters);
 
     // Fetch initial recipes on mount
     useEffect(() => {
@@ -55,11 +76,6 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
         setLastRecipeIndex(nextIndex);
         setRecipesToLoad(nextToLoad);
 
-        // We need to fetch with the NEW values. 
-        // However, state updates are async. 
-        // Ideally, we should pass these to fetchRecipes or use a ref/effect.
-        // For simplicity, let's just call the API directly here with new values.
-
         setLoading(true);
         try {
             const { recipes: newRecipes } = await ApiProvider.getLastRecipes(nextIndex, nextToLoad);
@@ -77,9 +93,79 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
     };
 
-    const filteredRecipes = recipes.filter((recipe) =>
-        recipe.recipe_name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+        setFilters(prev => ({ ...prev, [key]: value }));
+    }, []);
+
+    const clearFilters = useCallback(() => {
+        setFilters(defaultFilters);
+        setSearchQuery("");
+    }, []);
+
+    // Extract available cuisines from loaded recipes
+    const availableCuisines = useMemo(() => {
+        const cuisines = new Set<string>();
+        recipes.forEach(r => {
+            if (r.cuisine) cuisines.add(r.cuisine);
+        });
+        return Array.from(cuisines).sort();
+    }, [recipes]);
+
+    // Check if any filter is active
+    const hasActiveFilters = useMemo(() => {
+        return (
+            searchQuery.trim() !== "" ||
+            filters.mealType !== "" ||
+            filters.difficulty !== "" ||
+            filters.cuisine !== "" ||
+            filters.maxDuration !== null
+        );
+    }, [searchQuery, filters]);
+
+    // Multi-field search and filtering
+    const filteredRecipes = useMemo(() => {
+        const query = searchQuery.toLowerCase().trim();
+
+        return recipes.filter((recipe) => {
+            // Text search across multiple fields
+            if (query) {
+                const searchableText = [
+                    recipe.recipe_name,
+                    recipe.description,
+                    recipe.cuisine,
+                    recipe.continent,
+                    recipe.meal_type,
+                    ...(recipe.ingredients || []),
+                ].filter(Boolean).join(" ").toLowerCase();
+
+                if (!searchableText.includes(query)) {
+                    return false;
+                }
+            }
+
+            // Filter by meal type
+            if (filters.mealType && recipe.meal_type?.toLowerCase() !== filters.mealType.toLowerCase()) {
+                return false;
+            }
+
+            // Filter by difficulty
+            if (filters.difficulty && recipe.difficulty?.toLowerCase() !== filters.difficulty.toLowerCase()) {
+                return false;
+            }
+
+            // Filter by cuisine
+            if (filters.cuisine && recipe.cuisine?.toLowerCase() !== filters.cuisine.toLowerCase()) {
+                return false;
+            }
+
+            // Filter by max duration
+            if (filters.maxDuration !== null && recipe.duration_to_cook > filters.maxDuration) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [recipes, searchQuery, filters]);
 
     return (
         <RecipeContext.Provider
@@ -89,7 +175,13 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
                 loadMore,
                 searchQuery,
                 setSearchQuery,
+                filters,
+                setFilters,
+                updateFilter,
+                clearFilters,
                 filteredRecipes,
+                availableCuisines,
+                hasActiveFilters,
             }}
         >
             {children}

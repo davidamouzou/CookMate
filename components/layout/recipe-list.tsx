@@ -6,17 +6,25 @@ import { Button } from "@/components/ui/button";
 import { useRecipes } from "@/app/context/RecipeContext";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
+import { ActiveFilterBadges } from "@/components/layout/filter-bar";
 
 export function RecipeList() {
-    const { filteredRecipes, loading, loadMore } = useRecipes();
+    const { filteredRecipes, loading, loadMore, hasActiveFilters } = useRecipes();
     const t = useTranslations('RecipeList');
 
     return (
         <section className="w-full">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-4">
                 <h2 className="text-3xl font-bold tracking-tight">{t('popularRecipes')}</h2>
-                {/* Filter buttons could go here */}
             </div>
+
+            <ActiveFilterBadges />
+
+            {hasActiveFilters && filteredRecipes.length === 0 && !loading && (
+                <div className="text-center py-12 text-muted-foreground">
+                    <p className="text-lg">{t('noResults')}</p>
+                </div>
+            )}
 
             <motion.div
                 layout

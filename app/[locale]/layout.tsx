@@ -65,6 +65,7 @@ export default async function RootLayout({ children, params }: RootLayoutProps) 
       </head>
       <body
         className={`${outfit.className}`}
+        suppressHydrationWarning
       >
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider

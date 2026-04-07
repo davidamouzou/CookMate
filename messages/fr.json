@@ -49,7 +49,8 @@
   "RecipeList": {
     "popularRecipes": "Recettes populaires",
     "loading": "Chargement...",
-    "loadMore": "Charger plus de recettes"
+    "loadMore": "Charger plus de recettes",
+    "noResults": "Aucune recette ne correspond à vos filtres. Essayez de modifier vos critères."
   },
   "SliderCard": {
     "badge": "Plats les mieux notés",
@@ -177,6 +178,26 @@
       "dessert": "Dessert"
     },
     "difficultyOptions": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    }
+  },
+  "Filters": {
+    "mealType": "Type de repas",
+    "difficulty": "Difficulté",
+    "maxDuration": "Durée max",
+    "cuisine": "Cuisine",
+    "allCuisines": "Toutes les cuisines",
+    "clearAll": "Effacer les filtres",
+    "mealTypes": {
+      "breakfast": "Petit déjeuner",
+      "lunch": "Déjeuner",
+      "dinner": "Dîner",
+      "snack": "Snack",
+      "dessert": "Dessert"
+    },
+    "difficulties": {
       "easy": "Facile",
       "medium": "Moyen",
       "hard": "Difficile"
