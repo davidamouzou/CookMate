@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Header from "@/components/layout/header";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { buildAlternates } from "@/lib/metadata";
@@ -76,11 +75,10 @@ export default async function BlogPage({ params }: BlogPageProps) {
                         {posts.map((post) => (
                             <div key={post.id} className="group cursor-pointer space-y-4">
                                 <div className="relative aspect-video rounded-2xl overflow-hidden bg-secondary/20">
-                                    <Image
+                                    <img
                                         src={post.image}
                                         alt={post.title}
-                                        fill
-                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
                                 </div>
                                 <div className="space-y-2">

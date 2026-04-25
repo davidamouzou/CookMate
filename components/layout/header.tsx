@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Search, Menu } from "lucide-react";
@@ -40,8 +39,8 @@ const Header = () => {
       {/* Logo Section */}
       <Link href="/" className="flex items-center" aria-label={t('brandLabel')}>
         <div className="relative overflow-hidden rounded-lg w-8 h-8">
-          <Image src="/logo/dark.png" alt={t('brandLabel')} fill className="object-cover dark:hidden" />
-          <Image src="/logo/light.png" alt={t('brandLabel')} fill className="object-cover hidden dark:block" />
+          <img src="/logo/dark.png" alt={t('brandLabel')} className="absolute inset-0 w-full h-full object-cover dark:hidden" />
+          <img src="/logo/light.png" alt={t('brandLabel')} className="absolute inset-0 w-full h-full object-cover hidden dark:block" />
         </div>
         <span className="text-2xl md:block hidden font-bold tracking-tight">
           C<span className="text-primary">OOK</span>ER
@@ -85,7 +84,7 @@ const Header = () => {
           <span className="sr-only">{t('toggleTheme')}</span>
         </Button>
 
-        
+
 
         {/* Mobile Menu */}
         <div className="md:hidden">

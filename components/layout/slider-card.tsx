@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
 import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -53,12 +52,10 @@ export const SliderCard = () => {
           transition={{ duration: 0.8 }}
           className="absolute inset-0 w-full h-full"
         >
-          <Image
+          <img
             src={slides[currentSlideIndex]}
             alt={t("slideAlt", { number: currentSlideIndex + 1 })}
-            fill
-            priority
-            className="object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />

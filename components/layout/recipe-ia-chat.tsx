@@ -14,7 +14,6 @@ import { RecipeProvider } from "@/features/provider/recipe_provider";
 import RecipeCard from "./recipe-card";
 import { toast, Toaster } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
 interface Message {
@@ -290,12 +289,11 @@ const RecipeIAChat: React.FC = () => {
                                 <div
                                     className="rounded-full shadow-lg border-4 bg-white dark:bg-zinc-900 overflow-hidden w-[70px] h-[70px]"
                                 >
-                                    <Image
+                                    <img
                                         src="/images/Beagle_Fast_Food.gif"
                                         alt={t("assistantTitle")}
                                         width={80}
                                         height={80}
-                                        unoptimized
                                     />
                                 </div>
                             </motion.div>
@@ -339,13 +337,13 @@ const RecipeIAChat: React.FC = () => {
                                 >
                                     <div className={`max-w-[85%] space-y-2 ${msg.role === 'user' ? 'items-end flex flex-col' : 'items-start flex flex-col'}`}>
                                         {msg.image && (
-                                        <div className="rounded-xl overflow-hidden border border-border/50 shadow-sm mb-1 max-w-[200px]">
-                                            <Image
-                                                src={msg.image}
-                                                alt={t("imageUploaded")}
-                                                width={200}
-                                                height={200}
-                                                className="w-full h-auto object-cover"
+                                            <div className="rounded-xl overflow-hidden border border-border/50 shadow-sm mb-1 max-w-[200px]">
+                                                <img
+                                                    src={msg.image}
+                                                    alt={t("imageUploaded")}
+                                                    width={200}
+                                                    height={200}
+                                                    className="w-full h-auto object-cover"
                                                 />
                                             </div>
                                         )}
