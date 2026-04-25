@@ -5,6 +5,7 @@ node_modules/
 
 # next.js
 .next/
+.open-next/
 out/
 
 # build artifacts
@@ -39,3 +40,4 @@ yarn-error.log*
 
 # local caches
 .turbo/
+.wrangler/
