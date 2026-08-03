@@ -30,7 +30,7 @@ test-results/
 # logs
 *.log
 npm-debug.log*
-pnpm-debug.log*
+bun-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
@@ -41,3 +41,7 @@ yarn-error.log*
 # local caches
 .turbo/
 .wrangler/
+.bun/
+
+# migration dumps (exported recipe data and image URL mapping)
+backup/

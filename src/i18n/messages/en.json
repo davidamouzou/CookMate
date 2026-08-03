@@ -1,0 +1,299 @@
+{
+  "Metadata": {
+    "brand": "Cook Mate",
+    "siteTitle": "Cook Mate",
+    "siteDescription": "Cook Mate helps you discover recipes, generate ideas with AI, and cook with confidence every day.",
+    "homeTitle": "Discover culinary ideas",
+    "homeDescription": "Browse trending recipes, explore categories, and get inspired by Cook Mate's AI cooking assistant.",
+    "aboutTitle": "About Cook Mate",
+    "aboutDescription": "Learn more about Cook Mate, our mission, and our vision for easier home cooking.",
+    "contactTitle": "Contact Cook Mate",
+    "contactDescription": "Reach out with questions, suggestions, or collaboration ideas for Cook Mate.",
+    "blogTitle": "Cook Mate blog",
+    "blogDescription": "Read cooking tips, stories, and practical inspiration from the Cook Mate kitchen.",
+    "recipesTitle": "Recipe collection",
+    "recipesDescription": "Explore Cook Mate's growing collection of recipes from around the world."
+  },
+  "Header": {
+    "toggleTheme": "Toggle theme",
+    "brandLabel": "Cook Mate",
+    "searchPlaceholder": "Search recipes...",
+    "openMenu": "Open menu",
+    "menuTitle": "Navigation",
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "recipes": "Recipes",
+      "blog": "Blog",
+      "contact": "Contact",
+      "track": "Tracking"
+    }
+  },
+  "Hero": {
+    "titleStart": "Explore",
+    "titleHighlight": "Culinary",
+    "titleEnd": "Ideas",
+    "description": "Find recipes you can actually cook, save time with smart suggestions, and turn everyday ingredients into something exciting.",
+    "question": "What should we cook?",
+    "questionHighlight": "Cook",
+    "categories": {
+      "all": "All types",
+      "appetizers": "Appetizers",
+      "mainCourses": "Main courses",
+      "saladsSides": "Salads and sides",
+      "vegetarian": "Vegetarian",
+      "desserts": "Desserts",
+      "healthy": "Healthy eats",
+      "quickEasy": "Quick and easy"
+    }
+  },
+  "RecipeList": {
+    "popularRecipes": "Popular recipes",
+    "loading": "Loading...",
+    "loadMore": "Load more recipes",
+    "noResults": "No recipes match your filters. Try adjusting your criteria."
+  },
+  "SliderCard": {
+    "badge": "Top-rated foods",
+    "title": "Savor healthy eats and keep cooking easy every day.",
+    "slideAlt": "Featured dish {number}"
+  },
+  "LanguageSelector": {
+    "label": "Language"
+  },
+  "AboutPage": {
+    "title": "About",
+    "titleHighlight": "Cook Mate",
+    "description": "Cook Mate is your daily kitchen companion, built to help you discover ideas, cook with confidence, and enjoy every meal a little more.",
+    "missionTitle": "Our mission",
+    "missionDescription": "Make home cooking simpler and more inspiring with practical recipes, helpful tools, and a friendly experience.",
+    "visionTitle": "Our vision",
+    "visionDescription": "Create a world where every cook can explore new flavors, reduce friction in the kitchen, and share memorable meals."
+  },
+  "ContactPage": {
+    "title": "Get in",
+    "titleHighlight": "Touch",
+    "description": "Have a question, a suggestion, or a project in mind? We'd love to hear from you.",
+    "emailTitle": "Email us",
+    "websiteTitle": "Visit my website",
+    "websiteLinkLabel": "See my work",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "message": "Message",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "john@example.com",
+    "messagePlaceholder": "How can we help you?",
+    "submit": "Send message"
+  },
+  "BlogPage": {
+    "title": "Culinary",
+    "titleHighlight": "Blog",
+    "description": "Latest news, tips, and stories from the Cook Mate kitchen.",
+    "readMore": "Read more",
+    "posts": {
+      "healthyCooking": {
+        "title": "10 tips for healthy cooking",
+        "excerpt": "Discover simple changes you can make to your cooking routine for a healthier lifestyle.",
+        "category": "Health"
+      },
+      "sourdough": {
+        "title": "The art of sourdough",
+        "excerpt": "A beginner's guide to making your own delicious sourdough bread at home.",
+        "category": "Baking"
+      },
+      "weeknightDinners": {
+        "title": "Quick weeknight dinners",
+        "excerpt": "Save time without compromising on flavor with these 30-minute meal ideas.",
+        "category": "Recipes"
+      }
+    }
+  },
+  "RecipesPage": {
+    "title": "Discover",
+    "titleHighlight": "Recipes",
+    "description": "Explore our growing collection of delicious recipes from around the world."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or is no longer available.",
+    "cta": "Return home"
+  },
+  "RecipeCard": {
+    "viewRecipe": "View recipe {name}",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "RecipeDetail": {
+    "servings": "servings",
+    "nutrition": {
+      "calories": "Calories",
+      "protein": "Protein",
+      "fat": "Fat",
+      "carbs": "Carbs"
+    },
+    "readMore": "Read more",
+    "readLess": "Read less",
+    "ingredients": "Ingredients",
+    "instructions": "Instructions",
+    "step": "Step {number}",
+    "shareText": "Check out this recipe for {name}!",
+    "shareCopied": "Link copied to clipboard."
+  },
+  "RecipeIAChat": {
+    "welcome": "Hi! I'm your personal AI chef. Tell me what you have at home or what you're craving, and I'll suggest a recipe for you.",
+    "defaultPrompt": "Generate a recipe with my filters.",
+    "thinking": "I'm thinking of a delicious recipe...",
+    "invalidRecipe": "Sorry, I couldn't generate a valid recipe with these criteria. Try being a bit more specific.",
+    "recipeReady": "Here is a recipe for you: {name}",
+    "generationError": "Something went wrong while generating the recipe.",
+    "technicalError": "Sorry, a technical error occurred.",
+    "imageUploaded": "I have a photo of my ingredients!",
+    "imageAnalyzing": "I'm analyzing your ingredients...",
+    "imageDetected": "Here's what I detected from the image: {name}",
+    "imageRecipe": "Here is a recipe based on your image: {name}",
+    "imageRecipeError": "I couldn't generate a recipe from this image.",
+    "imageUploadError": "There was a problem while uploading the image.",
+    "cta": "Need inspiration?",
+    "assistantTitle": "Chef assistant",
+    "assistantSubtitle": "Always ready to cook",
+    "filtersButton": "Filters",
+    "preferences": "Preferences",
+    "mealType": "Meal type",
+    "maxTime": "Max time: {minutes} min",
+    "difficulty": "Difficulty",
+    "all": "All",
+    "inputPlaceholder": "Got a recipe idea?",
+    "filters": {
+      "mealType": "Meal type",
+      "difficulty": "Difficulty"
+    },
+    "mealTypeOptions": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "dessert": "Dessert"
+    },
+    "difficultyOptions": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "Filters": {
+    "mealType": "Meal type",
+    "difficulty": "Difficulty",
+    "maxDuration": "Max duration",
+    "cuisine": "Cuisine",
+    "allCuisines": "All cuisines",
+    "clearAll": "Clear filters",
+    "mealTypes": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "snack": "Snack",
+      "dessert": "Dessert"
+    },
+    "difficulties": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "Track": {
+    "metaTitle": "Daily tracking",
+    "metaDescription": "Log your meals and follow your calories and macros day by day.",
+    "title": "Tracking",
+    "addTitle": "Add a meal",
+    "kcals": "Kcals",
+    "carbs": "Carbs",
+    "protein": "Protein",
+    "fats": "Fats",
+    "kcalsUnit": "kcals",
+    "carbsUnit": "carbs",
+    "fatUnit": "fat",
+    "proteinUnit": "protein",
+    "remaining": "{count} kcal left",
+    "over": "{count} kcal over",
+    "entryCount": "{count, plural, =0 {no entries} one {# entry} other {# entries}}",
+    "empty": "Nothing logged for this day yet.",
+    "inputPlaceholder": "e.g. two scrambled eggs and a black coffee",
+    "addMeal": "Add",
+    "estimating": "Estimating...",
+    "aiDisclaimer": "AI-estimated, for information only.",
+    "parseError": "Could not estimate this meal. Try rephrasing it.",
+    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase.",
+    "deleteEntry": "Delete {title}",
+    "navLabel": "Tracking",
+    "aiFootnote": "Values are AI-estimated for informational purposes only",
+    "todayButton": "Today",
+    "composerHint": "Describe what you ate",
+    "closeComposer": "Close",
+    "tabsLabel": "Tracking sections",
+    "tabs": {
+      "today": "Today",
+      "water": "Water",
+      "program": "Program",
+      "recipes": "Recipes"
+    },
+    "sessionErrorTitle": "Setup needed",
+    "sessionFixAuth": "Supabase → Authentication → Providers → enable \"Allow anonymous sign-ins\" (User Signups card), then Save.",
+    "sessionFixSql": "SQL editor → run the migrations in supabase/migrations/.",
+    "retry": "Retry"
+  },
+  "Water": {
+    "metaTitle": "Hydration",
+    "metaDescription": "Track water, drinks and caffeine, day by day.",
+    "today": "Today",
+    "water": "Water",
+    "hydration": "Hydration",
+    "intake": "Intake",
+    "caffeine": "Caffeine",
+    "drinks": "Drinks",
+    "hydrationUnit": "hydration",
+    "caffeineUnit": "mg caffeine",
+    "empty": "Nothing to drink logged yet today.",
+    "weekTitle": "Last 7 days",
+    "ofGoal": "{pct}% of goal",
+    "deleteDrink": "Delete {title}",
+    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase.",
+    "presets": {
+      "water": "Water",
+      "coffee": "Coffee",
+      "tea": "Green tea",
+      "soda": "Soda"
+    }
+  },
+  "Program": {
+    "metaTitle": "Program",
+    "metaDescription": "Your weight programme, pace and consumption trend.",
+    "title": "Program",
+    "since": "from {date}",
+    "noProgram": "No programme set up yet",
+    "dailyGoal": "Daily goal",
+    "programGoal": "Program goal",
+    "kcals": "kcals",
+    "pace": "pace {pace} kg/wk",
+    "weeklyAverage": "Weekly average",
+    "kcalPerDay": "kcal/day",
+    "toTarget": "{delta} kcal to target",
+    "timeToGoal": "Estimated time to goal",
+    "weeks": "~{count} wks.",
+    "atCurrentPace": "at current pace",
+    "start": "Start",
+    "now": "Now",
+    "goal": "Goal",
+    "trendTitle": "Consumption trend ({days} days)",
+    "movingAverage": "moving average",
+    "goalShort": "goal",
+    "logWeight": "Log your weight",
+    "weightPlaceholder": "e.g. 82.4",
+    "save": "Save",
+    "oneReadingPerDay": "One reading per day — saving again replaces today's value.",
+    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase."
+  }
+}

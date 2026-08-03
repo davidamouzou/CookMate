@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Style de la balise select */
+select {
+  background-color: transparent;
+  /* Fond blanc */
+  appearance: none;
+  /* integer les styles par defaults du navigate */
+  -webkit-appearance: none;
+  /* Compatibility Webkit */
+  -moz-appearance: none;
+  /* Compatibility Firefox */
+}
+
+/* Style des options dans le menu undulant */
+
+.scrollbar-hidden {
+  scrollbar-width: none;
+  /* Pour Firefox */
+  -ms-overflow-style: none;
+  /* Pour Internet Explorer et Edge */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+  /* Pour Chrome, Safari et Opera */
+}
+
+@layer base {
+  :root {
+    --background: 40 33% 98%;
+    /* Creamy background */
+    --foreground: 20 14% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14% 4%;
+    --primary: 32 100% 50%;
+    /* Warm Orange */
+    --primary-foreground: 60 9% 98%;
+    --secondary: 60 5% 96%;
+    --secondary-foreground: 24 10% 10%;
+    --muted: 60 5% 96%;
+    --muted-foreground: 25 5% 45%;
+    --accent: 60 5% 96%;
+    --accent-foreground: 24 10% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 60 9% 98%;
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
+    --ring: 32 100% 50%;
+    --radius: 1rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* --- Tracking design system ------------------------------------------ */
+    /* Page canvas sits slightly warmer and darker than cards, so cards lift. */
+    --surface: 60 14% 96%;
+    --surface-raised: 0 0% 100%;
+    --surface-sunken: 60 8% 92%;
+    --surface-inverted: 24 10% 8%;
+    --surface-inverted-foreground: 60 9% 96%;
+
+    /* Accent hues, one per tracked domain. */
+    --track-green: 88 46% 48%;
+    --track-orange: 38 92% 55%;
+    --track-blue: 217 91% 60%;
+    --track-purple: 258 90% 66%;
+    --track-coral: 5 82% 65%;
+    --track-yellow: 45 86% 62%;
+
+    /* Tinted fills for stat tiles and pills. */
+    --track-green-soft: 88 45% 92%;
+    --track-orange-soft: 38 90% 92%;
+    --track-blue-soft: 217 90% 94%;
+    --track-purple-soft: 258 85% 95%;
+    --track-coral-soft: 5 80% 94%;
+    --track-yellow-soft: 45 85% 92%;
+
+    /* Chart hues are NOT the UI accents: the accent tones fail contrast and
+       CVD separation when used as data marks. These steps pass all six checks
+       against the light surface (validate_palette.js, mode light). */
+    --plot-calories: 22 89% 40%;   /* #c2410c */
+    --plot-hydration: 224 76% 48%; /* #1d4ed8 */
+    --plot-weight: 79 79% 27%;     /* #4d7c0f */
+
+    --track-green-ink: 88 55% 26%;
+    --track-orange-ink: 30 80% 32%;
+    --track-blue-ink: 217 70% 35%;
+    --track-purple-ink: 258 55% 40%;
+    --track-coral-ink: 5 60% 40%;
+    --track-yellow-ink: 40 70% 28%;
+  }
+
+  .dark {
+    --background: 20 14% 4%;
+    --foreground: 60 9% 98%;
+    --card: 20 14% 8%;
+    --card-foreground: 60 9% 98%;
+    --popover: 20 14% 8%;
+    --popover-foreground: 60 9% 98%;
+    --primary: 32 100% 50%;
+    --primary-foreground: 60 9% 98%;
+    --secondary: 12 6% 15%;
+    --secondary-foreground: 60 9% 98%;
+    --muted: 12 6% 15%;
+    --muted-foreground: 24 5% 64%;
+    --accent: 12 6% 15%;
+    --accent-foreground: 60 9% 98%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 60 9% 98%;
+    --border: 12 6% 15%;
+    --input: 12 6% 15%;
+    --ring: 32 100% 50%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* --- Tracking design system ------------------------------------------ */
+    --surface: 24 10% 7%;
+    --surface-raised: 24 8% 11%;
+    --surface-sunken: 24 12% 5%;
+    --surface-inverted: 60 14% 96%;
+    --surface-inverted-foreground: 24 10% 8%;
+
+    /* Slightly lighter and less saturated than light mode, so accents stay
+       legible against dark surfaces without glowing. */
+    --track-green: 88 44% 58%;
+    --track-orange: 38 88% 62%;
+    --track-blue: 217 85% 68%;
+    --track-purple: 258 80% 74%;
+    --track-coral: 5 78% 70%;
+    --track-yellow: 45 80% 68%;
+
+    --track-green-soft: 88 25% 18%;
+    --track-orange-soft: 38 35% 17%;
+    --track-blue-soft: 217 35% 19%;
+    --track-purple-soft: 258 30% 21%;
+    --track-coral-soft: 5 35% 19%;
+    --track-yellow-soft: 45 30% 17%;
+
+    /* Dark mode is stepped separately, not flipped: these pass the six checks
+       against the dark surface. */
+    --plot-calories: 9 63% 59%;    /* #d96552 */
+    --plot-hydration: 217 72% 64%; /* #5f92e6 */
+    --plot-weight: 86 37% 47%;     /* #79a54c */
+
+    --track-green-ink: 88 45% 78%;
+    --track-orange-ink: 38 85% 78%;
+    --track-blue-ink: 217 80% 82%;
+    --track-purple-ink: 258 75% 85%;
+    --track-coral-ink: 5 75% 82%;
+    --track-yellow-ink: 45 80% 80%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Numbers in stat tiles must line up column to column. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Hand-drawn marker underline sitting behind a word, as in the screenshots.
+     Uses a skewed pseudo-element rather than an image so it inherits color. */
+  .marker-underline {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .marker-underline::after {
+    content: "";
+    position: absolute;
+    left: -0.08em;
+    right: -0.08em;
+    bottom: 0.02em;
+    height: 0.28em;
+    border-radius: 9999px;
+    /* Default stroke; the `toneUnderline` classes override it with after:bg-*,
+       so the underline can differ from the text colour. */
+    background-color: currentColor;
+    opacity: 0.28;
+    transform: rotate(-0.6deg);
+    pointer-events: none;
+  }
+}

@@ -4,16 +4,65 @@ import tailwindcssAnimate from "tailwindcss-animate";
 const config: Config = {
 	darkMode: ["class"],
 	content: [
-		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
-		"./components/**/*.{js,ts,jsx,tsx,mdx}",
-		"./app/**/*.{js,ts,jsx,tsx,mdx}",
+		"./src/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+				mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+				display: ['var(--font-display)', 'var(--font-outfit)', 'cursive'],
+			},
 			boxShadow: {
-				'3xl': '0 0 20px rgba(0, 0, 0, 0.2)'
+				'3xl': '0 0 20px rgba(0, 0, 0, 0.2)',
+				tile: '0 1px 2px rgba(20, 18, 14, 0.04), 0 4px 16px -8px rgba(20, 18, 14, 0.10)',
+				lifted: '0 2px 6px rgba(20, 18, 14, 0.06), 0 18px 40px -22px rgba(20, 18, 14, 0.30)',
 			},
 			colors: {
+				surface: {
+					DEFAULT: 'hsl(var(--surface))',
+					raised: 'hsl(var(--surface-raised))',
+					sunken: 'hsl(var(--surface-sunken))',
+					inverted: 'hsl(var(--surface-inverted))',
+					'inverted-foreground': 'hsl(var(--surface-inverted-foreground))',
+				},
+				plot: {
+					calories: 'hsl(var(--plot-calories))',
+					hydration: 'hsl(var(--plot-hydration))',
+					weight: 'hsl(var(--plot-weight))',
+				},
+				track: {
+					green: {
+						DEFAULT: 'hsl(var(--track-green))',
+						soft: 'hsl(var(--track-green-soft))',
+						ink: 'hsl(var(--track-green-ink))',
+					},
+					orange: {
+						DEFAULT: 'hsl(var(--track-orange))',
+						soft: 'hsl(var(--track-orange-soft))',
+						ink: 'hsl(var(--track-orange-ink))',
+					},
+					blue: {
+						DEFAULT: 'hsl(var(--track-blue))',
+						soft: 'hsl(var(--track-blue-soft))',
+						ink: 'hsl(var(--track-blue-ink))',
+					},
+					purple: {
+						DEFAULT: 'hsl(var(--track-purple))',
+						soft: 'hsl(var(--track-purple-soft))',
+						ink: 'hsl(var(--track-purple-ink))',
+					},
+					coral: {
+						DEFAULT: 'hsl(var(--track-coral))',
+						soft: 'hsl(var(--track-coral-soft))',
+						ink: 'hsl(var(--track-coral-ink))',
+					},
+					yellow: {
+						DEFAULT: 'hsl(var(--track-yellow))',
+						soft: 'hsl(var(--track-yellow-soft))',
+						ink: 'hsl(var(--track-yellow-ink))',
+					},
+				},
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {
