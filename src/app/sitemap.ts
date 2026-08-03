@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const currentDate = new Date();
 
     // Define your static routes
-    const staticRoutes = ['', '/water', '/program', '/recipes', '/about', '/contact', '/blog'];
+    const staticRoutes = ['', '/water', '/program', '/recipes'];
 
     // Generate sitemap entries for each locale and route
     const sitemapEntries: MetadataRoute.Sitemap = [];

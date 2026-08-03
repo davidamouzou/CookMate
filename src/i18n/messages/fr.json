@@ -5,29 +5,21 @@
     "siteDescription": "Cook Mate vous aide à découvrir des recettes, générer des idées avec l'IA et cuisiner avec confiance au quotidien.",
     "homeTitle": "Explorer des idées culinaires",
     "homeDescription": "Parcourez les recettes tendances, explorez des catégories et laissez-vous guider par l'assistant culinaire IA de Cook Mate.",
-    "aboutTitle": "À propos de Cook Mate",
-    "aboutDescription": "Découvrez Cook Mate, notre mission et notre vision pour simplifier la cuisine du quotidien.",
-    "contactTitle": "Contacter Cook Mate",
-    "contactDescription": "Contactez-nous pour une question, une suggestion ou une idée de collaboration autour de Cook Mate.",
-    "blogTitle": "Blog Cook Mate",
-    "blogDescription": "Retrouvez des conseils cuisine, des histoires et de l'inspiration pratique signés Cook Mate.",
     "recipesTitle": "Collection de recettes",
     "recipesDescription": "Explorez la collection grandissante de recettes Cook Mate venues du monde entier."
   },
   "Header": {
-    "toggleTheme": "Changer de thème",
-    "brandLabel": "Cook Mate",
-    "searchPlaceholder": "Rechercher une recette...",
-    "openMenu": "Ouvrir le menu",
-    "menuTitle": "Navigation",
-    "nav": {
-      "home": "Accueil",
-      "about": "À propos",
-      "recipes": "Recettes",
-      "blog": "Blog",
-      "contact": "Contact",
-      "track": "Suivi"
-    }
+    "searchPlaceholder": "Rechercher une recette..."
+  },
+  "Settings": {
+    "title": "Réglages",
+    "theme": "Thème",
+    "themes": {
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "language": "Langue"
   },
   "Hero": {
     "titleStart": "Explorez des",
@@ -60,55 +52,6 @@
   },
   "LanguageSelector": {
     "label": "Langue"
-  },
-  "AboutPage": {
-    "title": "À propos de",
-    "titleHighlight": "Cook Mate",
-    "description": "Cook Mate est votre compagnon de cuisine au quotidien, pensé pour vous aider à trouver des idées, cuisiner avec confiance et profiter encore plus de chaque repas.",
-    "missionTitle": "Notre mission",
-    "missionDescription": "Rendre la cuisine maison plus simple et plus inspirante grâce à des recettes utiles, des outils pratiques et une expérience chaleureuse.",
-    "visionTitle": "Notre vision",
-    "visionDescription": "Construire un monde où chaque cuisinier peut explorer de nouvelles saveurs, réduire la friction en cuisine et partager des repas mémorables."
-  },
-  "ContactPage": {
-    "title": "Entrons en",
-    "titleHighlight": "contact",
-    "description": "Une question, une suggestion ou un projet en tête ? Nous serions ravis d'échanger avec vous.",
-    "emailTitle": "Écrivez-nous",
-    "websiteTitle": "Visitez mon site",
-    "websiteLinkLabel": "Voir mon travail",
-    "firstName": "Prénom",
-    "lastName": "Nom",
-    "email": "E-mail",
-    "message": "Message",
-    "firstNamePlaceholder": "Jean",
-    "lastNamePlaceholder": "Dupont",
-    "emailPlaceholder": "jean@example.com",
-    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
-    "submit": "Envoyer le message"
-  },
-  "BlogPage": {
-    "title": "Blog",
-    "titleHighlight": "culinaire",
-    "description": "Actualités, conseils et histoires en direct de la cuisine Cook Mate.",
-    "readMore": "Lire la suite",
-    "posts": {
-      "healthyCooking": {
-        "title": "10 conseils pour une cuisine plus saine",
-        "excerpt": "Découvrez de petits changements simples à intégrer à votre routine culinaire pour un mode de vie plus sain.",
-        "category": "Santé"
-      },
-      "sourdough": {
-        "title": "L'art du levain",
-        "excerpt": "Un guide débutant pour préparer votre propre pain au levain maison.",
-        "category": "Boulangerie"
-      },
-      "weeknightDinners": {
-        "title": "Dîners rapides en semaine",
-        "excerpt": "Gagnez du temps sans sacrifier les saveurs avec ces idées de repas en 30 minutes.",
-        "category": "Recettes"
-      }
-    }
   },
   "RecipesPage": {
     "title": "Découvrez nos",
@@ -184,6 +127,40 @@
       "hard": "Difficile"
     }
   },
+  "RecipeFinder": {
+    "title": "Trouver une recette",
+    "poweredBy": "IA + web",
+    "description": "Photographiez vos ingrédients ou fixez un objectif calories/protéines : on cherche une vraie recette sur le web.",
+    "photoButton": "Photo des ingrédients",
+    "photoChange": "Changer la photo",
+    "photoRemove": "Retirer la photo",
+    "photoAlt": "Vos ingrédients",
+    "photoError": "Impossible de lire cette image.",
+    "caloriesLabel": "Calories / portion",
+    "caloriesPlaceholder": "500",
+    "proteinLabel": "Protéines min.",
+    "proteinPlaceholder": "30",
+    "textPlaceholder": "Une envie particulière ? (facultatif)",
+    "searchButton": "Chercher sur le web",
+    "searching": "Recherche…",
+    "searchingHint": "On interroge le web puis on trie les résultats, ça prend quelques secondes.",
+    "searchError": "La recherche a échoué. Réessayez dans un instant.",
+    "quotaError": "Le quota de recherche web de l'IA est épuisé pour le moment. Réessayez plus tard.",
+    "reset": "Effacer la recherche",
+    "detected": "Ingrédients détectés",
+    "noResults": "Aucune recette trouvée sur le web avec ces critères. Élargissez un peu la recherche.",
+    "source": "Trouvé sur {site}",
+    "noSource": "Source introuvable — recette reconstituée par l'IA.",
+    "kcal": "{value} kcal",
+    "protein": "{value} g de protéines",
+    "minutes": "{value} min",
+    "servings": "{value} pers.",
+    "saveRecipe": "Enregistrer",
+    "savingRecipe": "Enregistrement…",
+    "saved": "Enregistrée",
+    "saveError": "Échec de l'enregistrement.",
+    "viewRecipe": "Voir la recette"
+  },
   "Filters": {
     "mealType": "Type de repas",
     "difficulty": "Difficulté",
@@ -191,6 +168,7 @@
     "cuisine": "Cuisine",
     "allCuisines": "Toutes les cuisines",
     "clearAll": "Effacer les filtres",
+    "removeFilter": "Retirer le filtre {label}",
     "mealTypes": {
       "breakfast": "Petit déjeuner",
       "lunch": "Déjeuner",
@@ -226,7 +204,6 @@
     "estimating": "Estimation…",
     "aiDisclaimer": "Estimation IA, à titre indicatif.",
     "parseError": "Impossible d'estimer ce repas. Essayez de le reformuler.",
-    "sessionError": "Impossible de démarrer une session. Vérifiez que les connexions anonymes sont activées dans Supabase.",
     "deleteEntry": "Supprimer {title}",
     "navLabel": "Suivi",
     "aiFootnote": "Valeurs estimées par IA, à titre informatif uniquement",
@@ -239,11 +216,7 @@
       "water": "Eau",
       "program": "Programme",
       "recipes": "Recettes"
-    },
-    "sessionErrorTitle": "Configuration requise",
-    "sessionFixAuth": "Supabase → Authentication → Providers → activer « Allow anonymous sign-ins » (carte User Signups), puis Save.",
-    "sessionFixSql": "SQL editor → exécuter les migrations de supabase/migrations/.",
-    "retry": "Réessayer"
+    }
   },
   "Water": {
     "metaTitle": "Hydratation",
@@ -257,10 +230,9 @@
     "hydrationUnit": "hydratation",
     "caffeineUnit": "mg caféine",
     "empty": "Aucune boisson enregistrée aujourd'hui.",
-    "weekTitle": "7 derniers jours",
+    "weekTitle": "{days} derniers jours",
     "ofGoal": "{pct}% de l'objectif",
     "deleteDrink": "Supprimer {title}",
-    "sessionError": "Impossible de démarrer une session. Vérifiez que les connexions anonymes sont activées dans Supabase.",
     "presets": {
       "water": "Eau",
       "coffee": "Café",
@@ -293,7 +265,6 @@
     "logWeight": "Enregistrer votre poids",
     "weightPlaceholder": "ex. 82,4",
     "save": "Enregistrer",
-    "oneReadingPerDay": "Une mesure par jour — réenregistrer remplace la valeur du jour.",
-    "sessionError": "Impossible de démarrer une session. Vérifiez que les connexions anonymes sont activées dans Supabase."
+    "oneReadingPerDay": "Une mesure par jour — réenregistrer remplace la valeur du jour."
   }
 }

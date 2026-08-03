@@ -62,8 +62,11 @@ export function CategoryChips() {
         }
     };
 
+    // The negative margin lets the row bleed to the screen edge as it scrolls,
+    // so it has to track the shell's padding at each step. From lg there is room
+    // for the chips to wrap instead of scrolling.
     return (
-        <div className="scrollbar-hidden -mx-4 flex gap-2 overflow-x-auto px-4">
+        <div className="scrollbar-hidden edge-fade -mx-4 flex gap-2 overflow-x-auto px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0 lg:[mask-image:none]">
             {CATEGORIES.map((category) => {
                 const isActive = activeCategory === category.key;
 
@@ -72,10 +75,10 @@ export function CategoryChips() {
                         key={category.key}
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleClick(category.key)}
-                        className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs font-medium transition-colors ${
+                        className={`tap flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-xs font-medium transition-colors ${
                             isActive
-                                ? "border-track-orange bg-track-orange text-white"
-                                : "border-border/60 bg-surface-raised text-muted-foreground hover:border-track-orange/40 hover:text-foreground"
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border bg-surface-raised text-muted-foreground hover:border-primary/50 hover:text-foreground"
                         }`}
                     >
                         <category.icon className="h-3.5 w-3.5" />

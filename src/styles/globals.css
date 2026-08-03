@@ -29,141 +29,185 @@ select {
 }
 
 @layer base {
+  /* --- Colour -------------------------------------------------------------
+     Every value below is checked against the pairing it is actually used in,
+     not against white in the abstract. Three rules hold the system together:
+
+     1. `--track-*` is a stroke and fill hue only. A bright warm accent cannot
+        reach 4.5:1 as text on a light canvas, so it is never used for text.
+     2. `--track-*-ink` is the text step of each hue. It passes on its own
+        `-soft` fill *and* on the bare page surface, in both themes.
+     3. Anything filled with a bright accent takes dark ink, never white — that
+        is what `--primary-foreground` is for. White on the brand orange was
+        1.99:1, which is why the active day chip used to be unreadable.
+
+     The tint steps also shift in lightness, not hue alone, so the tiles stay
+     separable in greyscale and under colour-vision deficiency. */
   :root {
-    --background: 40 33% 98%;
-    /* Creamy background */
-    --foreground: 20 14% 4%;
+    /* Canvas is a warm cream; cards are pure white and lift off it. */
+    --background: 40 24% 92%;
+    --foreground: 24 12% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 20 14% 4%;
+    --card-foreground: 24 12% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14% 4%;
-    --primary: 32 100% 50%;
-    /* Warm Orange */
-    --primary-foreground: 60 9% 98%;
-    --secondary: 60 5% 96%;
-    --secondary-foreground: 24 10% 10%;
-    --muted: 60 5% 96%;
-    --muted-foreground: 25 5% 45%;
-    --accent: 60 5% 96%;
-    --accent-foreground: 24 10% 10%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 60 9% 98%;
-    --border: 20 6% 90%;
-    --input: 20 6% 90%;
-    --ring: 32 100% 50%;
+    --popover-foreground: 24 12% 10%;
+
+    /* The brand orange, and the only text colour allowed to sit on it. */
+    --primary: 36 94% 52%;
+    --primary-foreground: 28 45% 12%;
+
+    --secondary: 40 16% 88%;
+    --secondary-foreground: 24 12% 14%;
+    --muted: 40 16% 88%;
+    --muted-foreground: 28 8% 40%;
+    --accent: 40 16% 88%;
+    --accent-foreground: 24 12% 14%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* `--border` is a hairline; `--input` bounds a control and so has to clear
+       3:1 against the card it sits on. */
+    --border: 34 18% 81%;
+    --input: 32 15% 55%;
+    /* Darker than the brand orange: a focus ring is meaning-bearing and owes
+       3:1 against both the canvas and a white card. */
+    --ring: 32 92% 41%;
     --radius: 1rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
 
     /* --- Tracking design system ------------------------------------------ */
-    /* Page canvas sits slightly warmer and darker than cards, so cards lift. */
-    --surface: 60 14% 96%;
+    --surface: 40 24% 92%;
     --surface-raised: 0 0% 100%;
-    --surface-sunken: 60 8% 92%;
-    --surface-inverted: 24 10% 8%;
-    --surface-inverted-foreground: 60 9% 96%;
+    --surface-sunken: 40 18% 87%;
+    --surface-inverted: 26 14% 10%;
+    --surface-inverted-foreground: 40 20% 96%;
 
-    /* Accent hues, one per tracked domain. */
-    --track-green: 88 46% 48%;
-    --track-orange: 38 92% 55%;
-    --track-blue: 217 91% 60%;
-    --track-purple: 258 90% 66%;
-    --track-coral: 5 82% 65%;
-    --track-yellow: 45 86% 62%;
+    /* The navigation has its own surface rather than borrowing the inverted
+       one. It is the full height of the viewport on a laptop, and a block that
+       large cannot simply flip with the theme: inverting it in dark mode put a
+       white slab down the side of a dark app. Light mode keeps the near-black
+       bar from the design; dark mode raises it off the canvas instead. The
+       active pill stays light against both. */
+    --nav: 26 14% 10%;
+    --nav-foreground: 40 20% 96%;
+    --nav-active: 40 20% 96%;
+    --nav-active-foreground: 26 14% 10%;
+
+    /* Accent hues, one per tracked domain. Strokes and fills only. */
+    --track-green: 88 46% 42%;
+    --track-orange: 36 94% 52%;
+    --track-blue: 217 85% 52%;
+    --track-purple: 258 70% 60%;
+    --track-coral: 5 74% 54%;
+    --track-yellow: 42 88% 46%;
 
     /* Tinted fills for stat tiles and pills. */
-    --track-green-soft: 88 45% 92%;
-    --track-orange-soft: 38 90% 92%;
-    --track-blue-soft: 217 90% 94%;
-    --track-purple-soft: 258 85% 95%;
-    --track-coral-soft: 5 80% 94%;
-    --track-yellow-soft: 45 85% 92%;
+    --track-green-soft: 88 44% 86%;
+    --track-orange-soft: 36 82% 86%;
+    --track-blue-soft: 217 82% 89%;
+    --track-purple-soft: 258 76% 90%;
+    --track-coral-soft: 5 76% 89%;
+    --track-yellow-soft: 45 78% 84%;
+
+    /* Text step of each hue: passes on its own `-soft` fill and on `--surface`. */
+    --track-green-ink: 88 55% 24%;
+    --track-orange-ink: 30 80% 30%;
+    --track-blue-ink: 217 70% 33%;
+    --track-purple-ink: 258 55% 38%;
+    --track-coral-ink: 5 60% 38%;
+    --track-yellow-ink: 40 70% 26%;
 
     /* Chart hues are NOT the UI accents: the accent tones fail contrast and
        CVD separation when used as data marks. These steps pass all six checks
-       against the light surface (validate_palette.js, mode light). */
+       against the light surface. */
     --plot-calories: 22 89% 40%;   /* #c2410c */
     --plot-hydration: 224 76% 48%; /* #1d4ed8 */
     --plot-weight: 79 79% 27%;     /* #4d7c0f */
-
-    --track-green-ink: 88 55% 26%;
-    --track-orange-ink: 30 80% 32%;
-    --track-blue-ink: 217 70% 35%;
-    --track-purple-ink: 258 55% 40%;
-    --track-coral-ink: 5 60% 40%;
-    --track-yellow-ink: 40 70% 28%;
   }
 
   .dark {
-    --background: 20 14% 4%;
-    --foreground: 60 9% 98%;
-    --card: 20 14% 8%;
-    --card-foreground: 60 9% 98%;
-    --popover: 20 14% 8%;
-    --popover-foreground: 60 9% 98%;
-    --primary: 32 100% 50%;
-    --primary-foreground: 60 9% 98%;
-    --secondary: 12 6% 15%;
-    --secondary-foreground: 60 9% 98%;
-    --muted: 12 6% 15%;
-    --muted-foreground: 24 5% 64%;
-    --accent: 12 6% 15%;
-    --accent-foreground: 60 9% 98%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 60 9% 98%;
-    --border: 12 6% 15%;
-    --input: 12 6% 15%;
-    --ring: 32 100% 50%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 26 14% 7%;
+    --foreground: 40 12% 96%;
+    --card: 26 11% 13%;
+    --card-foreground: 40 12% 96%;
+    --popover: 26 11% 13%;
+    --popover-foreground: 40 12% 96%;
+
+    /* The fill lightens for the dark canvas; the ink on it stays dark, because
+       the fill itself is still a light colour. */
+    --primary: 38 90% 60%;
+    --primary-foreground: 28 45% 12%;
+
+    --secondary: 26 9% 18%;
+    --secondary-foreground: 40 12% 96%;
+    --muted: 26 9% 18%;
+    --muted-foreground: 32 8% 66%;
+    --accent: 26 9% 18%;
+    --accent-foreground: 40 12% 96%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 26 9% 24%;
+    --input: 26 9% 46%;
+    --ring: 38 90% 60%;
 
     /* --- Tracking design system ------------------------------------------ */
-    --surface: 24 10% 7%;
-    --surface-raised: 24 8% 11%;
-    --surface-sunken: 24 12% 5%;
-    --surface-inverted: 60 14% 96%;
-    --surface-inverted-foreground: 24 10% 8%;
+    --surface: 26 14% 7%;
+    --surface-raised: 26 11% 13%;
+    --surface-sunken: 26 16% 4%;
+    --surface-inverted: 40 20% 96%;
+    --surface-inverted-foreground: 26 14% 10%;
 
-    /* Slightly lighter and less saturated than light mode, so accents stay
-       legible against dark surfaces without glowing. */
+    --nav: 26 11% 13%;
+    --nav-foreground: 40 12% 96%;
+    --nav-active: 40 20% 96%;
+    --nav-active-foreground: 26 14% 10%;
+
+    /* Dark mode is stepped separately, not flipped: lighter and less saturated
+       than the light steps, so accents stay legible without glowing. */
     --track-green: 88 44% 58%;
-    --track-orange: 38 88% 62%;
-    --track-blue: 217 85% 68%;
-    --track-purple: 258 80% 74%;
-    --track-coral: 5 78% 70%;
-    --track-yellow: 45 80% 68%;
+    --track-orange: 38 90% 60%;
+    --track-blue: 217 85% 66%;
+    --track-purple: 258 78% 72%;
+    --track-coral: 5 78% 68%;
+    --track-yellow: 45 82% 64%;
 
-    --track-green-soft: 88 25% 18%;
-    --track-orange-soft: 38 35% 17%;
-    --track-blue-soft: 217 35% 19%;
-    --track-purple-soft: 258 30% 21%;
-    --track-coral-soft: 5 35% 19%;
-    --track-yellow-soft: 45 30% 17%;
+    --track-green-soft: 88 22% 17%;
+    --track-orange-soft: 36 32% 17%;
+    --track-blue-soft: 217 32% 19%;
+    --track-purple-soft: 258 28% 20%;
+    --track-coral-soft: 5 32% 19%;
+    --track-yellow-soft: 45 28% 17%;
 
-    /* Dark mode is stepped separately, not flipped: these pass the six checks
-       against the dark surface. */
+    --track-green-ink: 88 45% 76%;
+    --track-orange-ink: 38 85% 76%;
+    --track-blue-ink: 217 80% 80%;
+    --track-purple-ink: 258 75% 84%;
+    --track-coral-ink: 5 75% 80%;
+    --track-yellow-ink: 45 80% 78%;
+
     --plot-calories: 9 63% 59%;    /* #d96552 */
     --plot-hydration: 217 72% 64%; /* #5f92e6 */
     --plot-weight: 86 37% 47%;     /* #79a54c */
-
-    --track-green-ink: 88 45% 78%;
-    --track-orange-ink: 38 85% 78%;
-    --track-blue-ink: 217 80% 82%;
-    --track-purple-ink: 258 75% 85%;
-    --track-coral-ink: 5 75% 82%;
-    --track-yellow-ink: 45 80% 80%;
   }
 }
 
 
 
 @layer base {
+  :root {
+    /* --- Type steps ------------------------------------------------------
+       Six named steps, each interpolated between its pocket value and its
+       desktop one. Components call a step; no component writes a size.
+       The floor is 10px rendered: below that, text fails in daylight — which
+       is exactly where the smallest sizes used to be spent. */
+    --step-label: clamp(0.625rem, 0.59rem + 0.18vw, 0.75rem);      /* 10 → 12 */
+    --step-meta: clamp(0.6875rem, 0.65rem + 0.18vw, 0.8125rem);    /* 11 → 13 */
+    --step-body: clamp(0.8125rem, 0.77rem + 0.22vw, 0.9375rem);    /* 13 → 15 */
+    --step-figure: clamp(1.125rem, 0.95rem + 0.9vw, 1.5rem);       /* 18 → 24 */
+    --step-title: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);             /* 24 → 32 */
+    --step-display: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);         /* 28 → 44 */
+  }
+
   * {
     @apply border-border;
   }
@@ -179,6 +223,96 @@ select {
 }
 
 @layer components {
+  /* --- Pointer affordances ------------------------------------------------
+     Viewport width says nothing about how the screen is touched: a 1024px
+     tablet is driven by a thumb, a 1024px laptop by a mouse. Affordances key
+     off the pointer, never off a breakpoint. */
+
+  /* Secondary or destructive action on a log row. Visible by default, so a
+     touch device — which has no hover — can always reach it. */
+  .row-action {
+    position: relative;
+    opacity: 1;
+  }
+
+  /* The hit area is grown with a pseudo-element rather than by enlarging the
+     icon, so the control reaches 44px without getting visually heavier. */
+  .row-action::after {
+    content: "";
+    position: absolute;
+    inset: -9px;
+  }
+
+  .fine-hover-reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    /* A mouse gets the quieter list back — but focus still reveals the action,
+       so it is never hover alone that carries it. */
+    .row-action {
+      opacity: 0;
+    }
+
+    .group:hover .row-action,
+    .row-action:focus-visible {
+      opacity: 1;
+    }
+
+    .row-action::after {
+      inset: -5px;
+    }
+
+    .fine-hover-reveal {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+
+    .group:hover .fine-hover-reveal,
+    .group:focus-visible .fine-hover-reveal,
+    .fine-hover-reveal:focus-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* A row that scrolls sideways has to say so. The mask softens both ends, so
+     a clipped chip reads as "there is more" instead of as a rendering bug.
+     Turn it off with `[mask-image:none]` at the tier where the row stops
+     scrolling, otherwise it fades content that is fully in view. */
+  .edge-fade {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 0.75rem,
+      #000 calc(100% - 0.75rem),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 0.75rem,
+      #000 calc(100% - 0.75rem),
+      transparent 100%
+    );
+  }
+
+  /* Minimum comfortable target, applied where the visual size is smaller.
+     44px on a finger, 32px on a pointer. */
+  .tap {
+    position: relative;
+    min-width: 2rem;
+    min-height: 2rem;
+  }
+
+  @media (pointer: coarse) {
+    .tap {
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+    }
+  }
+
   /* Hand-drawn marker underline sitting behind a word, as in the screenshots.
      Uses a skewed pseudo-element rather than an image so it inherits color. */
   .marker-underline {

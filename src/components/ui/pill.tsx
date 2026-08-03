@@ -16,7 +16,7 @@ export function Pill({ tone = "neutral", icon, className, children, ...props }: 
         <span
             className={cn(
                 "inline-flex items-center gap-1 rounded-full px-2.5 py-1",
-                "font-mono text-[0.6875rem] font-medium leading-none tabular",
+                "font-mono text-meta font-medium leading-none tabular",
                 toneSoft[tone],
                 className
             )}

@@ -1,174 +1,90 @@
-import { isSupabaseConfigured, missingSupabaseMessage, supabase } from "@/lib/supabase";
-import type { FoodEntryRow, ProfileRow } from "@/lib/database.types";
 import {
-    DEFAULT_GOALS,
+    STORAGE_KEYS,
+    createId,
+    read,
+    readProfile,
+    write,
+    writeProfile,
+} from "@/features/tracking/api/local-store";
+import {
     type DailyGoals,
     type EntrySource,
     type FoodEntry,
     type ParsedMeal,
 } from "@/features/tracking/types/entry";
 
-const ENTRIES_TABLE = "food_entries";
-const PROFILES_TABLE = "profiles";
+/** On-disk shape: `createdAt` cannot survive JSON as a Date. */
+type StoredEntry = Omit<FoodEntry, "createdAt"> & { createdAt: string };
 
-function toEntry(row: FoodEntryRow): FoodEntry {
-    return {
-        id: row.id,
-        loggedOn: row.logged_on,
-        createdAt: new Date(row.created_at),
-        title: row.title,
-        kcal: row.kcal,
-        // numeric columns come back as strings over PostgREST.
-        carbsG: Number(row.carbs_g),
-        proteinG: Number(row.protein_g),
-        fatG: Number(row.fat_g),
-        source: row.source as EntrySource,
-        recipeId: row.recipe_id,
-    };
+function toEntry(stored: StoredEntry): FoodEntry {
+    return { ...stored, createdAt: new Date(stored.createdAt) };
 }
 
-function toGoals(row: ProfileRow): DailyGoals {
-    return {
-        kcal: row.daily_kcal,
-        carbsG: row.daily_carbs_g,
-        proteinG: row.daily_protein_g,
-        fatG: row.daily_fat_g,
-    };
+function readEntries(): StoredEntry[] {
+    return read<StoredEntry[]>(STORAGE_KEYS.entries, []);
+}
+
+/** All entries, newest last, as the log reads chronologically. */
+export function readAllEntries(): FoodEntry[] {
+    return readEntries().map(toEntry);
 }
 
 export class TrackingProvider {
-    /**
-     * Returns the current user id, creating an anonymous session on first use.
-     * Anonymous users are real auth users, so RLS scopes their data properly.
-     */
-    static async ensureSession(): Promise<string | null> {
-        if (!isSupabaseConfigured) {
-            console.error(missingSupabaseMessage);
-            return null;
-        }
-
-        const { data: existing } = await supabase.auth.getSession();
-        if (existing.session?.user) return existing.session.user.id;
-
-        const { data, error } = await supabase.auth.signInAnonymously();
-
-        if (error) {
-            // The most common cause is anonymous sign-ins being disabled in the
-            // Supabase dashboard.
-            console.error("Could not start a session:", error.message);
-            return null;
-        }
-
-        return data.user?.id ?? null;
+    static getGoals(): DailyGoals {
+        const profile = readProfile();
+        return {
+            kcal: profile.dailyKcal,
+            carbsG: profile.dailyCarbsG,
+            proteinG: profile.dailyProteinG,
+            fatG: profile.dailyFatG,
+        };
     }
 
-    /** Reads the user's daily targets, creating the row with defaults if absent. */
-    static async getGoals(userId: string): Promise<DailyGoals> {
-        const { data, error } = await supabase
-            .from(PROFILES_TABLE)
-            .select("*")
-            .eq("id", userId)
-            .maybeSingle();
-
-        if (error) {
-            console.error("Could not load goals:", error.message);
-            return DEFAULT_GOALS;
-        }
-
-        if (data) return toGoals(data);
-
-        const { data: created, error: insertError } = await supabase
-            .from(PROFILES_TABLE)
-            .insert({
-                id: userId,
-                daily_kcal: DEFAULT_GOALS.kcal,
-                daily_carbs_g: DEFAULT_GOALS.carbsG,
-                daily_protein_g: DEFAULT_GOALS.proteinG,
-                daily_fat_g: DEFAULT_GOALS.fatG,
-            })
-            .select("*")
-            .single();
-
-        if (insertError || !created) {
-            console.error("Could not create profile:", insertError?.message);
-            return DEFAULT_GOALS;
-        }
-
-        return toGoals(created);
+    static updateGoals(goals: DailyGoals): boolean {
+        return writeProfile({
+            dailyKcal: goals.kcal,
+            dailyCarbsG: goals.carbsG,
+            dailyProteinG: goals.proteinG,
+            dailyFatG: goals.fatG,
+        });
     }
 
-    static async updateGoals(userId: string, goals: DailyGoals): Promise<boolean> {
-        const { error } = await supabase
-            .from(PROFILES_TABLE)
-            .update({
-                daily_kcal: goals.kcal,
-                daily_carbs_g: goals.carbsG,
-                daily_protein_g: goals.proteinG,
-                daily_fat_g: goals.fatG,
-            })
-            .eq("id", userId);
-
-        if (error) console.error("Could not save goals:", error.message);
-        return !error;
+    /** Entries for one calendar day, oldest first. */
+    static getEntries(dayKey: string): FoodEntry[] {
+        return readEntries()
+            .filter((entry) => entry.loggedOn === dayKey)
+            .map(toEntry)
+            .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     }
 
-    /** Entries for one calendar day, oldest first so the log reads chronologically. */
-    static async getEntries(userId: string, dayKey: string): Promise<FoodEntry[]> {
-        const { data, error } = await supabase
-            .from(ENTRIES_TABLE)
-            .select("*")
-            .eq("user_id", userId)
-            .eq("logged_on", dayKey)
-            .order("created_at", { ascending: true });
-
-        if (error) {
-            console.error("Could not load entries:", error.message);
-            return [];
-        }
-
-        return (data ?? []).map(toEntry);
-    }
-
-    static async addEntry(
-        userId: string,
+    static addEntry(
         dayKey: string,
         meal: ParsedMeal,
         source: EntrySource = "manual",
         recipeId: string | null = null
-    ): Promise<FoodEntry | null> {
-        const { data, error } = await supabase
-            .from(ENTRIES_TABLE)
-            .insert({
-                user_id: userId,
-                logged_on: dayKey,
-                title: meal.title,
-                kcal: Math.max(0, Math.round(meal.kcal)),
-                carbs_g: meal.carbsG,
-                protein_g: meal.proteinG,
-                fat_g: meal.fatG,
-                source,
-                recipe_id: recipeId,
-            })
-            .select("*")
-            .single();
+    ): FoodEntry | null {
+        const stored: StoredEntry = {
+            id: createId(),
+            loggedOn: dayKey,
+            createdAt: new Date().toISOString(),
+            title: meal.title,
+            kcal: Math.max(0, Math.round(meal.kcal)),
+            carbsG: meal.carbsG,
+            proteinG: meal.proteinG,
+            fatG: meal.fatG,
+            source,
+            recipeId,
+        };
 
-        if (error || !data) {
-            console.error("Could not add entry:", error?.message);
-            return null;
-        }
-
-        return toEntry(data);
+        if (!write(STORAGE_KEYS.entries, [...readEntries(), stored])) return null;
+        return toEntry(stored);
     }
 
-    static async deleteEntry(userId: string, entryId: string): Promise<boolean> {
-        const { error } = await supabase
-            .from(ENTRIES_TABLE)
-            .delete()
-            .eq("id", entryId)
-            .eq("user_id", userId);
-
-        if (error) console.error("Could not delete entry:", error.message);
-        return !error;
+    static deleteEntry(entryId: string): boolean {
+        return write(
+            STORAGE_KEYS.entries,
+            readEntries().filter((entry) => entry.id !== entryId)
+        );
     }
 
     /** Asks the AI to turn a free-text meal description into macros. */

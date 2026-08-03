@@ -26,9 +26,11 @@ export function RecipeList() {
                 </div>
             )}
 
+            {/* Cards stay two-up on phones — the shell is phone-width there —
+                and gain a column at each step the shell widens. */}
             <motion.div
                 layout
-                className="grid grid-cols-2 gap-3"
+                className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 desk:grid-cols-4"
             >
                 <AnimatePresence mode="popLayout">
                     {filteredRecipes.map((recipe) => (

@@ -232,7 +232,9 @@ const RecipeIAChat: React.FC = () => {
         <>
             <Toaster richColors position="top-right" />
             {/* Floating Toggle Button */}
-            <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 pointer-events-none">
+            {/* Sits above the bottom tab bar until lg turns navigation into a
+                left rail and frees the bottom-right corner. */}
+            <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+5rem)] right-4 z-50 flex flex-col items-end gap-3 pointer-events-none lg:bottom-6 lg:right-6 lg:gap-4">
                 <AnimatePresence>
                     {!isOpen && (
                         <>
@@ -242,7 +244,7 @@ const RecipeIAChat: React.FC = () => {
                                 animate={{ opacity: 1, x: 0, scale: 1 }}
                                 exit={{ opacity: 0, x: 20, scale: 0.8 }}
                                 transition={{ delay: 1, type: "spring" }}
-                                className="bg-white dark:bg-zinc-800 px-4 py-2 rounded-2xl shadow-xl border border-primary/10 pointer-events-auto relative mr-2"
+                                className="pointer-events-auto relative mr-2 hidden rounded-2xl border border-primary/10 bg-white px-4 py-2 shadow-xl xs:block dark:bg-zinc-800"
                             >
                                 <div className="text-sm font-medium text-foreground">
                                     {t("cta")} 👨‍🍳
@@ -250,7 +252,10 @@ const RecipeIAChat: React.FC = () => {
                                 <div className="absolute -bottom-1 right-6 w-3 h-3 bg-white dark:bg-zinc-800 border-b border-r border-primary/10 transform rotate-45 translate-y-1/2"></div>
                             </motion.div>
 
-                            <motion.div
+                            <motion.button
+                                type="button"
+                                onClick={() => setIsOpen(true)}
+                                aria-label={t("assistantTitle")}
                                 className="relative pointer-events-auto group"
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -272,7 +277,6 @@ const RecipeIAChat: React.FC = () => {
                                     }}
                                 />
                                 <motion.div
-                                    onClick={() => setIsOpen(true)}
                                     className="absolute -inset-4 bg-primary/20 rounded-full z-0"
                                     animate={{
                                         scale: [1, 1.5],
@@ -286,8 +290,8 @@ const RecipeIAChat: React.FC = () => {
                                     }}
                                 />
 
-                                <div
-                                    className="rounded-full shadow-lg border-4 bg-white dark:bg-zinc-900 overflow-hidden w-[70px] h-[70px]"
+                                <span
+                                    className="relative z-10 block h-16 w-16 overflow-hidden rounded-full border-4 bg-white shadow-lg xs:h-[70px] xs:w-[70px] dark:bg-zinc-900"
                                 >
                                     <img
                                         src="/images/Beagle_Fast_Food.gif"
@@ -295,8 +299,8 @@ const RecipeIAChat: React.FC = () => {
                                         width={80}
                                         height={80}
                                     />
-                                </div>
-                            </motion.div>
+                                </span>
+                            </motion.button>
                         </>
                     )}
                 </AnimatePresence>
@@ -310,7 +314,7 @@ const RecipeIAChat: React.FC = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 50, scale: 0.9 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        className="fixed bottom-6 right-6 z-50 w-[90vw] sm:w-[450px] h-[600px] max-h-[80vh] flex flex-col bg-background/95 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl overflow-hidden"
+                        className="fixed bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] right-3 left-3 z-50 h-[600px] max-h-[calc(100vh-11rem)] flex flex-col bg-background/95 backdrop-blur-xl border border-border/50 rounded-3xl shadow-2xl overflow-hidden sm:left-auto sm:w-[450px] lg:bottom-6 lg:right-6 lg:max-h-[80vh]"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b border-border/50 bg-muted/30">
@@ -383,7 +387,7 @@ const RecipeIAChat: React.FC = () => {
                                             <SlidersHorizontal className="h-4 w-4" />
                                         </Button>
                                     </PopoverTrigger>
-                                    <PopoverContent className="w-80 p-4" align="start" side="top">
+                                    <PopoverContent className="w-[calc(100vw-2rem)] max-w-80 p-4" align="start" side="top">
                                         <div className="space-y-4">
                                             <h4 className="font-medium leading-none mb-2">{t("preferences")}</h4>
                                             <div className="space-y-2">

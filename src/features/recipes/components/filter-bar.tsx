@@ -42,7 +42,7 @@ export function FilterBar() {
                         <button
                             key={type}
                             onClick={() => handleMealTypeClick(type)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`tap rounded-full px-4 py-2 text-sm font-medium transition-all ${
                                 filters.mealType === type
                                     ? "bg-primary text-primary-foreground shadow-md"
                                     : "bg-secondary/50 hover:bg-secondary text-secondary-foreground"
@@ -65,7 +65,7 @@ export function FilterBar() {
                         <button
                             key={diff}
                             onClick={() => handleDifficultyClick(diff)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`tap rounded-full px-4 py-2 text-sm font-medium transition-all ${
                                 filters.difficulty === diff
                                     ? "bg-primary text-primary-foreground shadow-md"
                                     : "bg-secondary/50 hover:bg-secondary text-secondary-foreground"
@@ -88,7 +88,7 @@ export function FilterBar() {
                         <button
                             key={duration}
                             onClick={() => handleDurationChange(duration)}
-                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                            className={`tap rounded-full px-4 py-2 text-sm font-medium transition-all ${
                                 filters.maxDuration === duration
                                     ? "bg-primary text-primary-foreground shadow-md"
                                     : "bg-secondary/50 hover:bg-secondary text-secondary-foreground"
@@ -110,7 +110,7 @@ export function FilterBar() {
                     <select
                         value={filters.cuisine}
                         onChange={(e) => handleCuisineChange(e.target.value)}
-                        className="px-4 py-2 rounded-full text-sm font-medium bg-secondary/50 hover:bg-secondary text-secondary-foreground border-none outline-none cursor-pointer"
+                        className="tap rounded-full border-none bg-secondary/50 px-4 py-2 text-sm font-medium text-secondary-foreground outline-none hover:bg-secondary"
                     >
                         <option value="">{t("allCuisines")}</option>
                         {availableCuisines.map((cuisine) => (
@@ -133,7 +133,7 @@ export function FilterBar() {
                     >
                         <button
                             onClick={clearFilters}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-destructive/10 hover:bg-destructive/20 text-destructive transition-colors"
+                            className="tap flex items-center gap-2 rounded-full bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/20"
                         >
                             <X className="w-4 h-4" />
                             {t("clearAll")}
@@ -203,12 +203,14 @@ export function ActiveFilterBadges() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary/10 text-primary"
+                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-sm text-primary"
                     >
                         {badge.label}
                         <button
+                            type="button"
                             onClick={badge.onRemove}
-                            className="ml-1 hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                            className="tap ml-1 rounded-full p-0.5 transition-colors hover:bg-primary/20"
+                            aria-label={t("removeFilter", { label: badge.label })}
                         >
                             <X className="w-3 h-3" />
                         </button>

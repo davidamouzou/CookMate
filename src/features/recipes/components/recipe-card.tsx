@@ -64,14 +64,14 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
         {/* Floating Action Button */}
-        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
-          <ArrowUpRight className="w-5 h-5 text-primary" />
+        <div className="fine-hover-reveal absolute right-2 top-2 rounded-full bg-white/90 p-1.5 shadow-lg backdrop-blur-sm transition-all duration-300 sm:right-3 sm:top-3 sm:p-2">
+          <ArrowUpRight className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
         </div>
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
+        <div className="absolute left-2 top-2 flex max-w-[calc(100%-3rem)] gap-2 sm:left-3 sm:top-3 sm:max-w-[calc(100%-4rem)]">
           {recipe.cuisine && (
-            <span className="max-w-[7.5rem] truncate rounded-full bg-black/55 px-2 py-0.5 font-mono text-[0.625rem] font-medium text-white backdrop-blur-md">
+            <span className="max-w-[7.5rem] truncate rounded-full bg-black/55 px-2 py-0.5 font-mono text-label font-medium text-white backdrop-blur-md">
               {recipe.cuisine}
             </span>
           )}
@@ -80,19 +80,19 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
       {/* Content Section */}
       <div className="space-y-1.5 p-3">
-        <h3 className="line-clamp-2 font-mono text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-track-orange">
+        <h3 className="line-clamp-2 font-mono text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-track-orange-ink">
           {recipe.recipe_name}
         </h3>
 
         {/* Meta Info */}
-        <div className="flex items-center gap-2 font-mono text-[0.625rem] text-muted-foreground tabular">
-          <span className="flex items-center gap-1.5">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-label text-muted-foreground tabular">
+          <span className="flex min-w-0 items-center gap-1.5">
             <Clock className="h-3 w-3 shrink-0" />
             {recipe.duration_to_cook || 30} min
           </span>
-          <span className="flex items-center gap-1.5 capitalize">
+          <span className="flex min-w-0 items-center gap-1.5 capitalize">
             <ChefHat className="h-3 w-3 shrink-0" />
-            {difficultyLabel}
+            <span className="truncate">{difficultyLabel}</span>
           </span>
         </div>
       </div>

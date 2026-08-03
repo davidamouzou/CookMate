@@ -7,14 +7,21 @@ export const TONES = ["green", "orange", "blue", "purple", "coral", "yellow", "n
 
 export type Tone = (typeof TONES)[number];
 
-/** Solid accent colour, for icons, strokes and emphasis. */
+/**
+ * Accent colour for text and icons.
+ *
+ * This is the `-ink` step, not the bright `--track-*` hue: a warm accent at
+ * full brightness sits around 2:1 on the cream canvas, so it reads as disabled
+ * text rather than as emphasis. The ink step clears 4.5:1 on the page surface
+ * and on its own `-soft` fill, in both themes.
+ */
 export const toneText: Record<Tone, string> = {
-    green: "text-track-green",
-    orange: "text-track-orange",
-    blue: "text-track-blue",
-    purple: "text-track-purple",
-    coral: "text-track-coral",
-    yellow: "text-track-yellow",
+    green: "text-track-green-ink",
+    orange: "text-track-orange-ink",
+    blue: "text-track-blue-ink",
+    purple: "text-track-purple-ink",
+    coral: "text-track-coral-ink",
+    yellow: "text-track-yellow-ink",
     neutral: "text-muted-foreground",
 };
 
@@ -41,11 +48,11 @@ export const toneUnderline: Record<Tone, string> = {
 };
 
 export const toneBorder: Record<Tone, string> = {
-    green: "border-track-green/30",
-    orange: "border-track-orange/30",
-    blue: "border-track-blue/30",
-    purple: "border-track-purple/30",
-    coral: "border-track-coral/30",
-    yellow: "border-track-yellow/30",
+    green: "border-track-green/40",
+    orange: "border-track-orange/40",
+    blue: "border-track-blue/40",
+    purple: "border-track-purple/40",
+    coral: "border-track-coral/40",
+    yellow: "border-track-yellow/40",
     neutral: "border-border",
 };

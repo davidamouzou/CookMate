@@ -9,9 +9,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { useTransition } from "react";
 
-export default function LanguageSelector() {
+export default function LanguageSelector({ className }: { className?: string }) {
     const locale = useLocale();
     const t = useTranslations("LanguageSelector");
     const router = useRouter();
@@ -30,7 +31,7 @@ export default function LanguageSelector() {
             onValueChange={handleValueChange}
             disabled={isPending}
         >
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className={cn("tap w-[100px]", className)}>
                 <SelectValue placeholder={t("label")} />
             </SelectTrigger>
             <SelectContent>

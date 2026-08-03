@@ -1,7 +1,10 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type SectionCardProps = React.HTMLAttributes<HTMLDivElement> & {
+// `title` is dropped from the DOM attributes first: HTMLAttributes types it as
+// the tooltip string, and the intersection would narrow this one to `string`
+// rather than the node it is rendered as.
+type SectionCardProps = Omit<React.HTMLAttributes<HTMLDivElement>, "title"> & {
     /** Left-aligned section title. */
     title?: React.ReactNode;
     /** Right-aligned caption, e.g. "moving average" or a date. */
@@ -40,7 +43,7 @@ export function SectionCard({
                         <h2 className="font-mono text-sm font-bold leading-none">{title}</h2>
                     ) : <span />}
                     {aside ? (
-                        <span className="font-mono text-[0.6875rem] leading-none text-muted-foreground">
+                        <span className="font-mono text-meta leading-none text-muted-foreground">
                             {aside}
                         </span>
                     ) : null}

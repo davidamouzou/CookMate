@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Analytics } from "@vercel/analytics/react";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Caveat, JetBrains_Mono, Outfit } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
@@ -33,6 +33,23 @@ const caveat = Caveat({
   display: "swap",
   variable: "--font-display",
 });
+
+/**
+ * `viewport-fit=cover` lets the layout reach under the notch and the home
+ * indicator, which is what makes `env(safe-area-inset-*)` report anything —
+ * the bottom tab bar pads itself with it.
+ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  // Matches `--surface` in each theme, so the browser chrome blends with the
+  // app shell rather than banding against it.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#efece6" },
+    { media: "(prefers-color-scheme: dark)", color: "#14120f" },
+  ],
+};
 
 type RootLayoutProps = {
   children: React.ReactNode;

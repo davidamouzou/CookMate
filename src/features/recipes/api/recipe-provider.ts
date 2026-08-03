@@ -1,13 +1,33 @@
 import { extractErrorMessageSafe, uploadImageToStorage } from "@/features/recipes/api/upload-file"
 import { isSupabaseConfigured, missingSupabaseMessage, supabase } from "@/lib/supabase";
 import type { RecipeRow } from "@/lib/database.types";
-import { Recipe } from "@/features/recipes/types/recipe";
+import { Recipe, RecipeDraft } from "@/features/recipes/types/recipe";
+import type {
+    FoundRecipe,
+    RecipeSearchCriteria,
+} from "@/features/recipes/lib/recipe-search";
+import type { GeminiSource } from "@/lib/ai/gemini";
 
 export type RecipeGenerateResponse = {
     success: boolean;
     recipe: Recipe | null;
     message?: string;
 }
+
+export type RecipeSearchResult = {
+    success: boolean;
+    recipes: FoundRecipe[];
+    /** Ingredients read off the photo, echoed back so the UI can show them. */
+    ingredients: string[];
+    sources: GeminiSource[];
+    /**
+     * Why it failed, when it did. `quota` is worth its own case: search
+     * grounding has a daily allowance separate from plain generation, so this
+     * feature can be the only thing that stops working.
+     */
+    code?: "quota" | "error";
+    message?: string;
+};
 
 const RECIPES_TABLE = "recipes";
 
@@ -24,6 +44,9 @@ function toRecipe(row: RecipeRow): Recipe {
         cuisine: row.cuisine ?? "",
         meal_type: row.meal_type ?? "",
         nutrition_facts: row.nutrition_facts ?? {},
+        origin: row.origin ?? "ai",
+        source_url: row.source_url ?? null,
+        source_name: row.source_name ?? null,
         created_at: new Date(row.created_at),
     };
 }
@@ -83,36 +106,104 @@ export class RecipeProvider {
         }
     }
 
-    static async saveRecipe(recipe: Recipe): Promise<{ success: boolean, recipe: Recipe | null }> {
+    /**
+     * Stores a recipe through /api/recipes.
+     *
+     * The write goes through the server rather than straight to Supabase so
+     * the submitter's IP and location are recorded alongside it — the browser
+     * cannot see its own public address.
+     */
+    static async saveRecipe(
+        recipe: Recipe | RecipeDraft,
+        locale?: string
+    ): Promise<{ success: boolean; recipe: Recipe | null; duplicate?: boolean }> {
         try {
-            if (!isSupabaseConfigured) {
-                console.error(missingSupabaseMessage);
+            const query = locale ? `?locale=${encodeURIComponent(locale)}` : "";
+            const response = await fetch(`/api/recipes${query}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ recipe }),
+            });
+
+            if (!response.ok) {
+                console.error("Failed to save recipe:", await safeReadError(response));
                 return { success: false, recipe: null };
             }
 
-            // Let Postgres generate the id and created_at.
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id: _id, created_at: _createdAt, ...payload } = recipe;
+            const { recipe: row, duplicate } = (await response.json()) as {
+                recipe: RecipeRow;
+                duplicate?: boolean;
+            };
 
-            const { data, error } = await supabase
-                .from(RECIPES_TABLE)
-                .insert({
-                    ...payload,
-                    created_by: recipe.created_by || "anonymous",
-                })
-                .select("*")
-                .single();
-
-            if (error || !data) {
-                console.error("Failed to save recipe:", error?.message);
-                return { success: false, recipe: null };
-            }
-
-            return { success: true, recipe: toRecipe(data) };
+            return { success: true, recipe: toRecipe(row), duplicate };
         } catch (error) {
             console.error("Unexpected error:", error);
             return { success: false, recipe: null };
         }
+    }
+
+    /**
+     * Finds recipes that already exist on the web, via search-grounded AI.
+     *
+     * Unlike `generateRecipe`, nothing here is invented: each result carries
+     * the page it was found on. The image is generated afterwards, when a
+     * result is saved — searching for four recipes should not cost four
+     * image generations.
+     */
+    static async findRecipes(
+        criteria: RecipeSearchCriteria & { image?: string }
+    ): Promise<RecipeSearchResult> {
+        const empty = { recipes: [], ingredients: [], sources: [] };
+
+        try {
+            const response = await fetch("/api/search/recipe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(criteria),
+            });
+
+            if (!response.ok) {
+                return {
+                    success: false,
+                    ...empty,
+                    code: response.status === 429 ? "quota" : "error",
+                    message: (await safeReadError(response)) ?? undefined,
+                };
+            }
+
+            const data = (await response.json()) as Omit<RecipeSearchResult, "success">;
+
+            return {
+                success: true,
+                recipes: data.recipes ?? [],
+                ingredients: data.ingredients ?? [],
+                sources: data.sources ?? [],
+            };
+        } catch (error) {
+            console.error("Unexpected error:", error);
+            return {
+                success: false,
+                ...empty,
+                code: "error",
+                message: error instanceof Error ? error.message : undefined,
+            };
+        }
+    }
+
+    /**
+     * Illustrates a recipe and stores it. Used for both a found recipe and a
+     * generated one; a recipe that already has an image keeps it.
+     */
+    static async publishRecipe(
+        draft: RecipeDraft,
+        locale?: string
+    ): Promise<{ success: boolean; recipe: Recipe | null; duplicate?: boolean }> {
+        const image =
+            draft.image ||
+            (await RecipeProvider.generateImage(draft.description || draft.recipe_name)) ||
+            "";
+
+        return RecipeProvider.saveRecipe({ ...draft, image }, locale);
     }
 
     static async generateImage(description: string): Promise<string | null> {

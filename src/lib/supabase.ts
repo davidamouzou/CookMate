@@ -18,10 +18,12 @@ export const supabase = createClient<Database>(
     supabasePublishableKey ?? "placeholder-publishable-key",
     {
         auth: {
-            // The tracking screens need a stable per-user session so row-level
-            // security can scope entries to `auth.uid()`.
-            persistSession: true,
-            autoRefreshToken: true,
+            // Nothing in the app signs in: recipes are public content and the
+            // tracking log is stored device-locally. Keeping auth inert avoids
+            // a token in localStorage and a refresh loop that has no session to
+            // refresh.
+            persistSession: false,
+            autoRefreshToken: false,
             detectSessionInUrl: false,
         },
     }

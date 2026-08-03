@@ -7,7 +7,30 @@ const config: Config = {
 		"./src/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
+		// The five named tiers of the responsive system. `xs` and `desk` are
+		// additions; the rest keep Tailwind's values so existing prefixes stay
+		// meaningful. Each threshold answers a physical constraint, not a round
+		// number: `xs` is where a phone stops being cramped, `sm` where four
+		// figures with their goal fit across, `lg` where the thumb stops being
+		// the cursor, `desk` where a second content column pays for itself.
+		screens: {
+			xs: "390px",    // poche
+			sm: "640px",    // tablette
+			md: "768px",
+			lg: "1024px",   // portable
+			xl: "1280px",
+			desk: "1440px", // bureau
+			"2xl": "1536px",
+		},
 		extend: {
+			fontSize: {
+				label: ["var(--step-label)", { lineHeight: "1.2" }],
+				meta: ["var(--step-meta)", { lineHeight: "1.45" }],
+				body: ["var(--step-body)", { lineHeight: "1.5" }],
+				figure: ["var(--step-figure)", { lineHeight: "1" }],
+				title: ["var(--step-title)", { lineHeight: "1.1" }],
+				display: ["var(--step-display)", { lineHeight: "1.05" }],
+			},
 			fontFamily: {
 				sans: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
 				mono: ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular', 'monospace'],
@@ -25,6 +48,12 @@ const config: Config = {
 					sunken: 'hsl(var(--surface-sunken))',
 					inverted: 'hsl(var(--surface-inverted))',
 					'inverted-foreground': 'hsl(var(--surface-inverted-foreground))',
+				},
+				nav: {
+					DEFAULT: 'hsl(var(--nav))',
+					foreground: 'hsl(var(--nav-foreground))',
+					active: 'hsl(var(--nav-active))',
+					'active-foreground': 'hsl(var(--nav-active-foreground))',
 				},
 				plot: {
 					calories: 'hsl(var(--plot-calories))',
@@ -93,26 +122,9 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
-				flavoriz: {
-					orange: {
-						DEFAULT: '#FFA500', // Example, will refine with HSL in globals
-						50: '#FFF8E1',
-						100: '#FFECB3',
-						500: '#FF9800',
-						600: '#FB8C00',
-					},
-					cream: '#FFFDD0',
-				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
-				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
-				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

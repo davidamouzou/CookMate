@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
+import { useMeasuredWidth } from "@/hooks/use-measured-width";
 import { cn } from "@/lib/utils";
 
 export type TrendPoint = {
@@ -23,7 +24,20 @@ type TrendChartProps = {
     tableCaption?: string;
 };
 
-const PADDING = { top: 8, right: 8, bottom: 18, left: 34 };
+const PADDING = { top: 10, right: 12, bottom: 8, left: 38 };
+
+/** Axis and target labels, in real pixels — the viewBox is measured in them. */
+const LABEL_SIZE = 10;
+
+/**
+ * Height per tier. A trend plotted much wider than 4:1 flattens its slope into
+ * a lie, so the box grows with the width it is given.
+ */
+function heightFor(width: number): number {
+    if (width < 480) return 120;
+    if (width < 900) return 160;
+    return 200;
+}
 
 /**
  * Daily values as dots with a moving-average line — the consumption trend.
@@ -37,16 +51,19 @@ export function TrendChart({
     target,
     targetLabel,
     unit = "",
-    height = 150,
+    height,
     className,
     tableCaption,
 }: TrendChartProps) {
     const gradientId = useId();
     const [hovered, setHovered] = useState<number | null>(null);
+    // The chart is sized from the box it lands in, not from a breakpoint: it
+    // works the same in the page column and in the narrower side column.
+    const { ref, width } = useMeasuredWidth<HTMLDivElement>();
 
-    const width = 320;
-    const plotWidth = width - PADDING.left - PADDING.right;
-    const plotHeight = height - PADDING.top - PADDING.bottom;
+    const chartHeight = height ?? heightFor(width);
+    const plotWidth = Math.max(width - PADDING.left - PADDING.right, 1);
+    const plotHeight = chartHeight - PADDING.top - PADDING.bottom;
 
     const { min, max } = useMemo(() => {
         const values = [
@@ -88,10 +105,12 @@ export function TrendChart({
 
     return (
         <figure className={cn("m-0", className)}>
-            <div className="relative">
+            <div className="relative" ref={ref}>
                 <svg
-                    viewBox={`0 0 ${width} ${height}`}
-                    className="w-full"
+                    viewBox={`0 0 ${width} ${chartHeight}`}
+                    width={width}
+                    height={chartHeight}
+                    className="block w-full"
                     role="img"
                     aria-label={tableCaption}
                     onMouseLeave={() => setHovered(null)}
@@ -103,15 +122,17 @@ export function TrendChart({
                         </linearGradient>
                     </defs>
 
-                    {/* Recessive axis labels */}
+                    {/* Recessive axis labels. Now that a unit is a pixel, these
+                        are set at a real type size instead of being scaled up
+                        with the box. */}
                     {[max, (max + min) / 2, min].map((value, index) => (
                         <text
                             key={index}
-                            x={PADDING.left - 5}
-                            y={y(value) + 3}
+                            x={PADDING.left - 6}
+                            y={y(value) + LABEL_SIZE / 3}
                             textAnchor="end"
                             className="fill-muted-foreground font-mono"
-                            style={{ fontSize: 7 }}
+                            style={{ fontSize: LABEL_SIZE }}
                         >
                             {Math.round(value)}
                         </text>
@@ -132,10 +153,10 @@ export function TrendChart({
                             {targetLabel ? (
                                 <text
                                     x={width - PADDING.right}
-                                    y={y(target) - 3}
+                                    y={y(target) - 4}
                                     textAnchor="end"
                                     className="fill-muted-foreground font-mono"
-                                    style={{ fontSize: 7 }}
+                                    style={{ fontSize: LABEL_SIZE }}
                                 >
                                     {targetLabel}
                                 </text>
@@ -188,13 +209,16 @@ export function TrendChart({
                             height={plotHeight}
                             fill="transparent"
                             onMouseEnter={() => setHovered(index)}
+                            // A finger has no hover: tapping a column pins its
+                            // reading instead of leaving the value unreachable.
+                            onPointerDown={() => setHovered(index)}
                         />
                     ))}
                 </svg>
 
                 {hoveredPoint ? (
                     <div
-                        className="pointer-events-none absolute top-0 rounded-md bg-surface-inverted px-2 py-1 font-mono text-[0.625rem] text-surface-inverted-foreground tabular"
+                        className="pointer-events-none absolute top-0 rounded-md bg-surface-inverted px-2 py-1 font-mono text-label text-surface-inverted-foreground tabular"
                         style={{ left: `${(x(hovered!) / width) * 100}%`, transform: "translateX(-50%)" }}
                     >
                         {hoveredPoint.label}

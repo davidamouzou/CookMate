@@ -30,8 +30,8 @@ export function LogRow({ title, metrics, leading, className }: LogRowProps) {
                 </span>
             ) : null}
             <div className="min-w-0 flex-1">
-                <p className="font-mono text-[0.8125rem] font-bold leading-tight">{title}</p>
-                <p className="mt-0.5 font-mono text-[0.6875rem] leading-tight text-muted-foreground tabular">
+                <p className="font-mono text-body font-bold leading-tight">{title}</p>
+                <p className="mt-0.5 font-mono text-meta leading-tight text-muted-foreground tabular">
                     {metrics.map((metric, index) => (
                         <React.Fragment key={`${metric.unit}-${index}`}>
                             {index > 0 ? " " : null}

@@ -1,4 +1,4 @@
-import type { NutritionFacts } from "@/features/recipes/types/recipe";
+import type { NutritionFacts, RecipeOrigin } from "@/features/recipes/types/recipe";
 
 /**
  * Shape of the `recipes` table (see supabase/migrations/0001_init_recipes.sql).
@@ -22,21 +22,33 @@ export type RecipeRow = {
     nutrition_facts: NutritionFacts;
     created_by: string;
     created_at: string;
+    /** Added by 0008_recipe_discovery_and_geo.sql. */
+    origin: RecipeOrigin;
+    source_url: string | null;
+    source_name: string | null;
 };
 
-export type RecipeInsert = Omit<RecipeRow, "id" | "created_at"> & {
+/** `origin` defaults to 'ai' in the table, so it is optional on insert. */
+export type RecipeInsert = Omit<RecipeRow, "id" | "created_at" | "origin"> & {
     id?: string;
     created_at?: string;
+    origin?: RecipeOrigin;
 };
 
-/** See supabase/migrations/0003_visits.sql. */
+/** See supabase/migrations/0003_visits.sql and 0008_recipe_discovery_and_geo.sql. */
 export type VisitRow = {
     id: number;
     created_at: string;
     ip: string | null;
     country: string | null;
+    region: string | null;
+    region_code: string | null;
     city: string | null;
+    postal_code: string | null;
+    continent: string | null;
     timezone: string | null;
+    latitude: number | null;
+    longitude: number | null;
     device_type: string | null;
     os: string | null;
     browser: string | null;
@@ -49,6 +61,32 @@ export type VisitRow = {
 
 export type VisitInsert = Omit<VisitRow, "id" | "created_at" | "is_bot"> & {
     is_bot?: boolean;
+};
+
+/**
+ * Who submitted a recipe and from where — see
+ * supabase/migrations/0008_recipe_discovery_and_geo.sql. Kept apart from
+ * `recipes` because that table is world-readable and this one holds an IP.
+ */
+export type RecipeSubmissionRow = {
+    id: number;
+    created_at: string;
+    recipe_id: string;
+    ip: string | null;
+    country: string | null;
+    region: string | null;
+    city: string | null;
+    postal_code: string | null;
+    timezone: string | null;
+    latitude: number | null;
+    longitude: number | null;
+    user_agent: string | null;
+    locale: string | null;
+    origin: string | null;
+};
+
+export type RecipeSubmissionInsert = Omit<RecipeSubmissionRow, "id" | "created_at"> & {
+    created_at?: string;
 };
 
 /** See supabase/migrations/0004_tracking.sql. */
@@ -135,6 +173,12 @@ export type Database = {
                 Row: VisitRow;
                 Insert: VisitInsert;
                 Update: Partial<VisitInsert>;
+                Relationships: [];
+            };
+            recipe_submissions: {
+                Row: RecipeSubmissionRow;
+                Insert: RecipeSubmissionInsert;
+                Update: Partial<RecipeSubmissionInsert>;
                 Relationships: [];
             };
             profiles: {

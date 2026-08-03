@@ -1,119 +1,70 @@
-import { supabase } from "@/lib/supabase";
-import type { WeightEntryRow } from "@/lib/database.types";
+import { STORAGE_KEYS, createId, read, readProfile, write, writeProfile } from "@/features/tracking/api/local-store";
+import { readAllEntries } from "@/features/tracking/api/tracking-provider";
 import type { Program, WeightEntry } from "@/features/tracking/types/program";
 
-const WEIGHTS_TABLE = "weight_entries";
-
-function toWeight(row: WeightEntryRow): WeightEntry {
-    return {
-        id: row.id,
-        loggedOn: row.logged_on,
-        // numeric columns come back as strings over PostgREST.
-        weightKg: Number(row.weight_kg),
-    };
+function readWeights(): WeightEntry[] {
+    return read<WeightEntry[]>(STORAGE_KEYS.weights, []);
 }
 
 export class ProgramProvider {
-    static async getProgram(userId: string): Promise<Program | null> {
-        const { data, error } = await supabase
-            .from("profiles")
-            .select(
-                "start_weight_kg, goal_weight_kg, pace_kg_per_week, program_started_on, daily_kcal"
-            )
-            .eq("id", userId)
-            .maybeSingle();
-
-        if (error || !data) {
-            if (error) console.error("Could not load programme:", error.message);
-            return null;
-        }
+    static getProgram(): Program {
+        const profile = readProfile();
 
         return {
-            startWeightKg: data.start_weight_kg === null ? null : Number(data.start_weight_kg),
-            goalWeightKg: data.goal_weight_kg === null ? null : Number(data.goal_weight_kg),
-            paceKgPerWeek: Number(data.pace_kg_per_week),
-            startedOn: data.program_started_on,
-            dailyKcal: data.daily_kcal,
+            startWeightKg: profile.startWeightKg,
+            goalWeightKg: profile.goalWeightKg,
+            paceKgPerWeek: profile.paceKgPerWeek,
+            startedOn: profile.programStartedOn,
+            dailyKcal: profile.dailyKcal,
         };
     }
 
-    static async saveProgram(userId: string, program: Program): Promise<boolean> {
-        const { error } = await supabase
-            .from("profiles")
-            .update({
-                start_weight_kg: program.startWeightKg,
-                goal_weight_kg: program.goalWeightKg,
-                pace_kg_per_week: program.paceKgPerWeek,
-                program_started_on: program.startedOn,
-            })
-            .eq("id", userId);
-
-        if (error) console.error("Could not save programme:", error.message);
-        return !error;
+    static saveProgram(program: Program): boolean {
+        return writeProfile({
+            startWeightKg: program.startWeightKg,
+            goalWeightKg: program.goalWeightKg,
+            paceKgPerWeek: program.paceKgPerWeek,
+            programStartedOn: program.startedOn,
+        });
     }
 
-    static async getWeights(userId: string, fromDay: string, toDay: string): Promise<WeightEntry[]> {
-        const { data, error } = await supabase
-            .from(WEIGHTS_TABLE)
-            .select("*")
-            .eq("user_id", userId)
-            .gte("logged_on", fromDay)
-            .lte("logged_on", toDay)
-            .order("logged_on", { ascending: true });
-
-        if (error) {
-            console.error("Could not load weights:", error.message);
-            return [];
-        }
-
-        return (data ?? []).map(toWeight);
+    static getWeights(fromDay: string, toDay: string): WeightEntry[] {
+        // Day keys are `YYYY-MM-DD`, so lexicographic order is date order.
+        return readWeights()
+            .filter((entry) => entry.loggedOn >= fromDay && entry.loggedOn <= toDay)
+            .sort((a, b) => a.loggedOn.localeCompare(b.loggedOn));
     }
 
     /** One reading per day: re-weighing replaces the day's value. */
-    static async recordWeight(
-        userId: string,
-        dayKey: string,
-        weightKg: number
-    ): Promise<WeightEntry | null> {
-        const { data, error } = await supabase
-            .from(WEIGHTS_TABLE)
-            .upsert(
-                { user_id: userId, logged_on: dayKey, weight_kg: weightKg },
-                { onConflict: "user_id,logged_on" }
-            )
-            .select("*")
-            .single();
+    static recordWeight(dayKey: string, weightKg: number): WeightEntry | null {
+        const existing = readWeights();
+        const entry: WeightEntry = {
+            id: existing.find((item) => item.loggedOn === dayKey)?.id ?? createId(),
+            loggedOn: dayKey,
+            weightKg,
+        };
 
-        if (error || !data) {
-            console.error("Could not record weight:", error?.message);
-            return null;
+        const next = [...existing.filter((item) => item.loggedOn !== dayKey), entry];
+        if (!write(STORAGE_KEYS.weights, next)) return null;
+
+        // The first reading doubles as the programme's starting point, which is
+        // what the "start → now → goal" row compares against.
+        if (readProfile().startWeightKg === null) {
+            writeProfile({ startWeightKg: weightKg, programStartedOn: dayKey });
         }
 
-        return toWeight(data);
+        return entry;
     }
 
     /** Daily calorie totals over a window, for the consumption trend. */
-    static async getDailyCalories(
-        userId: string,
-        fromDay: string,
-        toDay: string
-    ): Promise<Map<string, number>> {
-        const { data, error } = await supabase
-            .from("food_entries")
-            .select("logged_on, kcal")
-            .eq("user_id", userId)
-            .gte("logged_on", fromDay)
-            .lte("logged_on", toDay);
-
-        if (error) {
-            console.error("Could not load calorie history:", error.message);
-            return new Map();
-        }
-
+    static getDailyCalories(fromDay: string, toDay: string): Map<string, number> {
         const byDay = new Map<string, number>();
-        for (const row of data ?? []) {
-            byDay.set(row.logged_on, (byDay.get(row.logged_on) ?? 0) + row.kcal);
+
+        for (const entry of readAllEntries()) {
+            if (entry.loggedOn < fromDay || entry.loggedOn > toDay) continue;
+            byDay.set(entry.loggedOn, (byDay.get(entry.loggedOn) ?? 0) + entry.kcal);
         }
+
         return byDay;
     }
 }

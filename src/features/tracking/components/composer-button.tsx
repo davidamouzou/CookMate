@@ -34,7 +34,8 @@ export function ComposerButton({
                     onClick={onLabelClick}
                     className={cn(
                         "inline-flex items-center gap-2 rounded-full border border-border/60 bg-surface-raised px-3 py-1.5",
-                        "font-mono text-xs font-bold transition-colors hover:border-track-orange/40",
+                        "tap",
+                        "font-mono text-xs font-bold transition-colors hover:border-primary/50",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     )}
                 >

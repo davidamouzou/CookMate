@@ -22,12 +22,12 @@ const NutritionCard = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-white/50 dark:bg-zinc-900/50 border border-white/20 shadow-sm backdrop-blur-md">
-      <div className="p-3 rounded-full bg-primary/10 text-primary text-xl mb-2">
+    <div className="flex min-w-0 flex-col items-center justify-center rounded-xl border border-border/60 bg-surface-raised p-3 text-center shadow-sm">
+      <div className="mb-2 rounded-full bg-primary/10 p-2 text-lg text-primary">
         {icon}
       </div>
-      <span className="font-mono font-bold text-base tabular">{value}</span>
-      <span className="text-xs text-muted-foreground uppercase tracking-wider">{title}</span>
+      <span className="max-w-full truncate font-mono text-body font-bold tabular">{value}</span>
+      <span className="max-w-full truncate font-mono text-label uppercase text-muted-foreground">{title}</span>
     </div>
   );
 };
@@ -37,9 +37,10 @@ const Instruction = ({ instruction, index }: { instruction: string; index: numbe
   const t = useTranslations("RecipeDetail");
 
   return (
-    <div
+    <button
+      type="button"
       onClick={() => setIsChecked(!isChecked)}
-      className={`group flex items-start space-x-4 p-4 rounded-xl transition-all cursor-pointer border ${isChecked
+      className={`group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all sm:gap-4 sm:p-4 ${isChecked
         ? "bg-primary/5 border-primary/20"
         : "bg-white/40 dark:bg-zinc-900/40 border-transparent hover:bg-white/60 dark:hover:bg-zinc-900/60"
         }`}
@@ -48,12 +49,12 @@ const Instruction = ({ instruction, index }: { instruction: string; index: numbe
         {isChecked ? <CircleCheck className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
       </div>
       <div className="flex-1">
-        <span className="text-xs font-bold text-muted-foreground mb-1 block">{t("step", { number: index + 1 })}</span>
-        <p className={`text-base leading-relaxed transition-opacity ${isChecked ? "line-through opacity-50" : ""}`}>
+        <span className="mb-1 block font-mono text-label font-bold text-muted-foreground">{t("step", { number: index + 1 })}</span>
+        <p className={`text-body leading-relaxed transition-opacity ${isChecked ? "line-through opacity-50" : ""}`}>
           {instruction}
         </p>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -86,13 +87,16 @@ const DetailRecipe = () => {
           <div className="relative text-foreground">
             <div className="relative z-10">
               <div className="w-full">
-                <div className="flex flex-col gap-6">
+                {/* One column on phones; from lg the photo and its figures
+                    become a sticky rail beside the method, which is what the
+                    `lg:col-span-*` on the text column always assumed. */}
+                <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:items-start lg:gap-8">
                   {/* Left Column: Image & Quick Stats */}
-                  <div className="space-y-5">
+                  <div className="space-y-5 lg:sticky lg:top-20 lg:col-span-5">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="relative aspect-[5/5] w-full overflow-hidden rounded-3xl shadow-2xl border-4 border-white/20 dark:border-zinc-800/50"
+                      className="relative aspect-square w-full overflow-hidden rounded-2xl border border-border/60 shadow-lifted"
                     >
                       <img
                         className="h-full w-full object-cover"
@@ -103,12 +107,12 @@ const DetailRecipe = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <div className="flex items-center gap-4 text-sm font-medium mb-2">
-                          <span className="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white sm:p-6">
+                        <div className="mb-2 flex flex-wrap items-center gap-2 font-mono text-meta font-medium sm:gap-3">
+                          <span className="flex items-center gap-1 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 backdrop-blur-md">
                             <Clock className="w-4 h-4" /> {recipe.duration_to_cook} min
                           </span>
-                          <span className="bg-black/40 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                          <span className="flex items-center gap-1 rounded-full border border-white/10 bg-black/40 px-2.5 py-1 backdrop-blur-md">
                             <User className="w-4 h-4" /> {recipe.servings} {t("servings")}
                           </span>
                         </div>
@@ -116,7 +120,7 @@ const DetailRecipe = () => {
                     </motion.div>
 
                     {/* Nutrition Grid - Mobile/Desktop */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
                       <NutritionCard
                         title={t("nutrition.calories")}
                         value={`${recipe.nutrition_facts["calories"]}`}
@@ -141,13 +145,13 @@ const DetailRecipe = () => {
                   </div>
 
                   {/* Right Column: Details & Instructions */}
-                  <div className="lg:col-span-7 space-y-8 pb-24">
+                  <div className="min-w-0 space-y-8 pb-24 lg:col-span-7">
                     <div>
                       <motion.h1
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="font-mono text-3xl md:text-4xl font-bold tracking-tight mb-6"
+                        className="mb-4 font-mono text-title font-bold tracking-tight sm:mb-6"
                       >
                         {recipe.recipe_name}
                       </motion.h1>
@@ -158,12 +162,12 @@ const DetailRecipe = () => {
                         transition={{ delay: 0.2 }}
                         className="prose dark:prose-invert max-w-none"
                       >
-                        <p className="font-mono text-sm leading-relaxed text-muted-foreground">
+                        <p className="max-w-[68ch] font-mono text-body leading-relaxed text-muted-foreground">
                           {showFullDescription
                             ? recipe.description
                             : `${recipe.description?.substring(0, 180)}...`}
                           <button
-                            className="ml-2 text-primary font-semibold hover:underline decoration-2 underline-offset-4"
+                            className="tap ml-2 rounded-md font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                             onClick={() => setShowFullDescription(!showFullDescription)}
                           >
                             {showFullDescription ? t("readLess") : t("readMore")}
@@ -174,7 +178,7 @@ const DetailRecipe = () => {
 
                     {/* Ingredients Section */}
                     <div>
-                      <h2 className="font-mono text-lg font-bold mb-4 flex items-center gap-2">
+                      <h2 className="mb-4 flex items-center gap-2 font-mono text-body font-bold">
                         <span className="w-8 h-1 bg-primary rounded-full inline-block"></span>
                         {t("ingredients")}
                       </h2>
@@ -182,7 +186,7 @@ const DetailRecipe = () => {
                         {recipe.ingredients.map((ingredient, index) => (
                           <span
                             key={index}
-                            className="px-4 py-2 bg-secondary/50 hover:bg-secondary text-secondary-foreground rounded-xl text-sm font-medium transition-colors border border-transparent hover:border-primary/20"
+                            className="rounded-xl border border-transparent bg-secondary/50 px-3 py-2 text-body font-medium text-secondary-foreground transition-colors hover:border-primary/20 hover:bg-secondary sm:px-4"
                           >
                             {ingredient}
                           </span>
@@ -192,7 +196,7 @@ const DetailRecipe = () => {
 
                     {/* Instructions Section */}
                     <div>
-                      <h2 className="font-mono text-lg font-bold mb-6 flex items-center gap-2">
+                      <h2 className="mb-6 flex items-center gap-2 font-mono text-body font-bold">
                         <span className="w-8 h-1 bg-primary rounded-full inline-block"></span>
                         {t("instructions")}
                       </h2>
@@ -207,8 +211,10 @@ const DetailRecipe = () => {
               </div>
             </div>
 
-            {/* Floating Share Button */}
-            <div className="fixed bottom-6 left-6 z-50">
+            {/* Floating Share Button. It has to clear the bottom tab bar, which
+                only leaves the screen edge free from lg, where navigation
+                becomes a rail. */}
+            <div className="fixed bottom-[calc(env(safe-area-inset-bottom)+5rem)] left-4 z-50 lg:bottom-6 lg:left-6">
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}

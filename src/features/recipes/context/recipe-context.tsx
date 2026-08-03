@@ -22,6 +22,8 @@ interface RecipeContextType {
     recipes: Recipe[];
     loading: boolean;
     loadMore: () => Promise<void>;
+    /** Puts a just-saved recipe at the top of the list without a refetch. */
+    addRecipe: (recipe: Recipe) => void;
     searchQuery: string;
     setSearchQuery: (query: string) => void;
     filters: FilterState;
@@ -92,6 +94,12 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
         }
         setLoading(false);
     };
+
+    const addRecipe = useCallback((recipe: Recipe) => {
+        setRecipes((prev) =>
+            prev.some((existing) => existing.id === recipe.id) ? prev : [recipe, ...prev]
+        );
+    }, []);
 
     const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
         setFilters(prev => ({ ...prev, [key]: value }));
@@ -173,6 +181,7 @@ export const RecipeProvider = ({ children }: { children: ReactNode }) => {
                 recipes,
                 loading,
                 loadMore,
+                addRecipe,
                 searchQuery,
                 setSearchQuery,
                 filters,

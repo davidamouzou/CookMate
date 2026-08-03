@@ -5,29 +5,21 @@
     "siteDescription": "Cook Mate helps you discover recipes, generate ideas with AI, and cook with confidence every day.",
     "homeTitle": "Discover culinary ideas",
     "homeDescription": "Browse trending recipes, explore categories, and get inspired by Cook Mate's AI cooking assistant.",
-    "aboutTitle": "About Cook Mate",
-    "aboutDescription": "Learn more about Cook Mate, our mission, and our vision for easier home cooking.",
-    "contactTitle": "Contact Cook Mate",
-    "contactDescription": "Reach out with questions, suggestions, or collaboration ideas for Cook Mate.",
-    "blogTitle": "Cook Mate blog",
-    "blogDescription": "Read cooking tips, stories, and practical inspiration from the Cook Mate kitchen.",
     "recipesTitle": "Recipe collection",
     "recipesDescription": "Explore Cook Mate's growing collection of recipes from around the world."
   },
   "Header": {
-    "toggleTheme": "Toggle theme",
-    "brandLabel": "Cook Mate",
-    "searchPlaceholder": "Search recipes...",
-    "openMenu": "Open menu",
-    "menuTitle": "Navigation",
-    "nav": {
-      "home": "Home",
-      "about": "About",
-      "recipes": "Recipes",
-      "blog": "Blog",
-      "contact": "Contact",
-      "track": "Tracking"
-    }
+    "searchPlaceholder": "Search recipes..."
+  },
+  "Settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": "Language"
   },
   "Hero": {
     "titleStart": "Explore",
@@ -60,55 +52,6 @@
   },
   "LanguageSelector": {
     "label": "Language"
-  },
-  "AboutPage": {
-    "title": "About",
-    "titleHighlight": "Cook Mate",
-    "description": "Cook Mate is your daily kitchen companion, built to help you discover ideas, cook with confidence, and enjoy every meal a little more.",
-    "missionTitle": "Our mission",
-    "missionDescription": "Make home cooking simpler and more inspiring with practical recipes, helpful tools, and a friendly experience.",
-    "visionTitle": "Our vision",
-    "visionDescription": "Create a world where every cook can explore new flavors, reduce friction in the kitchen, and share memorable meals."
-  },
-  "ContactPage": {
-    "title": "Get in",
-    "titleHighlight": "Touch",
-    "description": "Have a question, a suggestion, or a project in mind? We'd love to hear from you.",
-    "emailTitle": "Email us",
-    "websiteTitle": "Visit my website",
-    "websiteLinkLabel": "See my work",
-    "firstName": "First name",
-    "lastName": "Last name",
-    "email": "Email",
-    "message": "Message",
-    "firstNamePlaceholder": "John",
-    "lastNamePlaceholder": "Doe",
-    "emailPlaceholder": "john@example.com",
-    "messagePlaceholder": "How can we help you?",
-    "submit": "Send message"
-  },
-  "BlogPage": {
-    "title": "Culinary",
-    "titleHighlight": "Blog",
-    "description": "Latest news, tips, and stories from the Cook Mate kitchen.",
-    "readMore": "Read more",
-    "posts": {
-      "healthyCooking": {
-        "title": "10 tips for healthy cooking",
-        "excerpt": "Discover simple changes you can make to your cooking routine for a healthier lifestyle.",
-        "category": "Health"
-      },
-      "sourdough": {
-        "title": "The art of sourdough",
-        "excerpt": "A beginner's guide to making your own delicious sourdough bread at home.",
-        "category": "Baking"
-      },
-      "weeknightDinners": {
-        "title": "Quick weeknight dinners",
-        "excerpt": "Save time without compromising on flavor with these 30-minute meal ideas.",
-        "category": "Recipes"
-      }
-    }
   },
   "RecipesPage": {
     "title": "Discover",
@@ -184,6 +127,40 @@
       "hard": "Hard"
     }
   },
+  "RecipeFinder": {
+    "title": "Find a recipe",
+    "poweredBy": "AI + web",
+    "description": "Photograph your ingredients or set a calorie/protein target: we search the web for a real recipe.",
+    "photoButton": "Photo of ingredients",
+    "photoChange": "Change photo",
+    "photoRemove": "Remove photo",
+    "photoAlt": "Your ingredients",
+    "photoError": "That image could not be read.",
+    "caloriesLabel": "Calories / serving",
+    "caloriesPlaceholder": "500",
+    "proteinLabel": "Min. protein",
+    "proteinPlaceholder": "30",
+    "textPlaceholder": "Anything specific in mind? (optional)",
+    "searchButton": "Search the web",
+    "searching": "Searching…",
+    "searchingHint": "We query the web then rank the results — this takes a few seconds.",
+    "searchError": "The search failed. Try again in a moment.",
+    "quotaError": "The AI web-search quota is used up for now. Try again later.",
+    "reset": "Clear the search",
+    "detected": "Ingredients detected",
+    "noResults": "No recipe on the web matches these criteria. Try widening the search.",
+    "source": "Found on {site}",
+    "noSource": "Source unavailable — recipe reconstructed by the AI.",
+    "kcal": "{value} kcal",
+    "protein": "{value} g protein",
+    "minutes": "{value} min",
+    "servings": "serves {value}",
+    "saveRecipe": "Save",
+    "savingRecipe": "Saving…",
+    "saved": "Saved",
+    "saveError": "Could not save it.",
+    "viewRecipe": "View recipe"
+  },
   "Filters": {
     "mealType": "Meal type",
     "difficulty": "Difficulty",
@@ -191,6 +168,7 @@
     "cuisine": "Cuisine",
     "allCuisines": "All cuisines",
     "clearAll": "Clear filters",
+    "removeFilter": "Remove filter {label}",
     "mealTypes": {
       "breakfast": "Breakfast",
       "lunch": "Lunch",
@@ -226,7 +204,6 @@
     "estimating": "Estimating...",
     "aiDisclaimer": "AI-estimated, for information only.",
     "parseError": "Could not estimate this meal. Try rephrasing it.",
-    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase.",
     "deleteEntry": "Delete {title}",
     "navLabel": "Tracking",
     "aiFootnote": "Values are AI-estimated for informational purposes only",
@@ -239,11 +216,7 @@
       "water": "Water",
       "program": "Program",
       "recipes": "Recipes"
-    },
-    "sessionErrorTitle": "Setup needed",
-    "sessionFixAuth": "Supabase → Authentication → Providers → enable \"Allow anonymous sign-ins\" (User Signups card), then Save.",
-    "sessionFixSql": "SQL editor → run the migrations in supabase/migrations/.",
-    "retry": "Retry"
+    }
   },
   "Water": {
     "metaTitle": "Hydration",
@@ -257,10 +230,9 @@
     "hydrationUnit": "hydration",
     "caffeineUnit": "mg caffeine",
     "empty": "Nothing to drink logged yet today.",
-    "weekTitle": "Last 7 days",
+    "weekTitle": "Last {days} days",
     "ofGoal": "{pct}% of goal",
     "deleteDrink": "Delete {title}",
-    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase.",
     "presets": {
       "water": "Water",
       "coffee": "Coffee",
@@ -293,7 +265,6 @@
     "logWeight": "Log your weight",
     "weightPlaceholder": "e.g. 82.4",
     "save": "Save",
-    "oneReadingPerDay": "One reading per day — saving again replaces today's value.",
-    "sessionError": "Could not start a session. Check that anonymous sign-ins are enabled in Supabase."
+    "oneReadingPerDay": "One reading per day — saving again replaces today's value."
   }
 }

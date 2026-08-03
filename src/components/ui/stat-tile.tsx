@@ -30,20 +30,22 @@ export function StatTile({
     return (
         <div
             className={cn(
-                "rounded-xl border border-border/60 px-3 py-2.5",
+                // `min-w-0` lets the tile shrink inside a grid track instead of
+                // pushing its figure past the border on narrow phones.
+                "min-w-0 rounded-xl border border-border/60 px-2.5 py-2.5 sm:px-3",
                 tone === "neutral" ? "bg-surface-raised" : toneSoft[tone],
                 className
             )}
         >
-            <p className="font-mono text-[0.6875rem] leading-none opacity-70">{label}</p>
-            <p className="mt-1.5 font-mono text-xl font-bold leading-none tabular">
+            <p className="truncate font-mono text-label leading-none opacity-70">{label}</p>
+            {/* Both sizes are steps, so the tile grows with the viewport on its
+                own — no breakpoint override needed to keep "880/2000" inside. */}
+            <p className="mt-1.5 font-mono text-figure font-bold tabular">
                 {value}
-                {goal ? (
-                    <span className="text-sm font-medium opacity-50">/{goal}</span>
-                ) : null}
+                {goal ? <span className="text-meta font-medium opacity-50">/{goal}</span> : null}
             </p>
             {hint ? (
-                <p className="mt-1 font-mono text-[0.6875rem] leading-none opacity-60">{hint}</p>
+                <p className="mt-1 font-mono text-meta leading-none opacity-60">{hint}</p>
             ) : null}
         </div>
     );

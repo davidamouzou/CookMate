@@ -1,20 +1,25 @@
 /**
- * Regenerates recipe photos and replaces the dead Firebase Storage URLs.
+ * Regenerates the photo of every recipe whose image fails to load.
  *
  *   bun run images:regenerate -- --dry-run     # list what would be done
  *   bun run images:regenerate -- --limit=3     # try a few first
  *   bun run images:regenerate                  # the whole backlog
- *   bun run images:regenerate -- --all         # also redo recipes already fixed
+ *   bun run images:regenerate -- --all         # also redo recipes that load fine
  *
- * The original photos are unreachable (Firebase Storage answers 402 while the
- * billing account is suspended), so they cannot be copied — they are recreated
- * from each recipe's own text with the same image model the app uses, uploaded
- * to Supabase Storage, and written back to `recipes.image`.
+ * A recipe needs a new photo when its `image` column does not actually serve an
+ * image: no URL at all, a dead Firebase Storage link (402 while the billing
+ * account is suspended), or a Supabase URL whose object has since gone missing.
+ * The URL alone does not say which — every one is fetched and checked, so a
+ * broken image is caught wherever it is hosted, ours included.
+ *
+ * Broken photos cannot be copied from anywhere, so they are recreated from each
+ * recipe's own text with the same image model the app uses, uploaded to Supabase
+ * Storage, and written back to `recipes.image`.
  *
  * Costs money: one paid image generation per recipe. Start with --dry-run.
  *
- * Idempotent and resumable: recipes already served from Supabase Storage are
- * skipped, and progress is appended to backup/regenerated-images.json.
+ * Idempotent and resumable: recipes whose photo already loads are skipped, and
+ * progress is appended to backup/regenerated-images.json.
  */
 import { createClient } from "@supabase/supabase-js";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -32,9 +37,11 @@ const IMAGE_KEY = process.env.IMAGE_GEN_MODEL_KEY;
 const BUCKET = "recipe-images";
 const LOG_PATH = "backup/regenerated-images.json";
 const GETIMG_API_URL = "https://api.getimg.ai/v1/flux-schnell/text-to-image";
-const FIREBASE_PREFIX = "https://firebasestorage.googleapis.com/";
 /** getimg.ai is rate-limited and billed per call; stay sequential and polite. */
 const DELAY_MS = 1200;
+/** Health checks are free HEADs against two hosts — a small pool is plenty. */
+const CHECK_CONCURRENCY = 8;
+const CHECK_TIMEOUT_MS = 15_000;
 
 const args = process.argv.slice(2);
 const isDryRun = args.includes("--dry-run");
@@ -70,6 +77,77 @@ type Recipe = {
 /** Deterministic path, so a re-run overwrites nothing and needs no lookup. */
 function storagePath(recipeId: string): string {
     return `recipes/${recipeId}.jpg`;
+}
+
+/**
+ * Whether a URL really serves an image, the same way the browser finds out.
+ *
+ * Deliberately lenient: a regeneration is billed, so only answer "broken" on
+ * hard evidence — an error status, an unreachable host, or a body the browser
+ * could not paint (an error page served as JSON/HTML, or an empty object).
+ * Anything ambiguous (a missing content-type, a HEAD the host refuses) counts
+ * as healthy and is left alone rather than paid for again.
+ */
+type ImageCheck = {
+    /** Why the image cannot be shown, or null when it loads. */
+    broken: string | null;
+    /** HTTP status, or null when the host could not be reached at all. */
+    status: number | null;
+};
+
+async function checkImage(url: string | null): Promise<ImageCheck> {
+    if (!url) return { broken: "no image", status: null };
+
+    let response: Response;
+    try {
+        response = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(CHECK_TIMEOUT_MS) });
+    } catch (error) {
+        const detail = error instanceof Error ? error.message : "fetch failed";
+        return { broken: `unreachable: ${detail}`, status: null };
+    }
+
+    // Some hosts reject HEAD but serve GET fine; confirm before condemning it.
+    if (response.status === 405 || response.status === 501) {
+        try {
+            response = await fetch(url, {
+                method: "GET",
+                headers: { Range: "bytes=0-0" },
+                signal: AbortSignal.timeout(CHECK_TIMEOUT_MS),
+            });
+        } catch (error) {
+            const detail = error instanceof Error ? error.message : "fetch failed";
+            return { broken: `unreachable: ${detail}`, status: null };
+        }
+    }
+
+    const status = response.status;
+    if (!response.ok) return { broken: `HTTP ${status}`, status };
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && !contentType.startsWith("image/")) {
+        return { broken: `not an image (${contentType.split(";")[0]})`, status };
+    }
+
+    const length = response.headers.get("content-length");
+    if (length !== null && Number(length) === 0) return { broken: "empty file", status };
+
+    return { broken: null, status };
+}
+
+/** Runs `task` over `items` with a bounded pool, preserving input order. */
+async function mapPool<T, R>(items: T[], size: number, task: (item: T) => Promise<R>): Promise<R[]> {
+    const results = new Array<R>(items.length);
+    let cursor = 0;
+
+    const workers = Array.from({ length: Math.min(size, items.length) }, async () => {
+        while (cursor < items.length) {
+            const index = cursor++;
+            results[index] = await task(items[index]);
+        }
+    });
+
+    await Promise.all(workers);
+    return results;
 }
 
 function buildPrompt(recipe: Recipe): string {
@@ -127,34 +205,75 @@ if (error) {
     process.exit(1);
 }
 
-const backlog = (recipes as Recipe[]).filter((recipe) => {
-    if (redoAll) return true;
-    // Anything not yet served from our bucket needs a photo: dead Firebase
-    // links, but also rows with no image at all.
-    return !recipe.image?.includes(`/storage/v1/object/public/${BUCKET}/`);
+const all = recipes as Recipe[];
+
+// Which photos are actually broken is a property of the URL's response, not of
+// its shape: our own bucket can 404 once an object is deleted, and a link that
+// looks dead may still serve. Ask every one of them.
+console.log(`Checking ${all.length} recipe image(s)…`);
+const health = await mapPool(all, CHECK_CONCURRENCY, (recipe) => checkImage(recipe.image));
+
+/** The reason each recipe is in the backlog, for the report and the reuse rule. */
+const broken = new Map<string, string>();
+all.forEach((recipe, index) => {
+    const reason = health[index].broken;
+    if (reason) broken.set(recipe.id, reason);
 });
 
+const backlog = redoAll ? all : all.filter((recipe) => broken.has(recipe.id));
 const targets = backlog.slice(0, limit === Infinity ? undefined : limit);
-const firebaseCount = targets.filter((r) => r.image?.startsWith(FIREBASE_PREFIX)).length;
 
-console.log(`${recipes!.length} recipes, ${backlog.length} without a working photo.`);
-console.log(`  ${firebaseCount} still point at Firebase, ${targets.length - firebaseCount} have no image.`);
+const byReason = backlog.reduce<Record<string, number>>((acc, recipe) => {
+    const reason = broken.get(recipe.id) ?? "loads fine (forced by --all)";
+    acc[reason] = (acc[reason] ?? 0) + 1;
+    return acc;
+}, {});
+
+console.log(`\n${all.length} recipes, ${broken.size} whose photo fails to load.`);
+for (const [reason, count] of Object.entries(byReason).sort((a, b) => b[1] - a[1])) {
+    console.log(`  ${count}x ${reason}`);
+}
 console.log(`Processing ${targets.length}${isDryRun ? " (dry run — nothing is generated or written)" : ""}.\n`);
 
-if (targets.length === 0) process.exit(0);
+if (targets.length === 0) {
+    console.log("Every recipe photo loads. Nothing to do.");
+    process.exit(0);
+}
+
+/**
+ * What is sitting at a recipe's deterministic storage path.
+ *
+ * `usable` lets a run skip the billed call and go straight to the row update —
+ * a previous run generated the photo but did not get to write the row back.
+ * `broken` additionally means the upload has to overwrite rather than insert,
+ * or the row would keep pointing at an unusable file.
+ */
+type StoredState = "usable" | "broken" | "absent";
+
+async function storedImageState(recipe: Recipe, publicUrl: string): Promise<StoredState> {
+    // The row's own failing URL: already checked, and known bad. Re-probing it
+    // would just repeat the request that failed.
+    if (recipe.image === publicUrl && broken.has(recipe.id)) return "broken";
+
+    const check = await checkImage(publicUrl);
+    if (!check.broken) return "usable";
+
+    // Storage answers 400 or 404 for a key it does not hold — nothing to reuse
+    // and nothing to overwrite, so a plain insert will do.
+    return check.status === 404 || check.status === 400 ? "absent" : "broken";
+}
 
 if (isDryRun) {
     let wouldBill = 0;
 
     for (const recipe of targets) {
         const { data: url } = supabase.storage.from(BUCKET).getPublicUrl(storagePath(recipe.id));
-        const stored = redoAll
-            ? null
-            : await fetch(url.publicUrl, { method: "HEAD" }).catch(() => null);
-        const reused = stored?.ok ?? false;
+        const stored = await storedImageState(recipe, url.publicUrl);
+        const reused = stored === "usable" && !redoAll;
         if (!reused) wouldBill++;
 
-        console.log(`  ${reused ? "·" : "$"} ${recipe.id}  ${recipe.recipe_name}`);
+        const reason = broken.get(recipe.id) ?? "forced by --all";
+        console.log(`  ${reused ? "·" : "$"} ${recipe.id}  ${recipe.recipe_name}  (${reason})`);
         if (!reused) console.log(`      prompt: ${buildPrompt(recipe).slice(0, 110)}…`);
     }
 
@@ -175,19 +294,16 @@ let replaced = 0;
 const failures: { id: string; reason: string }[] = [];
 
 for (const [index, recipe] of targets.entries()) {
-    console.log(`[${index + 1}/${targets.length}] ${recipe.recipe_name}`);
+    const reason = broken.get(recipe.id) ?? "forced by --all";
+    console.log(`[${index + 1}/${targets.length}] ${recipe.recipe_name} — ${reason}`);
 
     const path = storagePath(recipe.id);
     const { data: publicUrl } = supabase.storage.from(BUCKET).getPublicUrl(path);
 
-    // Generation is billed, so never pay twice for the same recipe: an object
-    // already sitting at the deterministic path means a previous run generated
-    // it but did not get to write the row back. Reuse it and go straight to the
-    // update. `--all` forces a fresh image.
-    const existing = redoAll
-        ? null
-        : await fetch(publicUrl.publicUrl, { method: "HEAD" }).catch(() => null);
-    const alreadyGenerated = existing?.ok ?? false;
+    // Generation is billed, so never pay twice for the same recipe: reuse a
+    // usable object instead of regenerating it. `--all` forces a fresh photo.
+    const stored = await storedImageState(recipe, publicUrl.publicUrl);
+    const alreadyGenerated = stored === "usable" && !redoAll;
 
     if (alreadyGenerated) {
         console.log("  · image already in storage, reusing it (no generation billed)");
@@ -198,13 +314,23 @@ for (const [index, recipe] of targets.entries()) {
             continue;
         }
 
+        // Overwrite only when something unusable is in the way. Plain inserts
+        // work with just the publishable key; upsert needs the extra storage
+        // policy from 0007, so do not ask for it unless it is really needed.
+        const mustOverwrite = stored !== "absent";
         const { error: uploadError } = await supabase.storage
             .from(BUCKET)
-            .upload(path, bytes, { contentType: "image/jpeg", upsert: redoAll });
+            .upload(path, bytes, { contentType: "image/jpeg", upsert: mustOverwrite });
 
         const raceLost = uploadError?.message?.toLowerCase().includes("already exists") ?? false;
         if (uploadError && !raceLost) {
             console.error(`  ✗ upload failed: ${uploadError.message}`);
+            if (mustOverwrite) {
+                console.error(
+                    "    Overwriting a broken object needs update rights: apply\n" +
+                    "    supabase/migrations/0007_recipe_image_repair.sql, or set SUPABASE_SECRET_KEY."
+                );
+            }
             failures.push({ id: recipe.id, reason: `upload: ${uploadError.message}` });
             continue;
         }
@@ -227,8 +353,9 @@ for (const [index, recipe] of targets.entries()) {
     if (!updated || updated.length === 0) {
         console.error(
             "  ✗ update matched no row — row-level security blocked it.\n" +
-            "    Apply supabase/migrations/0006_recipe_image_maintenance.sql, or set\n" +
-            "    SUPABASE_SECRET_KEY in .env."
+            "    0006 only unlocks rows still pointing at Firebase; a recipe with no\n" +
+            "    image, or a Supabase URL whose object went missing, needs\n" +
+            "    supabase/migrations/0007_recipe_image_repair.sql — or SUPABASE_SECRET_KEY in .env."
         );
         failures.push({ id: recipe.id, reason: "update blocked by RLS" });
         continue;
@@ -256,6 +383,8 @@ if (failures.length > 0) {
     process.exit(1);
 }
 
-console.log("Remember to drop the maintenance policy:");
+console.log("Remember to drop the maintenance policies:");
 console.log('  drop policy "Maintenance: replace dead recipe images" on public.recipes;');
+console.log('  drop policy "Maintenance: repair broken recipe images" on public.recipes;');
+console.log('  drop policy "Maintenance: overwrite a broken recipe image" on storage.objects;');
 process.exit(0);
